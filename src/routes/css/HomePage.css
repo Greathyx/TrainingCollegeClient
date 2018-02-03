@@ -1,0 +1,69 @@
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
+  color: white;
+}
+
+.trigger:hover {
+  /*color: #1890ff;*/
+  color: #40a9ff;
+}
+
+.logo {
+  height: 32px;
+  background: rgba(255, 255, 255, .2);
+  margin: 16px;
+}
+
+.content {
+  position: relative;
+  /*margin: 24px 16px;*/
+  background: url("../../assets/background.jpg") no-repeat center fixed;
+  background-size: cover;
+}
+
+.text {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+}
+
+.buttons {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+
+.singleButton {
+  margin: 10px 15px;
+}
+
+@media screen and (min-width: 1200px) {
+  .text {
+    font-size: 6em;
+  }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .text {
+    font-size: 6em;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 992px) {
+  .text {
+    font-size: 4em;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .text {
+    font-size: 3em;
+  }
+}
