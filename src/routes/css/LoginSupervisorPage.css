@@ -16,6 +16,12 @@
   text-align: center;
 }
 
+/*修改chrome自动填充表单样式*/
+:global input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+  border: 1px solid #CCC!important;
+}
+
 .welcome {
   font-size: xx-large;
 }

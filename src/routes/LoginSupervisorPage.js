@@ -1,5 +1,6 @@
 import React from 'react';
-import {Form, Icon, Input, Button, Checkbox} from 'antd';
+import {connect} from 'dva';
+import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
 import styles from './css/LoginSupervisorPage.css';
 
 const FormItem = Form.Item;
@@ -10,8 +11,28 @@ class SupervisorLoginForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
+      if (err) {
+        message.error("请输入ID和密码！");
+      }
+      else {
+        const param = {
+          supervisor_id: values['userId'],
+          password: values['password'],
+        };
+
+        // 判断id是否仅有数字
+        const regex = /^[0-9]+.?[0-9]*$/;
+        if (regex.test(param.supervisor_id)) {
+          this.props.dispatch({
+            type: 'supervisor/login',
+            payload: {
+              ...param,
+            },
+          });
+        }
+        else {
+          message.error("用户名或密码错误！");
+        }
       }
     });
   };
@@ -25,10 +46,10 @@ class SupervisorLoginForm extends React.Component {
             欢迎登陆
           </p>
           <FormItem>
-            {getFieldDecorator('userName', {
-              rules: [{required: true, message: '请输入您的用户名'}],
+            {getFieldDecorator('userId', {
+              rules: [{required: true, message: '请输入您的用户ID'}],
             })(
-              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="用户名"/>
+              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="用户ID"/>
             )}
           </FormItem>
           <FormItem>
@@ -59,4 +80,10 @@ class SupervisorLoginForm extends React.Component {
 
 const LoginSupervisorPage = Form.create()(SupervisorLoginForm);
 
-export default LoginSupervisorPage;
+function mapStateToProps({supervisor}) {
+  return {
+    supervisor,
+  };
+}
+
+export default connect(mapStateToProps)(LoginSupervisorPage);
