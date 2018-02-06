@@ -25,18 +25,3 @@ export async function login(param) {
   })
 
 }
-
-
-/**
- *
- * 登出
- *
- * @returns {Promise.<Object>}
- */
-// export async function logout() {
-//
-//   return request('/supervisor/logout', {
-//     method: 'GET',
-//   })
-//
-// }

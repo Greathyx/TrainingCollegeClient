@@ -11,8 +11,8 @@ const {Sider, Content} = Layout;
  */
 const menu_trainee = (
   <Menu>
-    <Menu.Item key="1">登陆</Menu.Item>
-    <Menu.Item key="2">注册</Menu.Item>
+    <Menu.Item key="1"><Link to="/TraineeLogin">登陆</Link></Menu.Item>
+    <Menu.Item key="2"><Link to="/TraineeRegister">注册</Link></Menu.Item>
   </Menu>
 );
 

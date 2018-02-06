@@ -4,7 +4,7 @@
   height: 100%;
 }
 
-.login_form {
+.register_form {
   max-width: 300px;
   position: absolute;
   top: 45%;
@@ -12,7 +12,7 @@
   transform: translateX(-50%) translateY(-50%);
 }
 
-.login_form > .welcome {
+.register_form > .welcome {
   text-align: center;
 }
 
@@ -31,10 +31,6 @@
   font-size: xx-large;
 }
 
-.login_form_forgot {
-  float: right;
-}
-
-.login_form_button {
+.button {
   width: 100%;
 }

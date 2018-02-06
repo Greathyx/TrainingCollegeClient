@@ -10,6 +10,7 @@ const app = dva();
 
 // 3. Model
 app.model(require('./models/Supervisor').default);
+app.model(require('./models/Trainee').default);
 
 // 4. Router
 app.router(require('./router').default);

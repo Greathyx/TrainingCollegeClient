@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
 import {message} from 'antd';
-import {login, logout} from "../services/SupervisorService";
+import {login} from "../services/SupervisorService";
 
 
 export default {
@@ -16,13 +16,18 @@ export default {
     setup({dispatch, history}) {
       history.listen((location) => {
         if (pathToRegexp('/homepage').exec(location.pathname) || pathToRegexp('').exec(location.pathname)) {
-          document.title = 'Homepage';
+          document.title = '主页';
         }
         else if (pathToRegexp('/SupervisorLogin').exec(location.pathname)) {
-          document.title = 'Supervisor Login';
+          document.title = '管理员登陆';
         }
-        else {
-          document.title = 'Not found';
+        else if (pathToRegexp('/TraineeRegister').exec(location.pathname)) {
+          document.title = '学员注册';
+        }
+        else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
+          document.title = '学员登陆';
+        }else {
+          document.title = '页面不存在';
         }
       });
 
@@ -74,22 +79,6 @@ export default {
       }
     },
 
-    // 登出
-    // * logout({payload}, {call, put, select}) {
-    //   const data = yield call(logout);
-    //   if (!data.auth) {
-    //     sessionStorage.setItem('hasLoggedIn', false);
-    //
-    //     yield put({
-    //       type: 'updateHasLoggedIn',
-    //       payload: {hasLoggedIn: false}
-    //     });
-    //     message.success('Logout successfully!')
-    //   }
-    //   else {
-    //     message.error('Logout error!')
-    //   }
-    // }
   },
 
   reducers: {
