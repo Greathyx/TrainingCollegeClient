@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
 import {message} from 'antd';
-import {login} from "../services/SupervisorService";
+import {login, getAllRegisterApply} from "../services/SupervisorService";
 
 
 export default {
@@ -10,6 +10,7 @@ export default {
   state: {
     supervisor_id: null,
     hasLoggedIn: false,
+    registerApplyData: null,
   },
 
   subscriptions: {
@@ -26,7 +27,14 @@ export default {
         }
         else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
           document.title = '学员登陆';
-        }else {
+        }
+        else if (pathToRegexp('/InstitutionRegister').exec(location.pathname)) {
+          document.title = '机构注册';
+        }
+        else if (pathToRegexp('/Supervisor/Check').exec(location.pathname)) {
+          document.title = '管理员-机构审核';
+        }
+        else {
           document.title = '页面不存在';
         }
       });
@@ -55,29 +63,49 @@ export default {
 
     // 登陆
     * login({payload}, {call, put, select}) {
-
       const data = yield call(login, payload);
-
       if (data.successTag) {
         sessionStorage.setItem('supervisor_id', data.t.supervisor_id);
         sessionStorage.setItem('hasLoggedIn', true);
 
         yield put({
           type: 'updateSupervisorId',
-          payload: {userId: data.t.supervisor_id}
+          payload: {supervisor_id: data.t.supervisor_id}
         });
 
         yield put({
           type: 'updateHasLoggedIn',
           payload: {hasLoggedIn: true}
         });
-
         message.success(data.message);
       }
       else {
         message.error(data.message);
       }
     },
+
+    // 获取所有机构注册申请
+    * getAllRegisterApply({payload}, {call, put, select}) {
+      const data = yield call(getAllRegisterApply);
+
+      let applies = [];
+      for (let i = 0; i < data.t.length; i++) {
+        applies.push({
+          key: i,
+          institution_apply_id: data.t[i].institution_apply_id,
+          name: data.t[i].name,
+          email: data.t[i].email,
+          address: data.t[i].location,
+          faculty: data.t[i].faculty,
+          introduction: data.t[i].introduction,
+        });
+      }
+
+      yield put({
+        type: 'updateRegisterApplyData',
+        payload: {registerApplyData: applies}
+      });
+    }
 
   },
 
@@ -86,7 +114,7 @@ export default {
     updateSupervisorId(state, action) {
       return {
         ...state,
-        userId: action.payload.supervisor_id,
+        supervisor_id: action.payload.supervisor_id,
       }
     },
 
@@ -94,6 +122,13 @@ export default {
       return {
         ...state,
         hasLoggedIn: action.payload.hasLoggedIn,
+      }
+    },
+
+    updateRegisterApplyData(state, action) {
+      return {
+        ...state,
+        registerApplyData: action.payload.registerApplyData,
       }
     },
 

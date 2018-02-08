@@ -23,7 +23,7 @@ const menu_trainee = (
 const menu_institution = (
   <Menu>
     <Menu.Item key="1">登陆</Menu.Item>
-    <Menu.Item key="2">注册</Menu.Item>
+    <Menu.Item key="2"><Link to="/InstitutionRegister">注册</Link></Menu.Item>
   </Menu>
 );
 
@@ -39,6 +39,7 @@ const menu_supervisor = (
 
 
 class HomePage extends React.Component {
+
   state = {
     collapsed: false,
   };

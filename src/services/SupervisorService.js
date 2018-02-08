@@ -25,3 +25,19 @@ export async function login(param) {
   })
 
 }
+
+
+/**
+ *
+ * 获取所有机构注册申请
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllRegisterApply() {
+
+  return request('/supervisor/getAllRegisterApply', {
+    method: 'GET',
+  })
+
+}

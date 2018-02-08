@@ -1,10 +1,11 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Form, Icon, Input, Button, Row, Col, message} from 'antd';
-import styles from './css/RegisterTraineePage.css';
+import {Form, Icon, Input, Button, message} from 'antd';
+import styles from './css/InstitutionRegisterPage.css';
 
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
 
 class RegisterTraineeForm extends React.Component {
 
@@ -12,29 +13,24 @@ class RegisterTraineeForm extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
-        message.error("请输入邮箱和密码！");
+        message.error("请完整填写表单！");
       }
       else {
         const param = {
           email: values['email'],
+          name: values['name'],
           password: values['password'],
-          verificationCode: values['verification']
+          location: values['location'],
+          faculty: values['faculty'],
+          introduction: values['introduction']
         };
 
-        if (param.email.toString().length > 40) {
-          message.warning("邮箱地址长度不能超过40位！");
-        }
-        else if (param.password.toString().length > 40) {
-          message.warning("密码长度不能超过40位！");
-        }
-        else {
-          this.props.dispatch({
-            type: 'trainee/register',
-            payload: {
-              ...param,
-            },
-          });
-        }
+        this.props.dispatch({
+          type: 'institution/register',
+          payload: {
+            ...param,
+          },
+        });
       }
     });
   };
@@ -43,7 +39,7 @@ class RegisterTraineeForm extends React.Component {
 
     const email = this.props.form.getFieldValue('email');
 
-    if (!email) {
+    if(!email){
       message.warning('请输入您的邮箱！');
       return;
     }
@@ -51,11 +47,6 @@ class RegisterTraineeForm extends React.Component {
     const param = {
       email: email,
     };
-
-    if (param.email.toString().length > 40) {
-      message.warning("邮箱地址长度不能超过40位！");
-      return;
-    }
 
     // 判断输入格式是否为email
     const regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
@@ -81,13 +72,20 @@ class RegisterTraineeForm extends React.Component {
       <div className={styles.wrapper}>
         <Form onSubmit={this.handleSubmit} className={styles.register_form}>
           <p className={styles.welcome}>
-            学员注册
+            机构注册
           </p>
           <FormItem>
             {getFieldDecorator('email', {
               rules: [{required: true, message: '请输入您的邮箱地址'}],
             })(
               <Input prefix={<Icon type="mail" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="邮箱"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('name', {
+              rules: [{required: true, message: '请输入您的机构名称'}],
+            })(
+              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="机构名称"/>
             )}
           </FormItem>
           <FormItem>
@@ -99,22 +97,25 @@ class RegisterTraineeForm extends React.Component {
             )}
           </FormItem>
           <FormItem>
-            <Row gutter={12}>
-              <Col span={15}>
-                {getFieldDecorator('verification', {
-                  rules: [{required: true, message: '请输入验证码'}],
-                })(
-                  <Input prefix={<Icon type="key" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                         placeholder="验证码"
-                  />
-                )}
-              </Col>
-              <Col span={9}>
-                <Button onClick={this.sendVerificationCode}>
-                  获取验证码
-                </Button>
-              </Col>
-            </Row>
+            {getFieldDecorator('location', {
+              rules: [{required: true, message: '请输入您的机构地址'}],
+            })(
+              <Input prefix={<Icon type="environment-o" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="地址"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('faculty', {
+              rules: [{required: true, message: '请输入您的师资介绍'}],
+            })(
+              <TextArea rows={4} placeholder="师资介绍"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('introduction', {
+              rules: [{required: true, message: '请输入您的机构简介'}],
+            })(
+              <TextArea rows={4} placeholder="机构简介"/>
+            )}
           </FormItem>
           <FormItem>
             <Button type="primary" htmlType="submit" className={styles.button}>
@@ -127,12 +128,12 @@ class RegisterTraineeForm extends React.Component {
   }
 }
 
-const TraineeRegisterPage = Form.create()(RegisterTraineeForm);
+const InstitutionRegisterPage = Form.create()(RegisterTraineeForm);
 
-function mapStateToProps({trainee}) {
+function mapStateToProps({institution}) {
   return {
-    trainee,
+    institution,
   };
 }
 
-export default connect(mapStateToProps)(TraineeRegisterPage);
+export default connect(mapStateToProps)(InstitutionRegisterPage);

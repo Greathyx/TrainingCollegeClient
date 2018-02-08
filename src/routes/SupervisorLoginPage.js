@@ -29,6 +29,7 @@ class SupervisorLoginForm extends React.Component {
               ...param,
             },
           });
+          this.props.history.push("/Supervisor/Check");
         }
         else {
           message.error("用户名或密码错误！");

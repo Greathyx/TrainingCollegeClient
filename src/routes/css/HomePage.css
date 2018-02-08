@@ -27,16 +27,17 @@
 
 .text {
   position: absolute;
-  top: 20%;
+  top: 30%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(-50%);
   color: white;
 }
 
 .buttons {
   position: absolute;
-  top: 60%;
+  top: 50%;
   left: 50%;
+  padding-top: 10%;
   transform: translateY(-50%) translateX(-50%);
 }
 

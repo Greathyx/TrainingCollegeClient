@@ -5,7 +5,6 @@
 }
 
 .register_form {
-  max-width: 300px;
   height: 100%;
   position: absolute;
   top: 50%;
@@ -35,4 +34,28 @@
 
 .button {
   width: 100%;
+}
+
+@media screen and (min-width: 1200px) {
+  .register_form {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .register_form {
+    width: 500px;
+  }
+}
+
+@media screen and (min-width: 600px) and (max-width: 992px) {
+  .register_form {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .register_form {
+    width: 300px;
+  }
 }

@@ -68,7 +68,7 @@ export default {
     updateTraineeEmail(state, action) {
       return {
         ...state,
-        userId: action.payload.trainee_email,
+        trainee_email: action.payload.trainee_email,
       }
     },
   }
