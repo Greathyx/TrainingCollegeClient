@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
 import {message} from 'antd';
-import {login, getAllRegisterApply} from "../services/SupervisorService";
+import {login, getAllRegisterApply, approveApply, rejectApply, sendReplyMail} from "../services/SupervisorService";
 
 
 export default {
@@ -30,6 +30,9 @@ export default {
         }
         else if (pathToRegexp('/InstitutionRegister').exec(location.pathname)) {
           document.title = '机构注册';
+        }
+        else if (pathToRegexp('/InstitutionLogin').exec(location.pathname)) {
+            document.title = '机构登陆';
         }
         else if (pathToRegexp('/Supervisor/Check').exec(location.pathname)) {
           document.title = '管理员-机构审核';
@@ -105,7 +108,73 @@ export default {
         type: 'updateRegisterApplyData',
         payload: {registerApplyData: applies}
       });
-    }
+    },
+
+    // 批准申请
+    * approveApply({payload}, {call, put, select}) {
+
+      const data = yield call(approveApply, payload.approve);
+      if (data.successTag) {
+        message.success(data.message);
+
+        // 发送处理结果邮件
+        if (payload.type === "approveRegister"){
+          // 直接在param中写data.t.code好像会报错导致邮件无法发送
+          // 改成这样就好了
+          const code = data.t.code;
+          const param = {
+            to: payload.email.to,
+            title: "机构注册成功提醒",
+            content: "尊敬的" + payload.email.name +
+            "，恭喜您成功注册\"若水\"教育。您的机构登陆码为："+ code + "。请您务必妥善保管。"
+          };
+          yield call(sendReplyMail, param);
+        }
+        else {
+          const param = {
+            to: payload.email.to,
+            title: "机构修改信息成功提醒",
+            content: "尊敬的" + payload.email.name +
+            "，您已成功修改贵机构信息。"
+          };
+          yield call(sendReplyMail, param);
+        }
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
+    // 驳回申请
+    * rejectApply({payload}, {call, put, select}) {
+      const data = yield call(rejectApply, payload.reject);
+      if (data.successTag) {
+        message.success(data.message);
+        // 发送处理结果邮件
+        if (payload.type === "rejectRegister"){
+          const param = {
+            to: payload.email.to,
+            title: "机构注册失败提醒",
+            content: "尊敬的" + payload.email.name +
+            "，我们很抱歉地通知您，贵机构未能成功注册\"若水\"教育。详情请致电我们的客服：012-3456-7878。"
+          };
+          yield call(sendReplyMail, param);
+        }
+        else {
+          const param = {
+            to: payload.email.to,
+            title: "机构修改信息失败提醒",
+            content: "尊敬的" + payload.email.name +
+            "，我们很抱歉地通知您，您未能修改贵机构信息。详情请致电我们的客服：012-3456-7878。"
+          };
+          yield call(sendReplyMail, param);
+        }
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
 
   },
 

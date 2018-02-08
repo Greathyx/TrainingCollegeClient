@@ -1,37 +1,39 @@
 import React from 'react';
 import {connect} from 'dva';
 import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
-import styles from './css/LoginSupervisorPage.css';
+import styles from './css/SupervisorLoginPage.css';
 
 
 const FormItem = Form.Item;
 
-class SupervisorLoginForm extends React.Component {
+class InstitutionLoginForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (err) {
-        message.error("请输入邮箱和密码！");
+        message.error("请输入登陆码和密码！");
       }
       else {
         const param = {
-          email: values['email'],
+          code: values['code'],
           password: values['password'],
         };
 
-        // 判断输入格式是否为email
-        const regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
-        if (regex.test(param.email)) {
+        // 判断id是否为数字和(或)字母(的组合)
+        const regex = /^[A-Za-z0-9]*$/;
+        if (regex.test(param.code)) {
           this.props.dispatch({
-            type: 'trainee/login',
+            type: 'institution/login',
             payload: {
               ...param,
             },
           });
+          // todo
+          // this.props.history.push("/Supervisor/Check");
         }
         else {
-          message.error("邮箱格式非法！");
+          message.error("登陆码或密码错误！");
         }
       }
     });
@@ -43,13 +45,13 @@ class SupervisorLoginForm extends React.Component {
       <div className={styles.wrapper}>
         <Form onSubmit={this.handleSubmit} className={styles.login_form}>
           <p className={styles.welcome}>
-            学员登陆
+            机构登陆
           </p>
           <FormItem>
-            {getFieldDecorator('email', {
-              rules: [{required: true, message: '请输入您的邮箱'}],
+            {getFieldDecorator('code', {
+              rules: [{required: true, message: '请输入您的机构登陆码'}],
             })(
-              <Input prefix={<Icon type="mail" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="邮箱"/>
+              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="登陆码"/>
             )}
           </FormItem>
           <FormItem>
@@ -78,12 +80,12 @@ class SupervisorLoginForm extends React.Component {
   }
 }
 
-const LoginTraineePage = Form.create()(SupervisorLoginForm);
+const InstitutionLoginPage = Form.create()(InstitutionLoginForm);
 
-function mapStateToProps({trainee}) {
+function mapStateToProps({institution}) {
   return {
-    trainee,
+    institution,
   };
 }
 
-export default connect(mapStateToProps)(LoginTraineePage);
+export default connect(mapStateToProps)(InstitutionLoginPage);

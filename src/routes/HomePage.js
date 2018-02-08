@@ -22,7 +22,7 @@ const menu_trainee = (
  */
 const menu_institution = (
   <Menu>
-    <Menu.Item key="1">登陆</Menu.Item>
+    <Menu.Item key="1"><Link to="/InstitutionLogin">登陆</Link></Menu.Item>
     <Menu.Item key="2"><Link to="/InstitutionRegister">注册</Link></Menu.Item>
   </Menu>
 );

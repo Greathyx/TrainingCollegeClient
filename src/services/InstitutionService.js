@@ -24,3 +24,23 @@ export async function register(param) {
   })
 
 }
+
+/**
+ *
+ * 机构登陆方法
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function login(param) {
+
+  const formData = new FormData();
+  formData.append('code', param.code);
+  formData.append('password', param.password);
+
+  return request('/institution/login', {
+    method: 'POST',
+    body: formData
+  })
+
+}

@@ -3,10 +3,11 @@ import {Router, Route, Switch} from 'dva/router';
 import HomePage from './routes/HomePage';
 import SupervisorLoginPage from './routes/SupervisorLoginPage';
 import TraineeRegisterPage from './routes/TraineeRegisterPage';
-import TraineeLoginPage from './routes/TraineeLogin';
+import TraineeLoginPage from './routes/TraineeLoginPage';
 import InstitutionRegisterPage from './routes/InstitutionRegisterPage';
+import InstitutionLoginPage from './routes/InstitutionLoginPage';
 import SupervisorMainPage from './routes/SupervisorMainPage';
-import SupervisorCheckPage from './routes/SupervisorCheckPage';
+import SupervisorCheckPage from './routes/SupervisorCheckRegisterPage';
 import Page404 from './routes/404Page';
 
 
@@ -20,6 +21,7 @@ function RouterConfig({history, app}) {
         <Route path="/TraineeRegister" exact component={TraineeRegisterPage}/>
         <Route path="/TraineeLogin" exact component={TraineeLoginPage}/>
         <Route path="/InstitutionRegister" exact component={InstitutionRegisterPage}/>
+        <Route path="/InstitutionLogin" exact component={InstitutionLoginPage}/>
         <Route path="/Supervisor">
           <SupervisorMainPage>
             <Switch>

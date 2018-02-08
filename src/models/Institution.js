@@ -1,5 +1,5 @@
 import {message} from 'antd';
-import {register} from "../services/InstitutionService";
+import {register, login} from "../services/InstitutionService";
 
 
 export default {
@@ -7,16 +7,16 @@ export default {
   namespace: 'institution',
 
   state: {
-    institution_id: null,
+    institution_code: null,
   },
 
   subscriptions: {
     setup({dispatch, history}) {
-      const institution_id = sessionStorage.getItem('institution_id');
-      if (institution_id && institution_id !== undefined) {
+      const institution_code = sessionStorage.getItem('institution_code');
+      if (institution_code && institution_code !== undefined) {
         dispatch({
-          type: 'updateInstitutionId',
-          payload: {institution_id: institution_id},
+          type: 'updateInstitutionCode',
+          payload: {institution_code: institution_code},
         });
       }
     }
@@ -24,7 +24,7 @@ export default {
 
   effects: {
 
-    // 注册
+    // 机构注册
     * register({payload}, {call, put, select}) {
       const data = yield call(register, payload);
       if (data.successTag) {
@@ -35,29 +35,29 @@ export default {
       }
     },
 
-    // 登陆
-    // * login({payload}, {call, put, select}) {
-    //   const data = yield call(login, payload);
-    //   if (data.successTag) {
-    //     sessionStorage.setItem('trainee_email', data.t.email);
-    //     yield put({
-    //       type: 'updateTraineeEmail',
-    //       payload: {trainee_email: data.t.email}
-    //     });
-    //     message.success(data.message);
-    //   }
-    //   else {
-    //     message.error(data.message);
-    //   }
-    // },
+    // 机构登陆
+    * login({payload}, {call, put, select}) {
+      const data = yield call(login, payload);
+      if (data.successTag) {
+        sessionStorage.setItem('institution_code', data.t.code);
+        yield put({
+          type: 'updateInstitutionCode',
+          payload: {institution_code: data.t.code}
+        });
+        message.success(data.message);
+      }
+      else {
+        message.error(data.message);
+      }
+    },
 
   },
 
   reducers: {
-    updateInstitutionId(state, action) {
+    updateInstitutionCode(state, action) {
       return {
         ...state,
-        institution_id: action.payload.institution_id,
+        institution_code: action.payload.institution_code,
       }
     },
   }
