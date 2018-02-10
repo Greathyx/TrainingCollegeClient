@@ -7,7 +7,7 @@ import styles from './css/InstitutionRegisterPage.css';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 
-class RegisterTraineeForm extends React.Component {
+class InstitutionRegisterForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -33,36 +33,6 @@ class RegisterTraineeForm extends React.Component {
         });
       }
     });
-  };
-
-  sendVerificationCode = () => {
-
-    const email = this.props.form.getFieldValue('email');
-
-    if(!email){
-      message.warning('请输入您的邮箱！');
-      return;
-    }
-
-    const param = {
-      email: email,
-    };
-
-    // 判断输入格式是否为email
-    const regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
-    if (regex.test(param.email)) {
-      message.success("邮箱验证中，请稍等...");
-      this.props.dispatch({
-        type: 'trainee/sendVerificationCode',
-        payload: {
-          ...param,
-        },
-      });
-    }
-    else {
-      message.error("邮箱不存在！");
-    }
-
   };
 
   render() {
@@ -128,7 +98,7 @@ class RegisterTraineeForm extends React.Component {
   }
 }
 
-const InstitutionRegisterPage = Form.create()(RegisterTraineeForm);
+const InstitutionRegisterPage = Form.create()(InstitutionRegisterForm);
 
 function mapStateToProps({institution}) {
   return {

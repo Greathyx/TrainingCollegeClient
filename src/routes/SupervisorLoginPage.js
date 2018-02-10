@@ -28,8 +28,12 @@ class SupervisorLoginForm extends React.Component {
             payload: {
               ...param,
             },
+          }).then(value => {
+            // 如果登陆成功则跳转页面
+            if(value){
+              this.props.history.push("/Supervisor/CheckRegister");
+            }
           });
-          this.props.history.push("/Supervisor/Check");
         }
         else {
           message.error("用户名或密码错误！");

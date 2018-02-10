@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {Table, Button} from 'antd';
 
 
-class SupervisorCheckRegisterPage extends React.Component {
+class SupervisorCheckModifyPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -40,7 +40,7 @@ class SupervisorCheckRegisterPage extends React.Component {
           this.props.dispatch({
             type: 'supervisor/approveApply',
             payload: {
-              type: "approveRegister",
+              type: "approveModify",
               approve: {
                 institution_apply_id: record.institution_apply_id,
               },
@@ -51,7 +51,7 @@ class SupervisorCheckRegisterPage extends React.Component {
             },
           });
           this.props.dispatch({
-            type: 'supervisor/getAllRegisterApply',
+            type: 'supervisor/getAllModifyApply',
             payload: {},
           });
           this.timer = setInterval(() => {
@@ -76,7 +76,7 @@ class SupervisorCheckRegisterPage extends React.Component {
           this.props.dispatch({
             type: 'supervisor/rejectApply',
             payload: {
-              type: "rejectRegister",
+              type: "rejectModify",
               reject: {
                 institution_apply_id: record.institution_apply_id,
               },
@@ -87,7 +87,7 @@ class SupervisorCheckRegisterPage extends React.Component {
             },
           });
           this.props.dispatch({
-            type: 'supervisor/getAllRegisterApply',
+            type: 'supervisor/getAllModifyApply',
             payload: {},
           });
           this.timer = setInterval(() => {
@@ -105,7 +105,7 @@ class SupervisorCheckRegisterPage extends React.Component {
   // React组件初始化时自动调用的方法
   componentWillMount() {
     this.props.dispatch({
-      type: 'supervisor/getAllRegisterApply',
+      type: 'supervisor/getAllModifyApply',
       payload: {},
     });
   }
@@ -117,7 +117,7 @@ class SupervisorCheckRegisterPage extends React.Component {
         <Table
           pagination={{defaultPageSize: 5}}
           columns={columns}
-          dataSource={this.props.supervisor.registerApplyData}
+          dataSource={this.props.supervisor.modifyApplyData}
           scroll={{x: 1500}}/>
       </div>
     )
@@ -131,4 +131,4 @@ function mapStateToProps({supervisor}) {
   };
 }
 
-export default connect(mapStateToProps)(SupervisorCheckRegisterPage);
+export default connect(mapStateToProps)(SupervisorCheckModifyPage);

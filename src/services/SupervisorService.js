@@ -43,6 +43,21 @@ export async function getAllRegisterApply() {
 
 /**
  *
+ * 获取所有机构修改信息申请
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllModifyApply() {
+
+  return request('/supervisor/getAllModifyApply', {
+    method: 'GET',
+  })
+
+}
+
+/**
+ *
  * 批准机构注册或修改信息申请
  *
  * @param param

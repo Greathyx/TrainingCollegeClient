@@ -1,6 +1,13 @@
 import pathToRegexp from 'path-to-regexp';
 import {message} from 'antd';
-import {login, getAllRegisterApply, approveApply, rejectApply, sendReplyMail} from "../services/SupervisorService";
+import {
+  login,
+  getAllRegisterApply,
+  getAllModifyApply,
+  approveApply,
+  rejectApply,
+  sendReplyMail
+} from "../services/SupervisorService";
 
 
 export default {
@@ -19,23 +26,29 @@ export default {
         if (pathToRegexp('/homepage').exec(location.pathname) || pathToRegexp('').exec(location.pathname)) {
           document.title = '主页';
         }
-        else if (pathToRegexp('/SupervisorLogin').exec(location.pathname)) {
-          document.title = '管理员登陆';
-        }
-        else if (pathToRegexp('/TraineeRegister').exec(location.pathname)) {
-          document.title = '学员注册';
-        }
-        else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
-          document.title = '学员登陆';
-        }
         else if (pathToRegexp('/InstitutionRegister').exec(location.pathname)) {
-          document.title = '机构注册';
+          document.title = '机构-注册';
         }
         else if (pathToRegexp('/InstitutionLogin').exec(location.pathname)) {
-            document.title = '机构登陆';
+          document.title = '机构-登陆';
         }
-        else if (pathToRegexp('/Supervisor/Check').exec(location.pathname)) {
-          document.title = '管理员-机构审核';
+        else if (pathToRegexp('/Institution/EditInfo').exec(location.pathname)) {
+          document.title = '机构-修改信息';
+        }
+        else if (pathToRegexp('/TraineeRegister').exec(location.pathname)) {
+          document.title = '学员-注册';
+        }
+        else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
+          document.title = '学员-登陆';
+        }
+        else if (pathToRegexp('/SupervisorLogin').exec(location.pathname)) {
+          document.title = '管理员-登陆';
+        }
+        else if (pathToRegexp('/Supervisor/CheckRegister').exec(location.pathname)) {
+          document.title = '管理员-机构注册审核';
+        }
+        else if (pathToRegexp('/Supervisor/CheckModify').exec(location.pathname)) {
+          document.title = '管理员-机构修改信息审核';
         }
         else {
           document.title = '页面不存在';
@@ -81,9 +94,11 @@ export default {
           payload: {hasLoggedIn: true}
         });
         message.success(data.message);
+        return true;
       }
       else {
         message.error(data.message);
+        return false;
       }
     },
 
@@ -110,6 +125,29 @@ export default {
       });
     },
 
+    // 获取所有机构修改信息申请
+    * getAllModifyApply({payload}, {call, put, select}) {
+      const data = yield call(getAllModifyApply);
+
+      let applies = [];
+      for (let i = 0; i < data.t.length; i++) {
+        applies.push({
+          key: i,
+          institution_apply_id: data.t[i].institution_apply_id,
+          name: data.t[i].name,
+          email: data.t[i].email,
+          address: data.t[i].location,
+          faculty: data.t[i].faculty,
+          introduction: data.t[i].introduction,
+        });
+      }
+
+      yield put({
+        type: 'updateModifyApplyData',
+        payload: {modifyApplyData: applies}
+      });
+    },
+
     // 批准申请
     * approveApply({payload}, {call, put, select}) {
 
@@ -118,7 +156,7 @@ export default {
         message.success(data.message);
 
         // 发送处理结果邮件
-        if (payload.type === "approveRegister"){
+        if (payload.type === "approveRegister") {
           // 直接在param中写data.t.code好像会报错导致邮件无法发送
           // 改成这样就好了
           const code = data.t.code;
@@ -126,7 +164,7 @@ export default {
             to: payload.email.to,
             title: "机构注册成功提醒",
             content: "尊敬的" + payload.email.name +
-            "，恭喜您成功注册\"若水\"教育。您的机构登陆码为："+ code + "。请您务必妥善保管。"
+            "，恭喜您成功注册\"若水\"教育。您的机构登陆码为：" + code + "。请您务必妥善保管。"
           };
           yield call(sendReplyMail, param);
         }
@@ -151,7 +189,7 @@ export default {
       if (data.successTag) {
         message.success(data.message);
         // 发送处理结果邮件
-        if (payload.type === "rejectRegister"){
+        if (payload.type === "rejectRegister") {
           const param = {
             to: payload.email.to,
             title: "机构注册失败提醒",
@@ -198,6 +236,13 @@ export default {
       return {
         ...state,
         registerApplyData: action.payload.registerApplyData,
+      }
+    },
+
+    updateModifyApplyData(state, action) {
+      return {
+        ...state,
+        modifyApplyData: action.payload.modifyApplyData,
       }
     },
 

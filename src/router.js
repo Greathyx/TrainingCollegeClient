@@ -1,13 +1,19 @@
 import React from 'react';
 import {Router, Route, Switch} from 'dva/router';
 import HomePage from './routes/HomePage';
-import SupervisorLoginPage from './routes/SupervisorLoginPage';
 import TraineeRegisterPage from './routes/TraineeRegisterPage';
 import TraineeLoginPage from './routes/TraineeLoginPage';
+
 import InstitutionRegisterPage from './routes/InstitutionRegisterPage';
 import InstitutionLoginPage from './routes/InstitutionLoginPage';
+import InstitutionMainPage from './routes/InstitutionMainPage';
+import InstitutionEditInfoPage from './routes/InstitutionEditInfoPage';
+
+import SupervisorLoginPage from './routes/SupervisorLoginPage';
 import SupervisorMainPage from './routes/SupervisorMainPage';
-import SupervisorCheckPage from './routes/SupervisorCheckRegisterPage';
+import SupervisorCheckRegisterPage from './routes/SupervisorCheckRegisterPage';
+import SupervisorCheckModifyPage from './routes/SupervisorCheckModifyPage';
+
 import Page404 from './routes/404Page';
 
 
@@ -25,9 +31,17 @@ function RouterConfig({history, app}) {
         <Route path="/Supervisor">
           <SupervisorMainPage>
             <Switch>
-              <Route path="/Supervisor/Check" exact restrict component={SupervisorCheckPage}/>
+              <Route path="/Supervisor/CheckRegister" exact restrict component={SupervisorCheckRegisterPage}/>
+              <Route path="/Supervisor/CheckModify" exact restrict component={SupervisorCheckModifyPage}/>
             </Switch>
           </SupervisorMainPage>
+        </Route>
+        <Route path="/Institution">
+          <InstitutionMainPage>
+            <Switch>
+              <Route path="/Institution/EditInfo" exact restrict component={InstitutionEditInfoPage}/>
+            </Switch>
+          </InstitutionMainPage>
         </Route>
         <Route path='*' exact component={Page404}/>
       </Switch>

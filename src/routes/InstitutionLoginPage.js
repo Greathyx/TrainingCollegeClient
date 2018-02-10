@@ -28,9 +28,13 @@ class InstitutionLoginForm extends React.Component {
             payload: {
               ...param,
             },
+          }).then(value => {
+            // 如果登陆成功则跳转页面
+            if(value){
+              // todo
+              this.props.history.push("/Institution/EditInfo");
+            }
           });
-          // todo
-          // this.props.history.push("/Supervisor/Check");
         }
         else {
           message.error("登陆码或密码错误！");
