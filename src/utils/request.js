@@ -44,9 +44,4 @@ export default function request(url, options) {
     })
     .catch(err => ({err}));
 
-  // return fetch(host + url, options)
-  //   .then(checkStatus)
-  //   .then(parseJSON)
-  //   .then(data => ({data}))
-  //   .catch(err => ({err}));
 }

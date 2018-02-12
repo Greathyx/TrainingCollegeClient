@@ -1,13 +1,13 @@
 import React from 'react';
 import {Link} from 'dva/router';
 import {Layout, Menu, Icon} from 'antd';
-import styles from './css/SupervisorMainPage.css';
+import styles from '../css/SupervisorMainPage.css';
 
 
 const {Sider, Content} = Layout;
 const SubMenu = Menu.SubMenu;
 
-class SupervisorMainPage extends React.Component {
+class InstitutionMainPage extends React.Component {
 
   state = {
     collapsed: false,
@@ -22,14 +22,19 @@ class SupervisorMainPage extends React.Component {
 
   // React组件初始化时自动调用的方法
   componentWillMount() {
-    if (window.location.hash === "#/Supervisor/CheckRegister") {
+    if (window.location.hash === "#/Institution/EditInfo") {
       this.setState({
-        defaultSelectedKeys: ['4'],
+        defaultSelectedKeys: ['3'],
       })
     }
-    else if (window.location.hash === "#/Supervisor/CheckModify"){
+    else if (window.location.hash === "#/Institution/ReleaseCourse") {
       this.setState({
-        defaultSelectedKeys: ['5'],
+        defaultSelectedKeys: ['6'],
+      })
+    }
+    else if (window.location.hash === "#/Institution/CourseInfo") {
+      this.setState({
+        defaultSelectedKeys: ['7'],
       })
     }
   }
@@ -47,20 +52,24 @@ class SupervisorMainPage extends React.Component {
           <Menu
             theme="dark"
             mode="inline"
-            defaultOpenKeys={['1']}
+            defaultOpenKeys={['1', '2']}
             defaultSelectedKeys={this.state.defaultSelectedKeys}
           >
-            <SubMenu key="1" title={<span><Icon type="file-text"/><span>机构审核</span></span>}>
-              <Menu.Item key="4"><Link to="/Supervisor/CheckRegister">审核注册信息</Link></Menu.Item>
-              <Menu.Item key="5"><Link to="/Supervisor/CheckModify">审核修改信息</Link></Menu.Item>
+            <SubMenu key="1" title={<span><Icon type="file-text"/><span>办公</span></span>}>
+              <Menu.Item key="4">听课登记</Menu.Item>
+              <Menu.Item key="5">缴费确认</Menu.Item>
+              <Menu.Item key="6"><Link to="/Institution/ReleaseCourse">课程发布</Link></Menu.Item>
             </SubMenu>
-            <Menu.Item key="2">
-              <Icon type="pay-circle"/>
-              <span>结算金额</span>
-            </Menu.Item>
+            <SubMenu key="2" title={<span><Icon type="file-text"/><span>统计信息</span></span>}>
+              <Menu.Item key="7"><Link to="/Institution/CourseInfo">课程信息</Link></Menu.Item>
+              <Menu.Item key="8">订课信息</Menu.Item>
+              <Menu.Item key="9">财务信息</Menu.Item>
+            </SubMenu>
             <Menu.Item key="3">
-              <Icon type="area-chart"/>
-              <span>统计信息</span>
+              <Link to="/Institution/EditInfo">
+                <Icon type="edit"/>
+                <span>修改信息</span>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -80,4 +89,4 @@ class SupervisorMainPage extends React.Component {
 
 }
 
-export default SupervisorMainPage;
+export default InstitutionMainPage;

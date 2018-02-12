@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'dva';
 import {Form, Icon, Input, Button, Checkbox, message} from 'antd';
-import styles from './css/SupervisorLoginPage.css';
+import styles from '../css/SupervisorLoginPage.css';
 
 
 const FormItem = Form.Item;

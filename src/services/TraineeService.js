@@ -21,7 +21,9 @@ export async function isActive(param) {
 }
 
 /**
+ *
  * 发送注册验证码
+ *
  * @param param
  * @returns {Promise.<Object>}
  */
@@ -59,7 +61,9 @@ export async function register(param) {
 
 
 /**
+ *
  * 学员登陆
+ *
  * @param param
  * @returns {Promise.<Object>}
  */

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'dva';
 import {Form, Input, InputNumber, Tooltip, Icon, Button, Select, DatePicker, message} from 'antd';
-import styles from './css/InstitutionReleaseCoursePage.css';
+import styles from '../css/InstitutionReleaseCoursePage.css';
 
 
 const FormItem = Form.Item;

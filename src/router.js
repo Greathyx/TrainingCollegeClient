@@ -1,22 +1,22 @@
 import React from 'react';
 import {Router, Route, Switch} from 'dva/router';
 import HomePage from './routes/HomePage';
-import TraineeRegisterPage from './routes/TraineeRegisterPage';
-import TraineeLoginPage from './routes/TraineeLoginPage';
-import TraineeMainPage from './routes/TraineeMainPage';
-import TraineeEditInfoPage from './routes/TraineeEditInfoPage';
+import TraineeRegisterPage from './routes/trainee/TraineeRegisterPage';
+import TraineeLoginPage from './routes/trainee/TraineeLoginPage';
+import TraineeMainPage from './routes/trainee/TraineeMainPage';
+import TraineeEditInfoPage from './routes/trainee/TraineeEditInfoPage';
 
-import InstitutionRegisterPage from './routes/InstitutionRegisterPage';
-import InstitutionLoginPage from './routes/InstitutionLoginPage';
-import InstitutionMainPage from './routes/InstitutionMainPage';
-import InstitutionReleaseCoursePage from './routes/InstitutionReleaseCoursePage';
-import InstitutionEditInfoPage from './routes/InstitutionEditInfoPage';
-import InstitutionCourseInfoPage from './routes/InstitutionCourseInfoPage';
+import InstitutionRegisterPage from './routes/institution/InstitutionRegisterPage';
+import InstitutionLoginPage from './routes/institution/InstitutionLoginPage';
+import InstitutionMainPage from './routes/institution/InstitutionMainPage';
+import InstitutionReleaseCoursePage from './routes/institution/InstitutionReleaseCoursePage';
+import InstitutionEditInfoPage from './routes/institution/InstitutionEditInfoPage';
+import InstitutionCourseInfoPage from './routes/institution/InstitutionCourseInfoPage';
 
-import SupervisorLoginPage from './routes/SupervisorLoginPage';
-import SupervisorMainPage from './routes/SupervisorMainPage';
-import SupervisorCheckRegisterPage from './routes/SupervisorCheckRegisterPage';
-import SupervisorCheckModifyPage from './routes/SupervisorCheckModifyPage';
+import SupervisorLoginPage from './routes/supervisor/SupervisorLoginPage';
+import SupervisorMainPage from './routes/supervisor/SupervisorMainPage';
+import SupervisorCheckRegisterPage from './routes/supervisor/SupervisorCheckRegisterPage';
+import SupervisorCheckModifyPage from './routes/supervisor/SupervisorCheckModifyPage';
 
 import Page404 from './routes/404Page';
 
