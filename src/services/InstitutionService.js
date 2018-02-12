@@ -70,3 +70,50 @@ export async function editInfo(param) {
   })
 
 }
+
+/**
+ *
+ * 发布课程
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function releaseCourse(param) {
+
+  const formData = new FormData();
+  formData.append('publisher', param.publisher);
+  formData.append('name', param.name);
+  formData.append('trainee_amount', param.trainee_amount);
+  formData.append('periods_per_week', param.periods_per_week);
+  formData.append('total_weeks', param.total_weeks);
+  formData.append('teacher', param.teacher);
+  formData.append('type', param.type);
+  formData.append('price', param.price);
+  formData.append('start_date', param.start_date);
+  formData.append('introduction', param.introduction);
+
+  return request('/institution/releaseCourse', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ *
+ * 获取机构课程信息
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getCourseInfo(param) {
+
+  const formData = new FormData();
+  formData.append('publisher', param.publisher);
+
+  return request('/institution/getCourseInfo', {
+    method: 'POST',
+    body: formData
+  })
+
+}

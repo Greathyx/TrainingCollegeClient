@@ -32,6 +32,12 @@ export default {
         else if (pathToRegexp('/InstitutionLogin').exec(location.pathname)) {
           document.title = '机构-登陆';
         }
+        else if (pathToRegexp('/Institution/ReleaseCourse').exec(location.pathname)) {
+          document.title = '机构-课程发布';
+        }
+        else if (pathToRegexp('/Institution/CourseInfo').exec(location.pathname)) {
+          document.title = '机构-查看课程';
+        }
         else if (pathToRegexp('/Institution/EditInfo').exec(location.pathname)) {
           document.title = '机构-修改信息';
         }
@@ -40,6 +46,9 @@ export default {
         }
         else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
           document.title = '学员-登陆';
+        }
+        else if (pathToRegexp('/Trainee/EditInfo').exec(location.pathname)) {
+          document.title = '学员-修改信息';
         }
         else if (pathToRegexp('/SupervisorLogin').exec(location.pathname)) {
           document.title = '管理员-登陆';

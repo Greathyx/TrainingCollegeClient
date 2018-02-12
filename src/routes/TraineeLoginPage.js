@@ -28,6 +28,11 @@ class SupervisorLoginForm extends React.Component {
             payload: {
               ...param,
             },
+          }).then(value => {
+            if(value){
+              // todo
+              this.props.history.push("/Trainee/EditInfo");
+            }
           });
         }
         else {

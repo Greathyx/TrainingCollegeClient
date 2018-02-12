@@ -31,8 +31,7 @@ class InstitutionLoginForm extends React.Component {
           }).then(value => {
             // 如果登陆成功则跳转页面
             if(value){
-              // todo
-              this.props.history.push("/Institution/EditInfo");
+              this.props.history.push("/Institution/CourseInfo");
             }
           });
         }

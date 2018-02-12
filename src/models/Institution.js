@@ -1,5 +1,5 @@
 import {message} from 'antd';
-import {register, login, editInfo} from "../services/InstitutionService";
+import {register, login, editInfo, releaseCourse, getCourseInfo} from "../services/InstitutionService";
 
 
 export default {
@@ -7,22 +7,31 @@ export default {
   namespace: 'institution',
 
   state: {
+    institution_id: null,
     institution_code: null,
     institution_email: null,
     institution_name: null,
     institution_location: null,
     institution_faculty: null,
-    institution_introduction: null
+    institution_introduction: null,
+    courseData: null,
   },
 
   subscriptions: {
     setup({dispatch, history}) {
+      const institution_id = sessionStorage.getItem('institution_id');
       const institution_code = sessionStorage.getItem('institution_code');
       const institution_email = sessionStorage.getItem('institution_email');
       const institution_name = sessionStorage.getItem('institution_name');
       const institution_location = sessionStorage.getItem('institution_location');
       const institution_faculty = sessionStorage.getItem('institution_faculty');
       const institution_introduction = sessionStorage.getItem('institution_introduction');
+      if (institution_id && institution_id !== undefined) {
+        dispatch({
+          type: 'updateInstitutionId',
+          payload: {institution_id: institution_id},
+        });
+      }
       if (institution_code && institution_code !== undefined) {
         dispatch({
           type: 'updateInstitutionCode',
@@ -79,12 +88,17 @@ export default {
     * login({payload}, {call, put, select}) {
       const data = yield call(login, payload);
       if (data.successTag) {
+        sessionStorage.setItem('institution_id', data.t.institution_id);
         sessionStorage.setItem('institution_code', data.t.code);
         sessionStorage.setItem('institution_email', data.t.email);
         sessionStorage.setItem('institution_name', data.t.name);
         sessionStorage.setItem('institution_location', data.t.location);
         sessionStorage.setItem('institution_faculty', data.t.faculty);
         sessionStorage.setItem('institution_introduction', data.t.introduction);
+        yield put({
+          type: 'updateInstitutionId',
+          payload: {institution_id: data.t.institution_id}
+        });
         yield put({
           type: 'updateInstitutionCode',
           payload: {institution_code: data.t.code}
@@ -129,9 +143,52 @@ export default {
       }
     },
 
+    // 机构发布课程
+    * releaseCourse({payload}, {call, put, select}) {
+      const data = yield call(releaseCourse, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
+    // 获取机构课程信息
+    * getCourseInfo({payload}, {call, put, select}) {
+      const data = yield call(getCourseInfo, payload);
+      let courses = [];
+      for (let i = 0; i < data.t.length; i++) {
+        courses.push({
+          key: i,
+          name: data.t[i].name,
+          trainee_amount: data.t[i].trainee_amount,
+          periods_per_week: data.t[i].periods_per_week,
+          total_weeks: data.t[i].total_weeks,
+          type: data.t[i].type,
+          start_date: data.t[i].start_date,
+          teacher: data.t[i].teacher,
+          introduction: data.t[i].introduction,
+          price: data.t[i].price,
+        });
+      }
+
+      yield put({
+        type: 'updateInstitutionCourseData',
+        payload: {courseData: courses}
+      });
+    },
+
   },
 
   reducers: {
+    // 更新机构ID
+    updateInstitutionId(state, action) {
+      return {
+        ...state,
+        institution_id: action.payload.institution_id,
+      }
+    },
     // 更新机构登陆码
     updateInstitutionCode(state, action) {
       return {
@@ -172,6 +229,13 @@ export default {
       return {
         ...state,
         institution_introduction: action.payload.institution_introduction,
+      }
+    },
+    // 更新机构课程信息
+    updateInstitutionCourseData(state, action) {
+      return {
+        ...state,
+        courseData: action.payload.courseData,
       }
     },
   }

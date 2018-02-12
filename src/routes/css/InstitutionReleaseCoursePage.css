@@ -1,14 +1,14 @@
 .wrapper {
   position: relative;
   background-color: white;
-  height: 88%;
+  height: 100%;
+  margin-bottom: 50px;
 }
 
 .edit_form {
   position: absolute;
-  top: 50%;
   left:50%;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-55%);
 }
 
 .edit_form > .welcome {
@@ -19,6 +19,11 @@
 :global input {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
   border: 1px solid #CCC!important;
+}
+
+/*修改 antd label提示标签的样式*/
+:global .ant-col-sm-8 {
+  width: 20%;
 }
 
 /*修改chrome自动填充表单样式*/
@@ -36,30 +41,35 @@
   font-size: xx-large;
 }
 
+/*修改 antd button的位置*/
+:global .ant-col-sm-offset-8 {
+  margin-left: 20%;
+}
+
 .button {
   width: 100%;
 }
 
 @media screen and (min-width: 1200px) {
   .edit_form {
-    width: 500px;
+    width: 600px;
   }
 }
 
 @media screen and (min-width: 992px) and (max-width: 1200px) {
   .edit_form {
-    width: 500px;
+    width: 600px;
   }
 }
 
 @media screen and (min-width: 600px) and (max-width: 992px) {
   .edit_form {
-    width: 400px;
+    width: 500px;
   }
 }
 
 @media screen and (max-width: 600px) {
   .edit_form {
-    width: 300px;
+    width: 400px;
   }
 }
