@@ -4,6 +4,7 @@ import HomePage from './routes/HomePage';
 import TraineeRegisterPage from './routes/trainee/TraineeRegisterPage';
 import TraineeLoginPage from './routes/trainee/TraineeLoginPage';
 import TraineeMainPage from './routes/trainee/TraineeMainPage';
+import TraineeVipCenterPage from './routes/trainee/TraineeVipCenterPage';
 import TraineeEditInfoPage from './routes/trainee/TraineeEditInfoPage';
 
 import InstitutionRegisterPage from './routes/institution/InstitutionRegisterPage';
@@ -35,6 +36,7 @@ function RouterConfig({history, app}) {
         <Route path="/Trainee">
           <TraineeMainPage>
             <Switch>
+              <Route path="/Trainee/VipCenter" exact restrict component={TraineeVipCenterPage}/>
               <Route path="/Trainee/EditInfo" exact restrict component={TraineeEditInfoPage}/>
             </Switch>
           </TraineeMainPage>

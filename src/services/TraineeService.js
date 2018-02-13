@@ -105,3 +105,22 @@ export async function traineeEditInfo(param) {
   })
 
 }
+
+/**
+ *
+ * 获取会员累计消费，等级，优惠折扣和积分
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getTraineeVipInfo(param) {
+
+  const formData = new FormData();
+  formData.append('trainee_id', param.trainee_id);
+
+  return request('/trainee/getTraineeVipInfo', {
+    method: 'POST',
+    body: formData
+  })
+
+}

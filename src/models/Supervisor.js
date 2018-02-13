@@ -47,6 +47,9 @@ export default {
         else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
           document.title = '学员-登陆';
         }
+        else if (pathToRegexp('/Trainee/VipCenter').exec(location.pathname)) {
+          document.title = '学员-会员中心';
+        }
         else if (pathToRegexp('/Trainee/EditInfo').exec(location.pathname)) {
           document.title = '学员-修改信息';
         }

@@ -4,7 +4,8 @@ import {
   sendVerificationCode,
   register,
   login,
-  traineeEditInfo
+  traineeEditInfo,
+  getTraineeVipInfo,
 } from "../services/TraineeService";
 
 
@@ -18,7 +19,9 @@ export default {
     trainee_name: null,
     expenditure: null,
     credit: null,
-    is_active: null
+    is_active: null,
+    level: null,
+    discount: null,
   },
 
   subscriptions: {
@@ -29,6 +32,8 @@ export default {
       const expenditure = sessionStorage.getItem('expenditure');
       const credit = sessionStorage.getItem('credit');
       const is_active = sessionStorage.getItem('is_active');
+      const level = sessionStorage.getItem('level');
+      const discount = sessionStorage.getItem('discount');
 
       if (trainee_id && trainee_id !== undefined) {
         dispatch({
@@ -70,6 +75,18 @@ export default {
         dispatch({
           type: 'updateIsActive',
           payload: {is_active: is_active},
+        });
+      }
+      if (level && level !== undefined) {
+        dispatch({
+          type: 'updateLevel',
+          payload: {level: level},
+        });
+      }
+      if (discount && discount !== undefined) {
+        dispatch({
+          type: 'updateDiscount',
+          payload: {discount: discount},
         });
       }
     }
@@ -204,6 +221,32 @@ export default {
       }
     },
 
+    // 获取会员累计消费，等级，优惠折扣和积分
+    * getTraineeVipInfo({payload}, {call, put, select}) {
+      const data = yield call(getTraineeVipInfo, payload);
+      sessionStorage.setItem('expenditure', data.t.expenditure);
+      sessionStorage.setItem('level', data.t.level);
+      sessionStorage.setItem('discount', data.t.discount);
+      sessionStorage.setItem('credit', data.t.credit);
+
+      yield put({
+        type: 'updateExpenditure',
+        payload: {expenditure: data.t.expenditure}
+      });
+      yield put({
+        type: 'updateLevel',
+        payload: {level: data.t.level}
+      });
+      yield put({
+        type: 'updateDiscount',
+        payload: {discount: data.t.discount}
+      });
+      yield put({
+        type: 'updateCredit',
+        payload: {credit: data.t.credit}
+      });
+    },
+
   },
 
   reducers: {
@@ -249,6 +292,20 @@ export default {
         is_active: action.payload.is_active,
       }
     },
+    // 更新会员等级
+    updateLevel(state, action) {
+      return {
+        ...state,
+        level: action.payload.level,
+      }
+    },
+    // 更新会员优惠折扣
+    updateDiscount(state, action) {
+      return {
+        ...state,
+        discount: action.payload.discount,
+      }
+    }
   }
 
 }

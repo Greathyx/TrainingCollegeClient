@@ -27,11 +27,11 @@ class TraineeMainPage extends React.Component {
         defaultSelectedKeys: ['4'],
       })
     }
-    // else if (window.location.hash === "#/Supervisor/CheckModify"){
-    //   this.setState({
-    //     defaultSelectedKeys: ['5'],
-    //   })
-    // }
+    else if (window.location.hash === "#/Trainee/VipCenter"){
+      this.setState({
+        defaultSelectedKeys: ['9'],
+      })
+    }
   }
 
   render() {
@@ -61,7 +61,7 @@ class TraineeMainPage extends React.Component {
             <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
               <Menu.Item key="7">订单状态</Menu.Item>
               <Menu.Item key="8">个人成绩</Menu.Item>
-              <Menu.Item key="9">会员信息</Menu.Item>
+              <Menu.Item key="9"><Link to="/Trainee/VipCenter">会员中心</Link></Menu.Item>
             </SubMenu>
             <Menu.Item key="4">
               <Link to="/Trainee/EditInfo">
