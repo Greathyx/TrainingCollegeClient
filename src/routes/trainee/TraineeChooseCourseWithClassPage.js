@@ -48,7 +48,7 @@ const CollectionCreateForm = Form.create()(
     const formItemLayout = {
       labelCol: {
         xs: {span: 24},
-        sm: {span: 6},
+        sm: {span: 8},
       },
       wrapperCol: {
         xs: {span: 24},
@@ -65,7 +65,7 @@ const CollectionCreateForm = Form.create()(
         onCancel={onCancel}
         onOk={onCreate}
       >
-        <Form layout="vertical" style={{width: '100%', marginTop: 20}}>
+        <Form layout="vertical" style={{width: '100%', marginTop: 20, marginLeft: 30}}>
           <FormItem
             {...formItemLayout} label="课程价格"
           >
@@ -291,8 +291,8 @@ class TraineeChooseCourseWithClassPage extends React.Component {
       onFilter: (value, record) => record.type.indexOf(value) === 0,
     }, {
       title: '已报名额／课程名额',
-      dataIndex: 'trainee_amount',
-      key: 'trainee_amount',
+      dataIndex: 'amount',
+      key: 'amount',
       width: 160,
     }, {
       title: '报名截止日期',
@@ -344,6 +344,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
         <span>
           <Button
             type="primary"
+            disabled={record.trainee_amount <= record.booked_amount}
             onClick={() => {
               const param = {
                 price: record.price,

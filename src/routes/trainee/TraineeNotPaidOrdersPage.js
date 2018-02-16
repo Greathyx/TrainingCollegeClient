@@ -1,12 +1,64 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Table, Button} from 'antd';
+import {Table, Button, Modal, Form, Input} from 'antd';
 
+
+const FormItem = Form.Item;
+
+const ConfirmPayForm = Form.create()(
+  (props) => {
+    const {visible, onCancel, onCreate, form} = props;
+    const {getFieldDecorator} = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: {span: 24},
+        sm: {span: 4},
+      },
+      wrapperCol: {
+        xs: {span: 24},
+        sm: {span: 16},
+      },
+    };
+
+    return (
+      <Modal
+        visible={visible}
+        title="确认支付"
+        okText="支付"
+        cancelText="取消"
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout="vertical" style={{width: '100%', marginTop: 20, marginLeft: 30}}>
+          <FormItem {...formItemLayout} label="卡号">
+            {getFieldDecorator('identity', {
+              rules: [{required: true, message: '请输入您的银行卡号！'}],
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="密码">
+            {getFieldDecorator('password', {
+              rules: [{required: true, message: '请输入您的银行卡密码！'}],
+            })(
+              <Input type="password"/>
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  }
+);
 
 class TraineeNotPaidOrdersPage extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      visible: false,
+      course_order_id: -1,
+    };
 
     this.columns = [{
       title: '课程名称',
@@ -52,10 +104,9 @@ class TraineeNotPaidOrdersPage extends React.Component {
         <span>
       <Button
         type="primary"
+        disabled={record.status === "invalid"}
         onClick={() => {
-          // this.timer = setInterval(() => {
-          //   window.location.reload(true);
-          // }, 1000);
+          this.showModal(record.course_order_id)
         }}
       >
         支付
@@ -70,10 +121,51 @@ class TraineeNotPaidOrdersPage extends React.Component {
     this.props.dispatch({
       type: 'trainee/getAllNotPaidOrders',
       payload: {
-        traineeID: this.props.trainee.trainee_id
+        traineeID: this.props.trainee.trainee_id,
+        status: "not_paid"
       },
     });
   }
+
+  showModal = (course_order_id) => {
+    this.setState({
+      visible: true,
+      course_order_id: course_order_id,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({visible: false});
+  };
+
+  handleCreate = () => {
+    const form = this.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      const param = {
+        ...values,
+        course_order_id: this.state.course_order_id,
+      };
+      this.props.dispatch({
+        type: 'trainee/pay',
+        payload: {
+          ...param,
+        },
+      });
+      form.resetFields();
+      this.setState({visible: false});
+      // 1s后刷新本页面
+      this.timer = setInterval(() => {
+        window.location.reload(true);
+      }, 1000);
+    });
+  };
+
+  saveFormRef = (form) => {
+    this.form = form;
+  };
 
   render() {
     const columns = this.columns;
@@ -84,6 +176,12 @@ class TraineeNotPaidOrdersPage extends React.Component {
           columns={columns}
           dataSource={this.props.trainee.notPaidOrders}
           // scroll={{x: 1500}}
+        />
+        <ConfirmPayForm
+          ref={this.saveFormRef}
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
         />
       </div>
     )

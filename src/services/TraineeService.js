@@ -182,12 +182,33 @@ export async function generateOrder(param) {
  * @param param
  * @returns {Promise.<Object>}
  */
-export async function getAllNotPaidOrders(param) {
+export async function getAllOrdersByStatus(param) {
 
   const formData = new FormData();
   formData.append('traineeID', param.traineeID);
+  formData.append('status', param.status);
 
-  return request('/trainee/getAllNotPaidOrders', {
+  return request('/trainee/getAllOrdersByStatus', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 付款
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function pay(param) {
+
+  const formData = new FormData();
+  formData.append('course_order_id', param.course_order_id);
+  formData.append('identity', param.identity);
+  formData.append('password', param.password);
+
+  return request('/trainee/pay', {
     method: 'POST',
     body: formData
   })

@@ -113,8 +113,8 @@ class TraineeChooseCourseWithoutClassPage extends React.Component {
       onFilter: (value, record) => record.type.indexOf(value) === 0,
     }, {
       title: '已报名额／课程名额',
-      dataIndex: 'trainee_amount',
-      key: 'trainee_amount',
+      dataIndex: 'amount',
+      key: 'amount',
       width: 160,
     }, {
       title: '报名截止日期',
@@ -166,6 +166,7 @@ class TraineeChooseCourseWithoutClassPage extends React.Component {
         <span>
           <Button
             type="primary"
+            disabled={record.trainee_amount <= record.booked_amount}
             onClick={() => {
               // this.timer = setInterval(() => {
               //   window.location.reload(true);

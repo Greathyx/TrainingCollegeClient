@@ -9,7 +9,8 @@ import {
   getAllCourses,
   getAllCoursesWithClasses,
   generateOrder,
-  getAllNotPaidOrders
+  getAllOrdersByStatus,
+  pay,
 } from "../services/TraineeService";
 
 
@@ -268,7 +269,9 @@ export default {
           course_name: data.t[i].name,
           price: data.t[i].price,
           type: data.t[i].type,
-          trainee_amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+          amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+          trainee_amount: data.t[i].trainee_amount,
+          booked_amount: data.t[i].booked_amount,
           start_date: data.t[i].start_date,
           periods_per_week: data.t[i].periods_per_week,
           total_weeks: data.t[i].total_weeks,
@@ -299,7 +302,9 @@ export default {
           course_name: data.t[i].name,
           price: data.t[i].price,
           type: data.t[i].type,
-          trainee_amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+          amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+          trainee_amount: data.t[i].trainee_amount,
+          booked_amount: data.t[i].booked_amount,
           start_date: data.t[i].start_date,
           periods_per_week: data.t[i].periods_per_week,
           total_weeks: data.t[i].total_weeks,
@@ -329,18 +334,16 @@ export default {
 
     // 获取学员所有未支付订单
     * getAllNotPaidOrders({payload}, {call, put, select}) {
-      const data = yield call(getAllNotPaidOrders, payload);
+      const data = yield call(getAllOrdersByStatus, payload);
       let notPaidOrders = [];
       for (let i = 0; i < data.t.length; i++) {
         let status = "";
         if (data.t[i].status === "not_paid") {
           status = "未支付";
         }
-        else if (data.t[i].status === "paid") {
-          status = "已支付";
-        }
         notPaidOrders.push({
           key: i,
+          course_order_id: data.t[i].course_order_id,
           traineeID: data.t[i].traineeID,
           courseID: data.t[i].courseID,
           classID: data.t[i].classID,
@@ -359,6 +362,17 @@ export default {
         type: 'updateNotPaidOrders',
         payload: {notPaidOrders: notPaidOrders}
       });
+    },
+
+    // 付款
+    * pay({payload}, {call, put, select}) {
+      const data = yield call(pay, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.warning(data.message);
+      }
     },
 
   },
