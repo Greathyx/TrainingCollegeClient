@@ -14,9 +14,13 @@ class InstitutionCourseInfoPage extends React.Component {
       width: 100,
       fixed: 'left'
     }, {
-      title: '课程人数',
-      width: 100,
+      title: '已报名额／课程名额',
+      width: 160,
       dataIndex: 'trainee_amount',
+    }, {
+      title: '班级数目',
+      width: 100,
+      dataIndex: 'class_amount',
     }, {
       title: '课时／周',
       width: 100,
@@ -29,6 +33,10 @@ class InstitutionCourseInfoPage extends React.Component {
       title: '课程类型',
       width: 100,
       dataIndex: 'type',
+    }, {
+      title: '报名截止日期',
+      width: 150,
+      dataIndex: 'book_due_date',
     }, {
       title: '开课日期',
       width: 150,
@@ -62,10 +70,11 @@ class InstitutionCourseInfoPage extends React.Component {
     return (
       <div style={{padding: '0 50px 20px 50px', backgroundColor: 'white'}}>
         <Table
-          pagination={{defaultPageSize: 10}}
+          pagination={{defaultPageSize: 5}}
           columns={columns}
           dataSource={this.props.institution.courseData}
-          scroll={{x: 1500}}/>
+          scroll={{x: 1500}}
+        />
       </div>
     )
   }

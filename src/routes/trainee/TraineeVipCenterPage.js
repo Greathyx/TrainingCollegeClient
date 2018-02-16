@@ -25,7 +25,8 @@ function level_info() {
         </p>
       </div>
     ),
-    onOk() {},
+    onOk() {
+    },
     okText: "我知道了",
   });
 }
@@ -49,7 +50,8 @@ function discount_info() {
         </p>
       </div>
     ),
-    onOk() {},
+    onOk() {
+    },
     okText: "我知道了",
   });
 }
@@ -60,12 +62,13 @@ function credit_info() {
     content: (
       <div>
         <p>
-          单笔消费每满100元，可获得10点积分。<br/>
+          单笔消费每满100元，可获得5点积分。<br/>
           1点积分可在购买课程时可抵扣1元金额。
         </p>
       </div>
     ),
-    onOk() {},
+    onOk() {
+    },
     okText: "我知道了",
   });
 }

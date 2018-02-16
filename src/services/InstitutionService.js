@@ -82,6 +82,7 @@ export async function releaseCourse(param) {
 
   const formData = new FormData();
   formData.append('publisher', param.publisher);
+  formData.append('publisher_name', param.publisher_name);
   formData.append('name', param.name);
   formData.append('trainee_amount', param.trainee_amount);
   formData.append('periods_per_week', param.periods_per_week);
@@ -91,6 +92,8 @@ export async function releaseCourse(param) {
   formData.append('price', param.price);
   formData.append('start_date', param.start_date);
   formData.append('introduction', param.introduction);
+  formData.append('has_classes', param.has_classes);
+  formData.append('book_due_date', param.book_due_date);
 
   return request('/institution/releaseCourse', {
     method: 'POST',

@@ -4,6 +4,9 @@ import HomePage from './routes/HomePage';
 import TraineeRegisterPage from './routes/trainee/TraineeRegisterPage';
 import TraineeLoginPage from './routes/trainee/TraineeLoginPage';
 import TraineeMainPage from './routes/trainee/TraineeMainPage';
+import TraineeChooseCourseWithClassPage from './routes/trainee/TraineeChooseCourseWithClassPage';
+import TraineeChooseCourseWithoutClassPage from './routes/trainee/TraineeChooseCourseWithoutClassPage';
+import TraineeNotPaidOrdersPage from './routes/trainee/TraineeNotPaidOrdersPage';
 import TraineeVipCenterPage from './routes/trainee/TraineeVipCenterPage';
 import TraineeEditInfoPage from './routes/trainee/TraineeEditInfoPage';
 
@@ -20,7 +23,7 @@ import SupervisorCheckRegisterPage from './routes/supervisor/SupervisorCheckRegi
 import SupervisorCheckModifyPage from './routes/supervisor/SupervisorCheckModifyPage';
 
 import Page404 from './routes/404Page';
-
+import TestPage from './routes/TestPage';
 
 function RouterConfig({history, app}) {
   return (
@@ -28,6 +31,7 @@ function RouterConfig({history, app}) {
       <Switch>
         <Route path="/" exact component={HomePage}/>
         <Route path="/homepage" exact component={HomePage}/>
+        <Route path="/test" exact component={TestPage}/>
         <Route path="/SupervisorLogin" exact component={SupervisorLoginPage}/>
         <Route path="/TraineeRegister" exact component={TraineeRegisterPage}/>
         <Route path="/TraineeLogin" exact component={TraineeLoginPage}/>
@@ -36,6 +40,9 @@ function RouterConfig({history, app}) {
         <Route path="/Trainee">
           <TraineeMainPage>
             <Switch>
+              <Route path="/Trainee/ChooseCourseWithClass" exact restrict component={TraineeChooseCourseWithClassPage}/>
+              <Route path="/Trainee/ChooseCourseWithoutClass" exact restrict component={TraineeChooseCourseWithoutClassPage}/>
+              <Route path="/Trainee/NotPaidOrders" exact restrict component={TraineeNotPaidOrdersPage}/>
               <Route path="/Trainee/VipCenter" exact restrict component={TraineeVipCenterPage}/>
               <Route path="/Trainee/EditInfo" exact restrict component={TraineeEditInfoPage}/>
             </Switch>

@@ -47,6 +47,15 @@ export default {
         else if (pathToRegexp('/TraineeLogin').exec(location.pathname)) {
           document.title = '学员-登陆';
         }
+        else if (pathToRegexp('/Trainee/ChooseCourseWithClass').exec(location.pathname)) {
+          document.title = '学员-预定课程(选班)';
+        }
+        else if (pathToRegexp('/Trainee/ChooseCourseWithoutClass').exec(location.pathname)) {
+          document.title = '学员-预定课程(不选班)';
+        }
+        else if (pathToRegexp('/Trainee/NotPaidOrders').exec(location.pathname)) {
+          document.title = '学员-未支付订单';
+        }
         else if (pathToRegexp('/Trainee/VipCenter').exec(location.pathname)) {
           document.title = '学员-会员中心';
         }

@@ -50,6 +50,7 @@ export async function register(param) {
   const formData = new FormData();
   formData.append('email', param.email);
   formData.append('password', param.password);
+  formData.append('name', param.name);
   formData.append('verificationCode', param.verificationCode);
 
   return request('/trainee/register', {
@@ -119,6 +120,74 @@ export async function getTraineeVipInfo(param) {
   formData.append('trainee_id', param.trainee_id);
 
   return request('/trainee/getTraineeVipInfo', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ *
+ * 获取所有机构发布的所有不分班课程
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getAllCourses() {
+
+  return request('/trainee/getAllCourses', {
+    method: 'GET',
+  })
+
+}
+
+/**
+ *
+ * 获取所有机构发布的所有分班课程
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getAllCoursesWithClasses() {
+
+  return request('/trainee/getAllCoursesWithClasses', {
+    method: 'GET',
+  })
+
+}
+
+/**
+ * 生成课程订单
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function generateOrder(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.traineeID);
+  formData.append('courseID', param.courseID);
+  formData.append('payment', param.payment);
+  formData.append('amount', param.amount);
+  formData.append('description', param.description);
+
+  return request('/trainee/generateOrder', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取学员所有未支付订单
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllNotPaidOrders(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.traineeID);
+
+  return request('/trainee/getAllNotPaidOrders', {
     method: 'POST',
     body: formData
   })

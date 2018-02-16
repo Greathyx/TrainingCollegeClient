@@ -46,7 +46,7 @@ class InstitutionMainPage extends React.Component {
           trigger={null}
           collapsible
           collapsed={this.state.collapsed}
-          style={{overflow: 'auto', height: '100vh', left: 0}}
+          style={{overflow: 'auto', minHeight: '100vh', left: 0}}
         >
           <div className={styles.logo}/>
           <Menu

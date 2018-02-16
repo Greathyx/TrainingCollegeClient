@@ -30,8 +30,7 @@ class SupervisorLoginForm extends React.Component {
             },
           }).then(value => {
             if(value){
-              // todo
-              this.props.history.push("/Trainee/EditInfo");
+              this.props.history.push("/Trainee/ChooseCourseWithClass");
             }
           });
         }

@@ -1,13 +1,16 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Form, Input, InputNumber, Tooltip, Icon, Button, Select, DatePicker, message} from 'antd';
+import moment from 'moment';
+import {Form, Input, InputNumber, Tooltip, Icon, Button, Select, DatePicker, Radio, message} from 'antd';
 import styles from '../css/InstitutionReleaseCoursePage.css';
 
 
 const FormItem = Form.Item;
 const {TextArea} = Input;
 const Option = Select.Option;
-const types = ["外语", "考研", "奥数", "编程", "前端交互"];
+const RadioGroup = Radio.Group;
+const types = ["外语", "考研", "奥数", "文学", "物化", "编程",
+  "前端交互", "摄影", "健身", "棋类", "烹饪"];
 
 /**
  *
@@ -17,7 +20,7 @@ const types = ["外语", "考研", "奥数", "编程", "前端交互"];
  * @returns {*}
  */
 function validateTraineeAmount(value) {
-  if (value >= 1 && value <= 200) {
+  if (value >= 1) {
     return {
       validateStatus: 'success',
       errorMsg: null,
@@ -25,7 +28,7 @@ function validateTraineeAmount(value) {
   }
   return {
     validateStatus: 'error',
-    errorMsg: '课程人数须在1～200人之间！',
+    errorMsg: '课程人数须至少1人！',
   };
 }
 
@@ -37,7 +40,7 @@ function validateTraineeAmount(value) {
  * @returns {*}
  */
 function validatePeriodPerWeek(value) {
-  if (value >= 1 && value <= 10) {
+  if (value >= 1) {
     return {
       validateStatus: 'success',
       errorMsg: null,
@@ -45,7 +48,7 @@ function validatePeriodPerWeek(value) {
   }
   return {
     validateStatus: 'error',
-    errorMsg: '每周课时须在1～10课时之间！',
+    errorMsg: '每周课时须至少1课时！',
   };
 }
 
@@ -57,7 +60,7 @@ function validatePeriodPerWeek(value) {
  * @returns {*}
  */
 function validateTotalWeeks(value) {
-  if (value >= 1 && value <= 20) {
+  if (value >= 1) {
     return {
       validateStatus: 'success',
       errorMsg: null,
@@ -65,7 +68,7 @@ function validateTotalWeeks(value) {
   }
   return {
     validateStatus: 'error',
-    errorMsg: '课程总周数须在1～20周之间！',
+    errorMsg: '课程总周数须至少1周！',
   };
 }
 
@@ -89,6 +92,13 @@ function validatePrice(value) {
   };
 }
 
+// 将今天及之前的日期设置为不可选
+function disabledDateBeforeToday(current) {
+  // Can not select days before today and today
+  return current && current < moment().endOf('day');
+}
+
+
 class InstitutionReleaseCourseForm extends React.Component {
 
   state = {
@@ -104,6 +114,7 @@ class InstitutionReleaseCourseForm extends React.Component {
     price: {
       value: 0
     },
+    has_classes: 1,
   };
 
   handleTraineeAmount = (value) => {
@@ -151,6 +162,13 @@ class InstitutionReleaseCourseForm extends React.Component {
     callback()
   };
 
+  // 设置是否分班变量的值
+  onHasClassesChange = (e) => {
+    this.setState({
+      has_classes: e.target.value,
+    });
+  };
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -163,20 +181,31 @@ class InstitutionReleaseCourseForm extends React.Component {
           message.error("登陆过时，请重新登陆！");
           return;
         }
+        if(values['start_date']<values['book_due_date']){
+          message.error("开课日期须在报名截止日期之后！");
+          return;
+        }
         const fieldsValue = {
           ...values,
           'publisher': this.props.institution.institution_id,
+          'publisher_name': this.props.institution.institution_name,
           'trainee_amount': this.state.trainee_amount.value,
           'periods_per_week': this.state.period_per_week.value,
           'total_weeks': this.state.total_weeks.value,
           'price': this.state.price.value,
           'start_date': values['start_date'].format('YYYY-MM-DD'),
+          'book_due_date': values['book_due_date'].format('YYYY-MM-DD'),
+          'has_classes': this.state.has_classes === 1 ? "false" : "true",
         };
         this.props.dispatch({
           type: 'institution/releaseCourse',
           payload: {
             ...fieldsValue,
           },
+        }).then(value => {
+          if (value){
+            this.props.form.resetFields();
+          }
         });
       }
     });
@@ -190,9 +219,9 @@ class InstitutionReleaseCourseForm extends React.Component {
     const total_weeks = this.state.total_weeks;
     const price = this.state.price;
 
-    const trainee_amount_tips = '课程人数须在1～200人之间';
-    const period_per_week_tips = '每周课时须在1～10课时之间';
-    const total_weeks_tips = '课程总周数须在1～20周之间';
+    const trainee_amount_tips = '课程人数须至少1人';
+    const period_per_week_tips = '每周课时须至少1课时';
+    const total_weeks_tips = '课程总周数须至少1周';
     const price_tips = '课程总金额须大于或等于0';
 
     const formItemLayout = {
@@ -240,17 +269,25 @@ class InstitutionReleaseCourseForm extends React.Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
-            label="课程人数"
+            label="课程名额"
             validateStatus={trainee_amount.validateStatus}
             help={trainee_amount.errorMsg || trainee_amount_tips}
           >
             <InputNumber
               min={1}
-              max={200}
               value={trainee_amount.value}
               onChange={this.handleTraineeAmount}
               style={{width: '100%'}}
             />
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="是否分班"
+          >
+            <RadioGroup onChange={this.onHasClassesChange} value={this.state.has_classes}>
+              <Radio value={1}>否</Radio>
+              <Radio value={2}>是</Radio>
+            </RadioGroup>
           </FormItem>
           <FormItem
             {...formItemLayout}
@@ -260,7 +297,6 @@ class InstitutionReleaseCourseForm extends React.Component {
           >
             <InputNumber
               min={1}
-              max={10}
               value={period_per_week.value}
               onChange={this.handlePeriodPerWeek}
               style={{width: '100%'}}
@@ -274,7 +310,6 @@ class InstitutionReleaseCourseForm extends React.Component {
           >
             <InputNumber
               min={1}
-              max={20}
               value={total_weeks.value}
               onChange={this.handleTotalWeeks}
               style={{width: '100%'}}
@@ -312,12 +347,22 @@ class InstitutionReleaseCourseForm extends React.Component {
           </FormItem>
           <FormItem
             {...formItemLayout}
+            label="报名截止日期"
+          >
+            {getFieldDecorator('book_due_date', {
+              rules: [{type: 'object', required: true, message: '请选择报名截止日期！'}],
+            })(
+              <DatePicker style={{width: '100%'}} disabledDate={disabledDateBeforeToday} placeholder="请选择报名截止日期"/>
+            )}
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
             label="开课日期"
           >
             {getFieldDecorator('start_date', {
               rules: [{type: 'object', required: true, message: '请选择开课日期！'}],
             })(
-              <DatePicker placeholder="请选择开课日期"/>
+              <DatePicker style={{width: '100%'}} disabledDate={disabledDateBeforeToday} placeholder="请选择开课日期"/>
             )}
           </FormItem>
           <FormItem

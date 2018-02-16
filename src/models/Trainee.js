@@ -6,6 +6,10 @@ import {
   login,
   traineeEditInfo,
   getTraineeVipInfo,
+  getAllCourses,
+  getAllCoursesWithClasses,
+  generateOrder,
+  getAllNotPaidOrders
 } from "../services/TraineeService";
 
 
@@ -22,6 +26,9 @@ export default {
     is_active: null,
     level: null,
     discount: null,
+    courses: [],
+    coursesWithoutClasses: [],
+    notPaidOrders: [],
   },
 
   subscriptions: {
@@ -247,6 +254,113 @@ export default {
       });
     },
 
+    // 获取所有机构发布的所有选班课程
+    * getAllCourses({payload}, {call, put, select}) {
+      const data = yield call(getAllCourses);
+
+      let courses = [];
+      for (let i = 0; i < data.t.length; i++) {
+        courses.push({
+          key: i,
+          course_id: data.t[i].course_id,
+          institution_id: data.t[i].publisher,
+          institution_name: data.t[i].publisher_name,
+          course_name: data.t[i].name,
+          price: data.t[i].price,
+          type: data.t[i].type,
+          trainee_amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+          start_date: data.t[i].start_date,
+          periods_per_week: data.t[i].periods_per_week,
+          total_weeks: data.t[i].total_weeks,
+          teacher: data.t[i].teacher,
+          course_introduction: data.t[i].introduction,
+          class_amount: data.t[i].class_amount,
+          book_due_date: data.t[i].book_due_date,
+        });
+      }
+
+      yield put({
+        type: 'updateCourses',
+        payload: {courses: courses}
+      });
+    },
+
+    // 获取所有机构发布的所有选班课程
+    * getAllCoursesWithClasses({payload}, {call, put, select}) {
+      const data = yield call(getAllCoursesWithClasses);
+
+      let coursesWithoutClasses = [];
+      for (let i = 0; i < data.t.length; i++) {
+        coursesWithoutClasses.push({
+          key: i,
+          course_id: data.t[i].course_id,
+          institution_id: data.t[i].publisher,
+          institution_name: data.t[i].publisher_name,
+          course_name: data.t[i].name,
+          price: data.t[i].price,
+          type: data.t[i].type,
+          trainee_amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+          start_date: data.t[i].start_date,
+          periods_per_week: data.t[i].periods_per_week,
+          total_weeks: data.t[i].total_weeks,
+          teacher: data.t[i].teacher,
+          course_introduction: data.t[i].introduction,
+          class_amount: data.t[i].class_amount,
+          book_due_date: data.t[i].book_due_date,
+        });
+      }
+
+      yield put({
+        type: 'updateCoursesWithClasses',
+        payload: {coursesWithoutClasses: coursesWithoutClasses}
+      });
+    },
+
+    // 生成课程订单
+    * generateOrder({payload}, {call, put, select}) {
+      const data = yield call(generateOrder, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
+    // 获取学员所有未支付订单
+    * getAllNotPaidOrders({payload}, {call, put, select}) {
+      const data = yield call(getAllNotPaidOrders, payload);
+      let notPaidOrders = [];
+      for (let i = 0; i < data.t.length; i++) {
+        let status = "";
+        if (data.t[i].status === "not_paid") {
+          status = "未支付";
+        }
+        else if (data.t[i].status === "paid") {
+          status = "已支付";
+        }
+        notPaidOrders.push({
+          key: i,
+          traineeID: data.t[i].traineeID,
+          courseID: data.t[i].courseID,
+          classID: data.t[i].classID,
+          payment: data.t[i].payment,
+          status: status,
+          amount: data.t[i].amount,
+          description: data.t[i].description,
+          trainee_name: data.t[i].trainee_name,
+          institution_name: data.t[i].institution_name,
+          course_name: data.t[i].course_name,
+          add_credits: data.t[i].add_credits,
+        });
+      }
+
+      yield put({
+        type: 'updateNotPaidOrders',
+        payload: {notPaidOrders: notPaidOrders}
+      });
+    },
+
   },
 
   reducers: {
@@ -305,7 +419,28 @@ export default {
         ...state,
         discount: action.payload.discount,
       }
-    }
+    },
+    // 更新所有不分班课程列表
+    updateCourses(state, action) {
+      return {
+        ...state,
+        courses: action.payload.courses,
+      }
+    },
+    // 更新所有分班课程列表
+    updateCoursesWithClasses(state, action) {
+      return {
+        ...state,
+        coursesWithoutClasses: action.payload.coursesWithoutClasses,
+      }
+    },
+    // 更新用户订单列表
+    updateNotPaidOrders(state, action) {
+      return {
+        ...state,
+        notPaidOrders: action.payload.notPaidOrders,
+      }
+    },
   }
 
 }

@@ -148,9 +148,11 @@ export default {
       const data = yield call(releaseCourse, payload);
       if (data.successTag) {
         message.success(data.message);
+        return true;
       }
       else {
         message.error(data.message);
+        return false;
       }
     },
 
@@ -159,6 +161,10 @@ export default {
       const data = yield call(getCourseInfo, payload);
       let courses = [];
       for (let i = 0; i < data.t.length; i++) {
+        let class_amount = data.t[i].class_amount;
+        if(data.t[i].hasClasses && class_amount === 1) {
+          class_amount = "暂未确定";
+        }
         courses.push({
           key: i,
           name: data.t[i].name,
@@ -170,6 +176,8 @@ export default {
           teacher: data.t[i].teacher,
           introduction: data.t[i].introduction,
           price: data.t[i].price,
+          class_amount: data.t[i].booked_amount + " / " + class_amount,
+          book_due_date: data.t[i].book_due_date
         });
       }
 

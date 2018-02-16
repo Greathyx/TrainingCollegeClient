@@ -18,6 +18,7 @@ class RegisterTraineeForm extends React.Component {
         const param = {
           email: values['email'],
           password: values['password'],
+          name: values['name'],
           verificationCode: values['verification']
         };
 
@@ -96,6 +97,13 @@ class RegisterTraineeForm extends React.Component {
             })(
               <Input prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}}/>} type="password"
                      placeholder="密码"/>
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('name', {
+              rules: [{required: true, message: '请输入您的真实姓名'}],
+            })(
+              <Input prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>} placeholder="真实姓名"/>
             )}
           </FormItem>
           <FormItem>

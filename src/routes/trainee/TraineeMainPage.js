@@ -1,5 +1,7 @@
 import React from 'react';
+// import {connect} from 'dva';
 import {Link} from 'dva/router';
+// import {Layout, Menu, Icon, Badge} from 'antd';
 import {Layout, Menu, Icon} from 'antd';
 import styles from '../css/SupervisorMainPage.css';
 
@@ -22,14 +24,29 @@ class TraineeMainPage extends React.Component {
 
   // React组件初始化时自动调用的方法
   componentWillMount() {
-    if (window.location.hash === "#/Trainee/EditInfo") {
+    if (window.location.hash === "#/Trainee/ChooseCourseWithClass") {
       this.setState({
-        defaultSelectedKeys: ['4'],
+        defaultSelectedKeys: ['5'],
       })
     }
-    else if (window.location.hash === "#/Trainee/VipCenter"){
+    else if (window.location.hash === "#/Trainee/ChooseCourseWithoutClass") {
+      this.setState({
+        defaultSelectedKeys: ['6'],
+      })
+    }
+    else if (window.location.hash === "#/Trainee/NotPaidOrders") {
+      this.setState({
+        defaultSelectedKeys: ['11'],
+      })
+    }
+    else if (window.location.hash === "#/Trainee/VipCenter") {
       this.setState({
         defaultSelectedKeys: ['9'],
+      })
+    }
+    else if (window.location.hash === "#/Trainee/EditInfo") {
+      this.setState({
+        defaultSelectedKeys: ['4'],
       })
     }
   }
@@ -41,25 +58,33 @@ class TraineeMainPage extends React.Component {
           trigger={null}
           collapsible
           collapsed={this.state.collapsed}
-          style={{overflow: 'auto', height: '100vh', left: 0}}
+          style={{overflow: 'auto', minHeight: '100vh', left: 0}}
         >
           <div className={styles.logo}/>
           <Menu
             theme="dark"
             mode="inline"
-            defaultOpenKeys={['1', '3']}
+            defaultOpenKeys={['1', '3', '10']}
             defaultSelectedKeys={this.state.defaultSelectedKeys}
           >
-            <SubMenu key="1" title={<span><Icon type="file-text"/><span>预定课程</span></span>}>
-              <Menu.Item key="5">选班级</Menu.Item>
-              <Menu.Item key="6">不选班级</Menu.Item>
+            <SubMenu key="1" title={<span><Icon type="book"/><span>预定课程</span></span>}>
+              <Menu.Item key="5"><Link to="/Trainee/ChooseCourseWithClass">选班级</Link></Menu.Item>
+              <Menu.Item key="6"><Link to="/Trainee/ChooseCourseWithoutClass">不选班级</Link></Menu.Item>
+            </SubMenu>
+            <SubMenu key="10" title={<span><Icon type="file-text"/><span>我的订单</span></span>}>
+              <Menu.Item key="11">
+                {/*<Badge count={this.props.trainee.notPaidOrders.length} overflowCount={10} offset={[-2,12]}>*/}
+                <Link to="/Trainee/NotPaidOrders">未支付订单</Link>
+                {/*</Badge>*/}
+              </Menu.Item>
+              <Menu.Item key="12">已支付订单</Menu.Item>
             </SubMenu>
             <Menu.Item key="2">
               <Icon type="export"/>
               <span>退定课程</span>
             </Menu.Item>
             <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
-              <Menu.Item key="7">订单状态</Menu.Item>
+              <Menu.Item key="7">订单</Menu.Item>
               <Menu.Item key="8">个人成绩</Menu.Item>
               <Menu.Item key="9"><Link to="/Trainee/VipCenter">会员中心</Link></Menu.Item>
             </SubMenu>
@@ -87,4 +112,11 @@ class TraineeMainPage extends React.Component {
 
 }
 
+// function mapStateToProps({trainee}) {
+//   return {
+//     trainee,
+//   };
+// }
+
+// export default connect(mapStateToProps)(TraineeMainPage);
 export default TraineeMainPage;
