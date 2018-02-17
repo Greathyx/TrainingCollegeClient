@@ -11,6 +11,8 @@ import {
   generateOrder,
   getAllOrdersByStatus,
   pay,
+  cancelPay,
+  unsubscribe,
 } from "../services/TraineeService";
 
 
@@ -30,6 +32,7 @@ export default {
     courses: [],
     coursesWithoutClasses: [],
     notPaidOrders: [],
+    paidOrders: [],
   },
 
   subscriptions: {
@@ -288,7 +291,7 @@ export default {
       });
     },
 
-    // 获取所有机构发布的所有选班课程
+    // 获取所有机构发布的所有不选班课程
     * getAllCoursesWithClasses({payload}, {call, put, select}) {
       const data = yield call(getAllCoursesWithClasses);
 
@@ -310,7 +313,7 @@ export default {
           total_weeks: data.t[i].total_weeks,
           teacher: data.t[i].teacher,
           course_introduction: data.t[i].introduction,
-          class_amount: data.t[i].class_amount,
+          class_amount: "开课前2周系统自动分配班级",
           book_due_date: data.t[i].book_due_date,
         });
       }
@@ -375,6 +378,59 @@ export default {
       }
     },
 
+    // 获取学员所有已支付订单
+    * getAllPaidOrders({payload}, {call, put, select}) {
+      const data = yield call(getAllOrdersByStatus, payload);
+      let paidOrders = [];
+      for (let i = 0; i < data.t.length; i++) {
+        let status = "";
+        if (data.t[i].status === "paid") {
+          status = "已支付";
+        }
+        paidOrders.push({
+          key: i,
+          course_order_id: data.t[i].course_order_id,
+          traineeID: data.t[i].traineeID,
+          courseID: data.t[i].courseID,
+          classID: data.t[i].classID,
+          payment: data.t[i].payment,
+          status: status,
+          amount: data.t[i].amount,
+          description: data.t[i].description,
+          trainee_name: data.t[i].trainee_name,
+          institution_name: data.t[i].institution_name,
+          course_name: data.t[i].course_name,
+          add_credits: data.t[i].add_credits,
+        });
+      }
+
+      yield put({
+        type: 'updatePaidOrders',
+        payload: {paidOrders: paidOrders}
+      });
+    },
+
+    // 取消课程订单
+    * cancelPay({payload}, {call, put, select}) {
+      const data = yield call(cancelPay, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
+    // 用户退课
+    * unsubscribe({payload}, {call, put, select}) {
+      const data = yield call(unsubscribe, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
   },
 
   reducers: {
@@ -448,11 +504,18 @@ export default {
         coursesWithoutClasses: action.payload.coursesWithoutClasses,
       }
     },
-    // 更新用户订单列表
+    // 更新用户未付款订单列表
     updateNotPaidOrders(state, action) {
       return {
         ...state,
         notPaidOrders: action.payload.notPaidOrders,
+      }
+    },
+    // 更新用户已付款订单列表
+    updatePaidOrders(state, action) {
+      return {
+        ...state,
+        paidOrders: action.payload.paidOrders,
       }
     },
   }

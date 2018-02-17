@@ -39,6 +39,11 @@ class TraineeMainPage extends React.Component {
         defaultSelectedKeys: ['11'],
       })
     }
+    else if (window.location.hash === "#/Trainee/PaidOrders") {
+      this.setState({
+        defaultSelectedKeys: ['12'],
+      })
+    }
     else if (window.location.hash === "#/Trainee/VipCenter") {
       this.setState({
         defaultSelectedKeys: ['9'],
@@ -77,12 +82,12 @@ class TraineeMainPage extends React.Component {
                 <Link to="/Trainee/NotPaidOrders">未支付订单</Link>
                 {/*</Badge>*/}
               </Menu.Item>
-              <Menu.Item key="12">已支付订单</Menu.Item>
+              <Menu.Item key="12"><Link to="/Trainee/PaidOrders">已支付订单</Link></Menu.Item>
             </SubMenu>
-            <Menu.Item key="2">
-              <Icon type="export"/>
-              <span>退定课程</span>
-            </Menu.Item>
+            {/*<Menu.Item key="2">*/}
+              {/*<Icon type="export"/>*/}
+              {/*<span>退定课程</span>*/}
+            {/*</Menu.Item>*/}
             <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
               <Menu.Item key="7">订单</Menu.Item>
               <Menu.Item key="8">个人成绩</Menu.Item>

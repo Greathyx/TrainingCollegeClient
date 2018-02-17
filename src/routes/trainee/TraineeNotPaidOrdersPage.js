@@ -50,6 +50,7 @@ const ConfirmPayForm = Form.create()(
   }
 );
 
+
 class TraineeNotPaidOrdersPage extends React.Component {
 
   constructor(props) {
@@ -96,6 +97,23 @@ class TraineeNotPaidOrdersPage extends React.Component {
       width: 100,
       // fixed: 'right',
     }, {
+      title: '取消',
+      dataIndex: 'cancel',
+      width: 100,
+      // fixed: 'right',
+      render: (text, record) => (
+        <span>
+      <Button
+        // type="primary"
+        onClick={() => {
+          this.showCancelModal(record.course_order_id, this.cancelBookedCourse)
+        }}
+      >
+        取消
+      </Button>
+    </span>
+      ),
+    }, {
       title: '支付',
       dataIndex: 'pay',
       width: 100,
@@ -106,7 +124,7 @@ class TraineeNotPaidOrdersPage extends React.Component {
         type="primary"
         disabled={record.status === "invalid"}
         onClick={() => {
-          this.showModal(record.course_order_id)
+          this.showPayModal(record.course_order_id)
         }}
       >
         支付
@@ -127,17 +145,52 @@ class TraineeNotPaidOrdersPage extends React.Component {
     });
   }
 
-  showModal = (course_order_id) => {
+  // 打开确认取消订单对话框
+  showCancelModal = (course_order_id, cancelBookedCourse) => {
+    this.setState({
+      course_order_id: course_order_id,
+    });
+
+    Modal.confirm({
+      title: '您确认取消预定此课程吗？',
+      content: '您已锁定该课程的名额，若您确认退订此课程，将会失去预定数额的所有名额。',
+      okText: '确认',
+      cancelText: "取消",
+      onOk: cancelBookedCourse,
+    });
+  };
+
+  // 取消订购课程方法
+  cancelBookedCourse = () => {
+    const param = {
+      course_order_id: this.state.course_order_id,
+    };
+    this.props.dispatch({
+      type: 'trainee/cancelPay',
+      payload: {
+        ...param,
+      },
+    });
+    // 1s后刷新本页面
+    this.timer = setInterval(() => {
+      window.location.reload(true);
+    }, 1000);
+  };
+
+  // 打开支付对话框
+  showPayModal = (course_order_id) => {
     this.setState({
       visible: true,
       course_order_id: course_order_id,
     });
   };
 
+  // 取消支付，关闭对话框
   handleCancel = () => {
     this.setState({visible: false});
   };
 
+  // 提交支付方法
   handleCreate = () => {
     const form = this.form;
     form.validateFields((err, values) => {

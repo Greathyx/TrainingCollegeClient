@@ -214,3 +214,39 @@ export async function pay(param) {
   })
 
 }
+
+/**
+ * 取消课程订单
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function cancelPay(param) {
+
+  const formData = new FormData();
+  formData.append('course_order_id', param.course_order_id);
+
+  return request('/trainee/cancelPay', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 用户退课
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function unsubscribe(param) {
+
+  const formData = new FormData();
+  formData.append('course_order_id', param.course_order_id);
+
+  return request('/trainee/unsubscribe', {
+    method: 'POST',
+    body: formData
+  })
+
+}

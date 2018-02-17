@@ -181,40 +181,40 @@ class TraineeEditInfoForm extends React.Component {
               </Select>
             )}
           </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label="累计消费(¥)"
-          >
-            <Tooltip
-              trigger={['hover']}
-              title="累计消费金额无法修改"
-              placement="topLeft"
-              overlayClassName="numeric-input"
-            >
-              <Input
-                prefix={<Icon type="pay-circle-o" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                disabled={true}
-                defaultValue={this.props.trainee.expenditure}
-              />
-            </Tooltip>
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label="积分"
-          >
-            <Tooltip
-              trigger={['hover']}
-              title="个人积分无法修改"
-              placement="topLeft"
-              overlayClassName="numeric-input"
-            >
-              <Input
-                prefix={<Icon type="credit-card" style={{color: 'rgba(0,0,0,.25)'}}/>}
-                disabled={true}
-                defaultValue={this.props.trainee.credit}
-              />
-            </Tooltip>
-          </FormItem>
+          {/*<FormItem*/}
+            {/*{...formItemLayout}*/}
+            {/*label="累计消费(¥)"*/}
+          {/*>*/}
+            {/*<Tooltip*/}
+              {/*trigger={['hover']}*/}
+              {/*title="累计消费金额无法修改"*/}
+              {/*placement="topLeft"*/}
+              {/*overlayClassName="numeric-input"*/}
+            {/*>*/}
+              {/*<Input*/}
+                {/*prefix={<Icon type="pay-circle-o" style={{color: 'rgba(0,0,0,.25)'}}/>}*/}
+                {/*disabled={true}*/}
+                {/*defaultValue={this.props.trainee.expenditure}*/}
+              {/*/>*/}
+            {/*</Tooltip>*/}
+          {/*</FormItem>*/}
+          {/*<FormItem*/}
+            {/*{...formItemLayout}*/}
+            {/*label="积分"*/}
+          {/*>*/}
+            {/*<Tooltip*/}
+              {/*trigger={['hover']}*/}
+              {/*title="个人积分无法修改"*/}
+              {/*placement="topLeft"*/}
+              {/*overlayClassName="numeric-input"*/}
+            {/*>*/}
+              {/*<Input*/}
+                {/*prefix={<Icon type="credit-card" style={{color: 'rgba(0,0,0,.25)'}}/>}*/}
+                {/*disabled={true}*/}
+                {/*defaultValue={this.props.trainee.credit}*/}
+              {/*/>*/}
+            {/*</Tooltip>*/}
+          {/*</FormItem>*/}
           <FormItem
             {...buttonLayout}
           >
