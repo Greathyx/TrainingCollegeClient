@@ -13,6 +13,7 @@ import {
   pay,
   cancelPay,
   unsubscribe,
+  creditsExchange,
 } from "../services/TraineeService";
 
 
@@ -33,6 +34,7 @@ export default {
     coursesWithoutClasses: [],
     notPaidOrders: [],
     paidOrders: [],
+    unsubscribeOrders: [],
   },
 
   subscriptions: {
@@ -410,6 +412,40 @@ export default {
       });
     },
 
+    // 获取学员所有已退课订单
+    * getAllUnsubscribeOrders({payload}, {call, put, select}) {
+      const data = yield call(getAllOrdersByStatus, payload);
+      let unsubscribeOrders = [];
+      for (let i = 0; i < data.t.length; i++) {
+        let status = "";
+        if (data.t[i].status === "unsubscribe") {
+          status = "已退课";
+        }
+        unsubscribeOrders.push({
+          key: i,
+          course_order_id: data.t[i].course_order_id,
+          traineeID: data.t[i].traineeID,
+          courseID: data.t[i].courseID,
+          // classID: data.t[i].classID,
+          payment: data.t[i].payment,
+          status: status,
+          // amount: data.t[i].amount,
+          // description: data.t[i].description,
+          trainee_name: data.t[i].trainee_name,
+          institution_name: data.t[i].institution_name,
+          course_name: data.t[i].course_name,
+          add_credits: data.t[i].add_credits,
+          payback: data.t[i].payback,
+          minus_credits: data.t[i].minus_credits,
+        });
+      }
+
+      yield put({
+        type: 'updateUnsubscribeOrders',
+        payload: {unsubscribeOrders: unsubscribeOrders}
+      });
+    },
+
     // 取消课程订单
     * cancelPay({payload}, {call, put, select}) {
       const data = yield call(cancelPay, payload);
@@ -431,6 +467,18 @@ export default {
         message.warning(data.message);
       }
     },
+
+    // 积分兑换卡余额方法
+    * creditsExchange({payload}, {call, put, select}) {
+      const data = yield call(creditsExchange, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
   },
 
   reducers: {
@@ -516,6 +564,13 @@ export default {
       return {
         ...state,
         paidOrders: action.payload.paidOrders,
+      }
+    },
+    // 更新用户已退课订单列表
+    updateUnsubscribeOrders(state, action) {
+      return {
+        ...state,
+        unsubscribeOrders: action.payload.unsubscribeOrders,
       }
     },
   }

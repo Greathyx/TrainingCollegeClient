@@ -131,9 +131,10 @@ class TraineeChooseCourseWithClassPage extends React.Component {
       value: 1 // 初始值
     },
     book_info: {
-      price: 0,
-      course_id: 0,
-      discount: 0,
+      price: -1,
+      course_id: -1,
+      institution_id: -1,
+      discount: -1,
       book_amount: 1,
     },
   };
@@ -199,6 +200,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
         payment: this.state.book_info.price * this.state.book_info.book_amount * this.state.book_info.discount,
         traineeID: this.props.trainee.trainee_id,
         courseID: this.state.book_info.course_id,
+        institutionID: this.state.book_info.institution_id,
       };
       this.props.dispatch({
         type: 'trainee/generateOrder',
@@ -349,6 +351,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
               const param = {
                 price: record.price,
                 course_id: record.course_id,
+                institution_id: record.institution_id,
                 discount: this.props.trainee.discount,
                 book_amount: 1,
               };

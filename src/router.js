@@ -7,7 +7,8 @@ import TraineeMainPage from './routes/trainee/TraineeMainPage';
 import TraineeChooseCourseWithClassPage from './routes/trainee/TraineeChooseCourseWithClassPage';
 import TraineeChooseCourseWithoutClassPage from './routes/trainee/TraineeChooseCourseWithoutClassPage';
 import TraineeNotPaidOrdersPage from './routes/trainee/TraineeNotPaidOrdersPage';
-import TraineePaidPage from './routes/trainee/TraineePaidPage';
+import TraineePaidPage from './routes/trainee/TraineePaidOrdersPage';
+import TraineeUnsubscribeOrdersPage from './routes/trainee/TraineeUnsubscribeOrdersPage';
 import TraineeVipCenterPage from './routes/trainee/TraineeVipCenterPage';
 import TraineeEditInfoPage from './routes/trainee/TraineeEditInfoPage';
 
@@ -45,6 +46,7 @@ function RouterConfig({history, app}) {
               <Route path="/Trainee/ChooseCourseWithoutClass" exact restrict component={TraineeChooseCourseWithoutClassPage}/>
               <Route path="/Trainee/NotPaidOrders" exact restrict component={TraineeNotPaidOrdersPage}/>
               <Route path="/Trainee/PaidOrders" exact restrict component={TraineePaidPage}/>
+              <Route path="/Trainee/UnsubscribeOrders" exact restrict component={TraineeUnsubscribeOrdersPage}/>
               <Route path="/Trainee/VipCenter" exact restrict component={TraineeVipCenterPage}/>
               <Route path="/Trainee/EditInfo" exact restrict component={TraineeEditInfoPage}/>
             </Switch>

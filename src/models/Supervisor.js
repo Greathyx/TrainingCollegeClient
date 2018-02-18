@@ -59,6 +59,9 @@ export default {
         else if (pathToRegexp('/Trainee/PaidOrders').exec(location.pathname)) {
           document.title = '学员-已支付订单';
         }
+        else if (pathToRegexp('/Trainee/UnsubscribeOrders').exec(location.pathname)) {
+          document.title = '学员-已退课订单';
+        }
         else if (pathToRegexp('/Trainee/VipCenter').exec(location.pathname)) {
           document.title = '学员-会员中心';
         }

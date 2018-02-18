@@ -165,6 +165,7 @@ export async function generateOrder(param) {
   const formData = new FormData();
   formData.append('traineeID', param.traineeID);
   formData.append('courseID', param.courseID);
+  formData.append('institutionID', param.institutionID);
   formData.append('payment', param.payment);
   formData.append('amount', param.amount);
   formData.append('description', param.description);
@@ -245,6 +246,26 @@ export async function unsubscribe(param) {
   formData.append('course_order_id', param.course_order_id);
 
   return request('/trainee/unsubscribe', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 积分兑换卡余额方法
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function creditsExchange(param) {
+
+  const formData = new FormData();
+  formData.append('trainee_id', param.trainee_id);
+  formData.append('credits', param.credits);
+  formData.append('identity', param.identity);
+
+  return request('/trainee/creditsExchange', {
     method: 'POST',
     body: formData
   })

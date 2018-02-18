@@ -1,10 +1,11 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Card, Icon, Modal} from 'antd';
+import {Card, Icon, Modal, Form, Input, Button} from 'antd';
 import styles from '../css/TraineeVipCenterPage.css';
 
 
 const {Meta} = Card;
+const FormItem = Form.Item;
 
 function level_info() {
   Modal.info({
@@ -73,6 +74,51 @@ function credit_info() {
   });
 }
 
+const CreditsExchangeForm = Form.create()(
+  (props) => {
+    const {visible, onCancel, onCreate, form} = props;
+    const {getFieldDecorator} = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: {span: 24},
+        sm: {span: 4},
+      },
+      wrapperCol: {
+        xs: {span: 24},
+        sm: {span: 16},
+      },
+    };
+
+    return (
+      <Modal
+        visible={visible}
+        title="积分兑换"
+        okText="兑换"
+        cancelText="取消"
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout="vertical" style={{width: '100%', marginTop: 20, marginLeft: 30}}>
+          <FormItem {...formItemLayout} label="兑换积分">
+            {getFieldDecorator('credits', {
+              rules: [{required: true, message: '请输入您要兑换的积分数额！'}],
+            })(
+              <Input/>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="银行卡号">
+            {getFieldDecorator('identity', {
+              rules: [{required: true, message: '请输入您的积分兑换入的银行卡号！'}],
+            })(
+              <Input/>
+            )}
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  }
+);
+
 class TraineeVipCenterPage extends React.Component {
 
   // React组件初始化时自动调用的方法
@@ -84,6 +130,47 @@ class TraineeVipCenterPage extends React.Component {
       },
     });
   }
+
+  state = {
+    visible: false,
+  };
+
+  showCreditsExchangeModal = () => {
+    this.setState({visible: true});
+  };
+
+  handleCancel = () => {
+    this.setState({visible: false});
+  };
+
+  handleCreate = () => {
+    const form = this.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      const param = {
+        ...values,
+        trainee_id: this.props.trainee.trainee_id,
+      };
+      this.props.dispatch({
+        type: 'trainee/creditsExchange',
+        payload: {
+          ...param,
+        },
+      });
+      form.resetFields();
+      this.setState({visible: false});
+      // 1s后刷新本页面
+      this.timer = setInterval(() => {
+        window.location.reload(true);
+      }, 1000);
+    });
+  };
+
+  saveFormRef = (form) => {
+    this.form = form;
+  };
 
   render() {
     return (
@@ -110,6 +197,9 @@ class TraineeVipCenterPage extends React.Component {
                 查看会员积分规则
               </span>
             ]}
+            extra={
+              <Button onClick={this.showCreditsExchangeModal}>积分兑换</Button>
+            }
           >
             <Meta
               title="累计消费(¥)"
@@ -128,6 +218,12 @@ class TraineeVipCenterPage extends React.Component {
               description={this.props.trainee.credit + "分"}
             />
           </Card>
+          <CreditsExchangeForm
+            ref={this.saveFormRef}
+            visible={this.state.visible}
+            onCancel={this.handleCancel}
+            onCreate={this.handleCreate}
+          />
         </div>
       </div>
     )
