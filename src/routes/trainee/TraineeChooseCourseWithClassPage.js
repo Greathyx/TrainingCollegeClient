@@ -74,7 +74,7 @@ const CollectionCreateForm = Form.create()(
           <FormItem
             {...formItemLayout} label="会员折扣"
           >
-            <span>{book_info.discount + "折"}</span>
+            <span>{book_info.discount === "1" ? "暂无可使用优惠折扣" : book_info.discount + "折"}</span>
           </FormItem>
           <FormItem
             {...formItemLayout} label="最终支付"
@@ -103,7 +103,7 @@ const CollectionCreateForm = Form.create()(
               />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="学员信息">
+          <FormItem {...formItemLayout} label="联系方式">
             <Tooltip title="请留下您的联系方式，若您为他人订购课程，请再留下他们的姓名及联系方式">
               {getFieldDecorator('description', {
                 rules: [{required: true, message: '请输入联系方式！'}],
@@ -175,7 +175,6 @@ class TraineeChooseCourseWithClassPage extends React.Component {
           trainee_id: this.props.trainee.trainee_id
         },
       });
-      return;
     }
     this.setState({
       visible: true,

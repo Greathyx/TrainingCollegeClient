@@ -26,6 +26,14 @@ class TraineeUnsubscribeOrdersPage extends React.Component {
       width: 100,
       dataIndex: 'status',
     }, {
+      title: '订课日期',
+      width: 100,
+      dataIndex: 'book_time',
+    }, {
+      title: '退课日期',
+      width: 100,
+      dataIndex: 'unsubscribe_time',
+    }, {
       title: '付款金额(¥)',
       dataIndex: 'payment',
       width: 100,

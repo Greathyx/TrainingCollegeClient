@@ -1,5 +1,12 @@
 import {message} from 'antd';
-import {register, login, editInfo, releaseCourse, getCourseInfo} from "../services/InstitutionService";
+import {
+  register,
+  login,
+  editInfo,
+  releaseCourse,
+  getCourseInfo,
+  getAllOrdersByStatus,
+} from "../services/InstitutionService";
 
 
 export default {
@@ -14,7 +21,8 @@ export default {
     institution_location: null,
     institution_faculty: null,
     institution_introduction: null,
-    courseData: null,
+    courseData: [],
+    booked_courses: [],
   },
 
   subscriptions: {
@@ -168,7 +176,7 @@ export default {
         courses.push({
           key: i,
           name: data.t[i].name,
-          trainee_amount: data.t[i].trainee_amount,
+          trainee_amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
           periods_per_week: data.t[i].periods_per_week,
           total_weeks: data.t[i].total_weeks,
           type: data.t[i].type,
@@ -176,7 +184,7 @@ export default {
           teacher: data.t[i].teacher,
           introduction: data.t[i].introduction,
           price: data.t[i].price,
-          class_amount: data.t[i].booked_amount + " / " + class_amount,
+          class_amount: class_amount,
           book_due_date: data.t[i].book_due_date
         });
       }
@@ -184,6 +192,28 @@ export default {
       yield put({
         type: 'updateInstitutionCourseData',
         payload: {courseData: courses}
+      });
+    },
+
+    // 获取机构订课信息
+    * getAllOrdersByStatus({payload}, {call, put, select}) {
+      const data = yield call(getAllOrdersByStatus, payload);
+      let booked_courses = [];
+      for (let i = 0; i < data.t.length; i++) {
+        booked_courses.push({
+          key: i,
+          course_name: data.t[i].course_name,
+          trainee_name: data.t[i].trainee_name,
+          amount: data.t[i].amount,
+          payment: data.t[i].payment,
+          book_time: data.t[i].book_time,
+          description: data.t[i].description,
+        });
+      }
+
+      yield put({
+        type: 'updateBookedCourses',
+        payload: {booked_courses: booked_courses}
       });
     },
 
@@ -246,6 +276,14 @@ export default {
         courseData: action.payload.courseData,
       }
     },
+    // 更新机构订课信息
+    updateBookedCourses(state, action) {
+      return {
+        ...state,
+        booked_courses: action.payload.booked_courses,
+      }
+    },
+
   }
 
 }

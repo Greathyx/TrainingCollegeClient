@@ -34,6 +34,10 @@ class TraineePaidPage extends React.Component {
       width: 100,
       dataIndex: 'status',
     }, {
+      title: '订课日期',
+      width: 100,
+      dataIndex: 'book_time',
+    }, {
       title: '联系方式',
       width: 200,
       dataIndex: 'description',

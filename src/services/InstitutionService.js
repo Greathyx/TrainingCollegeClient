@@ -120,3 +120,22 @@ export async function getCourseInfo(param) {
   })
 
 }
+
+/**
+ * 获得订课信息或退课信息
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllOrdersByStatus(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+  formData.append('status', param.status);
+
+  return request('/institution/getAllOrdersByStatus', {
+    method: 'POST',
+    body: formData
+  })
+
+}

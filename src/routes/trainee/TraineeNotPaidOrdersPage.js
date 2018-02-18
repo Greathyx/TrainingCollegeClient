@@ -83,6 +83,10 @@ class TraineeNotPaidOrdersPage extends React.Component {
       width: 100,
       dataIndex: 'status',
     }, {
+      title: '订课日期',
+      width: 100,
+      dataIndex: 'book_time',
+    }, {
       title: '联系方式',
       width: 200,
       dataIndex: 'description',
@@ -209,6 +213,13 @@ class TraineeNotPaidOrdersPage extends React.Component {
       });
       form.resetFields();
       this.setState({visible: false});
+      // 更新学员会员信息
+      this.props.dispatch({
+        type: 'trainee/getTraineeVipInfo',
+        payload: {
+          trainee_id: this.props.trainee.trainee_id
+        },
+      });
       // 1s后刷新本页面
       this.timer = setInterval(() => {
         window.location.reload(true);

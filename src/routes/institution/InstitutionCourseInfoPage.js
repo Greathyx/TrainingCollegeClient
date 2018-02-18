@@ -11,7 +11,7 @@ class InstitutionCourseInfoPage extends React.Component {
     this.columns = [{
       title: '课程名称',
       dataIndex: 'name',
-      width: 100,
+      width: 150,
       fixed: 'left'
     }, {
       title: '已报名额／课程名额',
@@ -73,7 +73,7 @@ class InstitutionCourseInfoPage extends React.Component {
           pagination={{defaultPageSize: 5}}
           columns={columns}
           dataSource={this.props.institution.courseData}
-          scroll={{x: 1500}}
+          scroll={{x: 2000}}
         />
       </div>
     )

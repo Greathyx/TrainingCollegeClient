@@ -38,6 +38,9 @@ export default {
         else if (pathToRegexp('/Institution/CourseInfo').exec(location.pathname)) {
           document.title = '机构-查看课程';
         }
+        else if (pathToRegexp('/Institution/BookedCourses').exec(location.pathname)) {
+          document.title = '机构-订课信息';
+        }
         else if (pathToRegexp('/Institution/EditInfo').exec(location.pathname)) {
           document.title = '机构-修改信息';
         }

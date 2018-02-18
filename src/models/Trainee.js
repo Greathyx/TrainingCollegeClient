@@ -360,6 +360,7 @@ export default {
           institution_name: data.t[i].institution_name,
           course_name: data.t[i].course_name,
           add_credits: data.t[i].add_credits,
+          book_time: data.t[i].book_time,
         });
       }
 
@@ -403,6 +404,7 @@ export default {
           institution_name: data.t[i].institution_name,
           course_name: data.t[i].course_name,
           add_credits: data.t[i].add_credits,
+          book_time: data.t[i].book_time
         });
       }
 
@@ -426,11 +428,10 @@ export default {
           course_order_id: data.t[i].course_order_id,
           traineeID: data.t[i].traineeID,
           courseID: data.t[i].courseID,
-          // classID: data.t[i].classID,
           payment: data.t[i].payment,
           status: status,
-          // amount: data.t[i].amount,
-          // description: data.t[i].description,
+          book_time: data.t[i].book_time,
+          unsubscribe_time: data.t[i].unsubscribe_time,
           trainee_name: data.t[i].trainee_name,
           institution_name: data.t[i].institution_name,
           course_name: data.t[i].course_name,

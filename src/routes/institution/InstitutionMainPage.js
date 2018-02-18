@@ -37,6 +37,11 @@ class InstitutionMainPage extends React.Component {
         defaultSelectedKeys: ['7'],
       })
     }
+    else if (window.location.hash === "#/Institution/BookedCourses") {
+      this.setState({
+        defaultSelectedKeys: ['8'],
+      })
+    }
   }
 
   render() {
@@ -62,8 +67,9 @@ class InstitutionMainPage extends React.Component {
             </SubMenu>
             <SubMenu key="2" title={<span><Icon type="file-text"/><span>统计信息</span></span>}>
               <Menu.Item key="7"><Link to="/Institution/CourseInfo">课程信息</Link></Menu.Item>
-              <Menu.Item key="8">订课信息</Menu.Item>
-              <Menu.Item key="9">财务信息</Menu.Item>
+              <Menu.Item key="8"><Link to="/Institution/BookedCourses">订课信息</Link></Menu.Item>
+              <Menu.Item key="9">退课信息</Menu.Item>
+              <Menu.Item key="10">财务信息</Menu.Item>
             </SubMenu>
             <Menu.Item key="3">
               <Link to="/Institution/EditInfo">

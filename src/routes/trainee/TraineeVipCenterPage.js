@@ -211,7 +211,7 @@ class TraineeVipCenterPage extends React.Component {
             /><br/>
             <Meta
               title="可享折扣优惠"
-              description={this.props.trainee.discount + "折"}
+              description={this.props.trainee.discount === 1 ? "暂无可使用优惠折扣" : this.props.trainee.discount + "折"}
             /><br/>
             <Meta
               title="会员积分"
