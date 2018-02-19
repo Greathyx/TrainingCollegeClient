@@ -16,8 +16,11 @@ import InstitutionRegisterPage from './routes/institution/InstitutionRegisterPag
 import InstitutionLoginPage from './routes/institution/InstitutionLoginPage';
 import InstitutionMainPage from './routes/institution/InstitutionMainPage';
 import InstitutionReleaseCoursePage from './routes/institution/InstitutionReleaseCoursePage';
+import InstitutionCourseRegistrationPage from './routes/institution/InstitutionCourseRegistrationPage';
+import InstitutionConfirmPaymentPage from './routes/institution/InstitutionConfirmPaymentPage';
 import InstitutionCourseInfoPage from './routes/institution/InstitutionCourseInfoPage';
 import InstitutionBookedCoursesPage from './routes/institution/InstitutionBookedCoursesPage';
+import InstitutionUnsubscribeCoursesPage from './routes/institution/InstitutionUnsubscribeCoursesPage';
 import InstitutionEditInfoPage from './routes/institution/InstitutionEditInfoPage';
 
 import SupervisorLoginPage from './routes/supervisor/SupervisorLoginPage';
@@ -57,8 +60,11 @@ function RouterConfig({history, app}) {
           <InstitutionMainPage>
             <Switch>
               <Route path="/Institution/ReleaseCourse" exact restrict component={InstitutionReleaseCoursePage}/>
+              <Route path="/Institution/CourseRegistration" exact restrict component={InstitutionCourseRegistrationPage}/>
+              <Route path="/Institution/ConfirmPayment" exact restrict component={InstitutionConfirmPaymentPage}/>
               <Route path="/Institution/CourseInfo" exact restrict component={InstitutionCourseInfoPage}/>
               <Route path="/Institution/BookedCourses" exact restrict component={InstitutionBookedCoursesPage}/>
+              <Route path="/Institution/UnsubscribeCourses" exact restrict component={InstitutionUnsubscribeCoursesPage}/>
               <Route path="/Institution/EditInfo" exact restrict component={InstitutionEditInfoPage}/>
             </Switch>
           </InstitutionMainPage>

@@ -6,6 +6,10 @@ import {
   releaseCourse,
   getCourseInfo,
   getAllOrdersByStatus,
+  getTraineeInfoByName,
+  courseRegistration,
+  getAllRegistrationInfo,
+  getAllTraineeInfo,
 } from "../services/InstitutionService";
 
 
@@ -23,6 +27,10 @@ export default {
     institution_introduction: null,
     courseData: [],
     booked_courses: [],
+    unsubscribe_courses: [],
+    trainee_discount_info: [],
+    trainee_all_discount_info: [],
+    registration_list: [],
   },
 
   subscriptions: {
@@ -170,7 +178,7 @@ export default {
       let courses = [];
       for (let i = 0; i < data.t.length; i++) {
         let class_amount = data.t[i].class_amount;
-        if(data.t[i].hasClasses && class_amount === 1) {
+        if (data.t[i].hasClasses && class_amount === 1) {
           class_amount = "暂未确定";
         }
         courses.push({
@@ -196,12 +204,14 @@ export default {
     },
 
     // 获取机构订课信息
-    * getAllOrdersByStatus({payload}, {call, put, select}) {
+    * getAllBookedOrders({payload}, {call, put, select}) {
       const data = yield call(getAllOrdersByStatus, payload);
       let booked_courses = [];
       for (let i = 0; i < data.t.length; i++) {
         booked_courses.push({
           key: i,
+          traineeID: data.t[i].traineeID,
+          courseID: data.t[i].courseID,
           course_name: data.t[i].course_name,
           trainee_name: data.t[i].trainee_name,
           amount: data.t[i].amount,
@@ -215,6 +225,115 @@ export default {
         type: 'updateBookedCourses',
         payload: {booked_courses: booked_courses}
       });
+    },
+
+    // 获取机构退课信息
+    * getAllUnsubscribeOrders({payload}, {call, put, select}) {
+      const data = yield call(getAllOrdersByStatus, payload);
+      let unsubscribe_courses = [];
+      for (let i = 0; i < data.t.length; i++) {
+        unsubscribe_courses.push({
+          key: i,
+          course_name: data.t[i].course_name,
+          trainee_name: data.t[i].trainee_name,
+          amount: data.t[i].amount,
+          payment: data.t[i].payment,
+          payback: data.t[i].payback,
+          book_time: data.t[i].book_time,
+          unsubscribe_time: data.t[i].unsubscribe_time,
+          description: data.t[i].description,
+        });
+      }
+
+      yield put({
+        type: 'updateUnsubscribeCourses',
+        payload: {unsubscribe_courses: unsubscribe_courses}
+      });
+    },
+
+    // 获取学员优惠信息
+    * getTraineeInfoByName({payload}, {call, put, select}) {
+      const data = yield call(getTraineeInfoByName, payload);
+      if (data.successTag) {
+        let trainee_discount_info = [];
+        for (let i = 0; i < data.t.length; i++) {
+          trainee_discount_info.push({
+            key: i,
+            trainee_name: data.t[i].name,
+            email: data.t[i].email,
+            level: data.t[i].level + "级",
+            discount: data.t[i].discount === 1 ? "暂无可使用优惠折扣" : data.t[i].discount + "折"
+          });
+        }
+
+        yield put({
+          type: 'updateTraineeDiscountInfo',
+          payload: {trainee_discount_info: trainee_discount_info}
+        });
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
+    // 获取所有该机构学员优惠信息
+    * getAllTraineeInfo({payload}, {call, put, select}) {
+      const data = yield call(getAllTraineeInfo, payload);
+      if (data.successTag) {
+        let trainee_all_discount_info = [];
+        for (let i = 0; i < data.t.length; i++) {
+          trainee_all_discount_info.push({
+            key: i,
+            trainee_name: data.t[i].name,
+            email: data.t[i].email,
+            level: data.t[i].level + "级",
+            discount: data.t[i].discount === 1 ? "暂无可使用优惠折扣" : data.t[i].discount + "折"
+          });
+        }
+
+        yield put({
+          type: 'updateAllTraineeDiscountInfo',
+          payload: {trainee_all_discount_info: trainee_all_discount_info}
+        });
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
+    // 听课登记
+    * courseRegistration({payload}, {call, put, select}) {
+      const data = yield call(courseRegistration, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
+    // 获取该机构所有听课登记信息
+    * getAllRegistrationInfo({payload}, {call, put, select}) {
+      const data = yield call(getAllRegistrationInfo, payload);
+      if (data.successTag) {
+        let registration_list = [];
+        for (let i = 0; i < data.t.length; i++) {
+          registration_list.push({
+            key: i,
+            trainee_name2: data.t[i].trainee_name,
+            course_name2: data.t[i].course_name,
+            registration_date: new Date(parseInt(data.t[i].registration_date, 10)).toLocaleString(),
+          });
+        }
+
+        yield put({
+          type: 'updateRegistrationList',
+          payload: {registration_list: registration_list}
+        });
+      }
+      else {
+        message.error(data.message);
+      }
     },
 
   },
@@ -281,6 +400,34 @@ export default {
       return {
         ...state,
         booked_courses: action.payload.booked_courses,
+      }
+    },
+    // 更新机构退课信息
+    updateUnsubscribeCourses(state, action) {
+      return {
+        ...state,
+        unsubscribe_courses: action.payload.unsubscribe_courses,
+      }
+    },
+    // 更新学员优惠信息
+    updateTraineeDiscountInfo(state, action) {
+      return {
+        ...state,
+        trainee_discount_info: action.payload.trainee_discount_info,
+      }
+    },
+    // 更新所有学员优惠信息
+    updateAllTraineeDiscountInfo(state, action) {
+      return {
+        ...state,
+        trainee_all_discount_info: action.payload.trainee_all_discount_info,
+      }
+    },
+    // 更新机构听课登记表
+    updateRegistrationList(state, action) {
+      return {
+        ...state,
+        registration_list: action.payload.registration_list,
       }
     },
 

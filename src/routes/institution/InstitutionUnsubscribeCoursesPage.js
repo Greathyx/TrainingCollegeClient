@@ -4,19 +4,19 @@ import {Table, Input, Button, Icon, Tooltip} from 'antd';
 import styles from '../css/TraineeChooseCourseWithClassPage.css';
 
 
-class InstitutionBookedCoursesPage extends React.Component {
+class InstitutionUnsubscribeCoursesPage extends React.Component {
 
   // React组件初始化时自动调用的方法
   componentWillMount() {
     this.props.dispatch({
-      type: 'institution/getAllBookedOrders',
+      type: 'institution/getAllUnsubscribeOrders',
       payload: {
         institutionID: this.props.institution.institution_id,
-        status: "paid"
+        status: "unsubscribe"
       },
     }).then(() => {
       this.setState({
-        data: this.props.institution.booked_courses
+        data: this.props.institution.unsubscribe_courses
       });
     });
   }
@@ -39,7 +39,7 @@ class InstitutionBookedCoursesPage extends React.Component {
     this.setState({
       filterDropdownVisible: false,
       filtered: !!searchText,
-      data: this.props.institution.booked_courses.map((record) => {
+      data: this.props.institution.unsubscribe_courses.map((record) => {
         const match = record.course_name.match(reg);
         if (!match) {
           return null;
@@ -98,9 +98,17 @@ class InstitutionBookedCoursesPage extends React.Component {
       dataIndex: 'payment',
       key: 'payment',
     }, {
+      title: '实退费用(¥)',
+      dataIndex: 'payback',
+      key: 'payback',
+    }, {
       title: '订课日期',
       dataIndex: 'book_time',
       key: 'book_time',
+    }, {
+      title: '退课日期',
+      dataIndex: 'unsubscribe_time',
+      key: 'unsubscribe_time',
     }, {
       title: '联系方式',
       dataIndex: 'description',
@@ -125,4 +133,4 @@ function mapStateToProps({institution}) {
   };
 }
 
-export default connect(mapStateToProps)(InstitutionBookedCoursesPage);
+export default connect(mapStateToProps)(InstitutionUnsubscribeCoursesPage);

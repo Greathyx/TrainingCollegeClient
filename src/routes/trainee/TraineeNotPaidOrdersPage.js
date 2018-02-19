@@ -84,7 +84,7 @@ class TraineeNotPaidOrdersPage extends React.Component {
       dataIndex: 'status',
     }, {
       title: '订课日期',
-      width: 100,
+      width: 120,
       dataIndex: 'book_time',
     }, {
       title: '联系方式',

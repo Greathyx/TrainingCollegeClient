@@ -139,3 +139,81 @@ export async function getAllOrdersByStatus(param) {
   })
 
 }
+
+/**
+ * 根据会员名字获取会员优惠信息
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getTraineeInfoByName(param) {
+
+  const formData = new FormData();
+  formData.append('name', param.name);
+
+  return request('/institution/getTraineeInfoByName', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取所有该机构学员优惠信息
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllTraineeInfo(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+  formData.append('status', param.status);
+
+  return request('/institution/getAllTraineeInfo', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 听课登记
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function courseRegistration(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.traineeID);
+  formData.append('courseID', param.courseID);
+  formData.append('institutionID', param.institutionID);
+  formData.append('traineeName', param.traineeName);
+  formData.append('courseName', param.courseName);
+  formData.append('registration_date', param.registration_date);
+
+  return request('/institution/courseRegistration', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取该机构所有听课登记信息
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllRegistrationInfo(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+
+  return request('/institution/getAllRegistrationInfo', {
+    method: 'POST',
+    body: formData
+  })
+
+}
