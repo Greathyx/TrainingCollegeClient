@@ -17,6 +17,7 @@ import InstitutionLoginPage from './routes/institution/InstitutionLoginPage';
 import InstitutionMainPage from './routes/institution/InstitutionMainPage';
 import InstitutionReleaseCoursePage from './routes/institution/InstitutionReleaseCoursePage';
 import InstitutionCourseRegistrationPage from './routes/institution/InstitutionCourseRegistrationPage';
+import InstitutionScoresRegistrationPage from './routes/institution/InstitutionScoresRegistrationPage';
 import InstitutionConfirmPaymentPage from './routes/institution/InstitutionConfirmPaymentPage';
 import InstitutionCourseInfoPage from './routes/institution/InstitutionCourseInfoPage';
 import InstitutionBookedCoursesPage from './routes/institution/InstitutionBookedCoursesPage';
@@ -61,6 +62,7 @@ function RouterConfig({history, app}) {
             <Switch>
               <Route path="/Institution/ReleaseCourse" exact restrict component={InstitutionReleaseCoursePage}/>
               <Route path="/Institution/CourseRegistration" exact restrict component={InstitutionCourseRegistrationPage}/>
+              <Route path="/Institution/ScoresRegistration" exact restrict component={InstitutionScoresRegistrationPage}/>
               <Route path="/Institution/ConfirmPayment" exact restrict component={InstitutionConfirmPaymentPage}/>
               <Route path="/Institution/CourseInfo" exact restrict component={InstitutionCourseInfoPage}/>
               <Route path="/Institution/BookedCourses" exact restrict component={InstitutionBookedCoursesPage}/>

@@ -1,22 +1,15 @@
 import React from 'react';
 import {connect} from 'dva';
-import moment from 'moment';
-import {Input, Table, Tabs, Button, Tooltip, Icon, Modal, Form, DatePicker, TimePicker} from 'antd';
+import {Input, Table, Tabs, Button, Tooltip, Icon, Modal, Form} from 'antd';
 import styles from '../css/TraineeChooseCourseWithClassPage.css';
 
 
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 
-// 将今天及之前的日期设置为不可选
-function disabledDateBeforeToday(current) {
-  // Can not select days before today and today
-  return current && current < moment().endOf('day');
-}
-
 const RegistrationForm = Form.create()(
   (props) => {
-    const {visible, onCancel, onCreate, form} = props;
+    const {visible, onCancel, onCreate, form, registration_info} = props;
     const {getFieldDecorator} = form;
     const formItemLayout = {
       labelCol: {
@@ -32,32 +25,28 @@ const RegistrationForm = Form.create()(
     return (
       <Modal
         visible={visible}
-        title="登记听课日期"
+        title="登记课程成绩"
         okText="确认"
         cancelText="取消"
         onCancel={onCancel}
         onOk={onCreate}
       >
         <Form layout="vertical" style={{width: '100%', marginTop: 20, marginLeft: 30}}>
-          <FormItem {...formItemLayout} label="登记日期">
-            {getFieldDecorator('registration_date', {
-              initialValue: moment(new Date(), 'YY-mm-dd'),
-              rules: [{required: true, message: '请输入听课登记日期！'}],
-            })(
-              <DatePicker
-                disabledDate={disabledDateBeforeToday}
-                placeholder="请选择日期"
-              />
-            )}
+          <FormItem
+            {...formItemLayout} label="课程名称"
+          >
+            <span>{registration_info.courseName}</span>
           </FormItem>
-          <FormItem {...formItemLayout} label="登记时间">
-            {getFieldDecorator('registration_time', {
-              initialValue: moment(new Date(), 'HH:mm:ss'),
-              rules: [{required: true, message: '请输入听课登记时间！'}],
+          <FormItem
+            {...formItemLayout} label="学员姓名"
+          >
+            <span>{registration_info.traineeName}</span>
+          </FormItem>
+          <FormItem {...formItemLayout} label="课程成绩">
+            {getFieldDecorator('scores', {
+              rules: [{required: true, message: '请输入课程成绩！'}],
             })(
-              <TimePicker
-                placeholder="请选择时间"
-              />
+              <Input/>
             )}
           </FormItem>
         </Form>
@@ -67,7 +56,7 @@ const RegistrationForm = Form.create()(
 );
 
 
-class InstitutionCourseRegistrationPage extends React.Component {
+class InstitutionScoresRegistrationPage extends React.Component {
 
   state = {
     filterDropdownVisible: false,
@@ -76,6 +65,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
     filtered: false,
     visible: false,
     registration_info: {
+      course_order_id: null,
       traineeID: null,
       courseID: null,
       traineeName: null,
@@ -90,42 +80,40 @@ class InstitutionCourseRegistrationPage extends React.Component {
   // React组件初始化时自动调用的方法
   componentWillMount() {
     this.props.dispatch({
-      type: 'institution/getAllBookedOrders',
+      type: 'institution/getAllNoScoresTrainees',
       payload: {
-        institutionID: this.props.institution.institution_id,
-        status: "paid"
+        institutionID: this.props.institution.institution_id
       },
     }).then(() => {
       this.setState({
-        data: this.props.institution.booked_courses
+        data: this.props.institution.no_scores_trainees
       });
     });
   }
 
   // 点击tab标签的监听
   tab_callback = (key) => {
-    if (key === "1" && this.props.institution.booked_courses.length === 0) {
+    if (key === "1" && this.props.institution.no_scores_trainees.length === 0) {
       this.props.dispatch({
-        type: 'institution/getAllBookedOrders',
+        type: 'institution/getAllNoScoresTrainees',
         payload: {
-          institutionID: this.props.institution.institution_id,
-          status: "paid"
+          institutionID: this.props.institution.institution_id
         },
       }).then(() => {
         this.setState({
-          data: this.props.institution.booked_courses
+          data: this.props.institution.no_scores_trainees
         });
       });
     }
-    if (key === "2" && this.props.institution.registration_list.length === 0) {
+    if (key === "2" && this.props.institution.all_trainees_scores.length === 0) {
       this.props.dispatch({
-        type: 'institution/getAllRegistrationInfo',
+        type: 'institution/getAllTraineesScores',
         payload: {
           institutionID: this.props.institution.institution_id,
         },
       }).then(() => {
         this.setState({
-          data_record: this.props.institution.registration_list
+          data_record: this.props.institution.all_trainees_scores
         });
       });
     }
@@ -152,34 +140,39 @@ class InstitutionCourseRegistrationPage extends React.Component {
         return;
       }
       const param = {
+        ...values,
+        course_order_id: this.state.registration_info.course_order_id,
         traineeID: this.state.registration_info.traineeID,
         courseID: this.state.registration_info.courseID,
-        traineeName: this.state.registration_info.traineeName,
-        courseName: this.state.registration_info.courseName,
+        trainee_name: this.state.registration_info.traineeName,
+        course_name: this.state.registration_info.courseName,
         institutionID: this.props.institution.institution_id,
-        registration_date: values['registration_date'].format('YYYY-MM-DD') + " " + values['registration_time'].format('HH:mm:ss'),
       };
       this.props.dispatch({
-        type: 'institution/courseRegistration',
+        type: 'institution/setScores',
         payload: {
           ...param,
         },
       });
-      // 更新听课登记表
+      // 更新成绩登记表
       this.props.dispatch({
-        type: 'institution/getAllRegistrationInfo',
+        type: 'institution/getAllTraineesScores',
         payload: {
           institutionID: this.props.institution.institution_id,
         },
       }).then(value => {
         if (value) {
           this.setState({
-            data_record: this.props.institution.registration_list
+            data_record: this.props.institution.all_trainees_scores
           });
         }
       });
       form.resetFields();
       this.setState({visible: false});
+      // 1s后刷新本页面
+      this.timer = setInterval(() => {
+        window.location.reload(true);
+      }, 1000);
     });
   };
 
@@ -198,7 +191,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
     this.setState({
       filterDropdownVisible: false,
       filtered: !!searchText,
-      data: this.props.institution.booked_courses.map((record) => {
+      data: this.props.institution.no_scores_trainees.map((record) => {
         const match = record.trainee_name.match(reg);
         if (!match) {
           return null;
@@ -228,7 +221,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
     this.setState({
       filterDropdownVisible_record: false,
       filtered: !!searchText_record,
-      data_record: this.props.institution.registration_list.map((record) => {
+      data_record: this.props.institution.all_trainees_scores.map((record) => {
         const match = record.trainee_name2.match(reg);
         if (!match) {
           return null;
@@ -278,7 +271,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
       title: '课程名称',
       dataIndex: 'course_name',
     }, {
-      title: '听课登记',
+      title: '成绩登记',
       dataIndex: 'registration',
       render: (text, record) => (
         <span>
@@ -290,11 +283,12 @@ class InstitutionCourseRegistrationPage extends React.Component {
             courseID: record.courseID,
             traineeName: record.trainee_name,
             courseName: record.course_name,
+            course_order_id: record.course_order_id
           };
           this.showRegistrationModal(param)
         }}
       >
-        登记时间
+        成绩登记
       </Button>
     </span>
       ),
@@ -329,14 +323,14 @@ class InstitutionCourseRegistrationPage extends React.Component {
       title: '课程名称',
       dataIndex: 'course_name2',
     }, {
-      title: '登记时间',
-      dataIndex: 'registration_date',
+      title: '课程成绩',
+      dataIndex: 'scores',
     }];
 
     return (
       <div style={{padding: '0 50px 20px 50px', backgroundColor: 'white'}}>
         <Tabs defaultActiveKey="1" onChange={this.tab_callback}>
-          <TabPane tab="听课登记" key="1">
+          <TabPane tab="成绩登记" key="1">
             <Table
               pagination={{defaultPageSize: 10}}
               columns={columns}
@@ -348,9 +342,10 @@ class InstitutionCourseRegistrationPage extends React.Component {
               visible={this.state.visible}
               onCancel={this.handleCancel}
               onCreate={this.handleCreate}
+              registration_info={this.state.registration_info}
             />
           </TabPane>
-          <TabPane tab="查看登记表" key="2">
+          <TabPane tab="查看成绩表" key="2">
             <Table
               pagination={{defaultPageSize: 10}}
               columns={columns2}
@@ -371,4 +366,4 @@ function mapStateToProps({institution}) {
   };
 }
 
-export default connect(mapStateToProps)(InstitutionCourseRegistrationPage);
+export default connect(mapStateToProps)(InstitutionScoresRegistrationPage);

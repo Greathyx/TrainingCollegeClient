@@ -10,6 +10,9 @@ import {
   courseRegistration,
   getAllRegistrationInfo,
   getAllTraineeInfo,
+  getAllNoScoreTrainees,
+  setScores,
+  getAllTraineesScores,
 } from "../services/InstitutionService";
 
 
@@ -31,6 +34,8 @@ export default {
     trainee_discount_info: [],
     trainee_all_discount_info: [],
     registration_list: [],
+    no_scores_trainees: [],
+    all_trainees_scores: [],
   },
 
   subscriptions: {
@@ -306,9 +311,11 @@ export default {
       const data = yield call(courseRegistration, payload);
       if (data.successTag) {
         message.success(data.message);
+        return true;
       }
       else {
         message.error(data.message);
+        return false;
       }
     },
 
@@ -333,6 +340,69 @@ export default {
       }
       else {
         message.error(data.message);
+      }
+    },
+
+    // 获取该机构所有没有登记成绩的学生
+    * getAllNoScoresTrainees({payload}, {call, put, select}) {
+      const data = yield call(getAllNoScoreTrainees, payload);
+      if (data.successTag) {
+        let no_scores_trainees = [];
+        for (let i = 0; i < data.t.length; i++) {
+          no_scores_trainees.push({
+            key: i,
+            trainee_name: data.t[i].trainee_name,
+            course_name: data.t[i].course_name,
+            traineeID: data.t[i].traineeID,
+            courseID: data.t[i].courseID,
+            course_order_id: data.t[i].course_order_id,
+          });
+        }
+
+        yield put({
+          type: 'updateNoScoresTrainees',
+          payload: {no_scores_trainees: no_scores_trainees}
+        });
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
+    // 机构登记成绩
+    * setScores({payload}, {call, put, select}) {
+      const data = yield call(setScores, payload);
+      if (data.successTag) {
+        message.success(data.message);
+        return true;
+      }
+      else {
+        message.error(data.message);
+        return false;
+      }
+    },
+
+    // 获取该机构所有学生的登记成绩
+    * getAllTraineesScores({payload}, {call, put, select}) {
+      const data = yield call(getAllTraineesScores, payload);
+      if (data.successTag) {
+        let all_trainees_scores = [];
+        for (let i = 0; i < data.t.length; i++) {
+          all_trainees_scores.push({
+            key: i,
+            trainee_name2: data.t[i].trainee_name,
+            course_name2: data.t[i].course_name,
+            scores: data.t[i].scores,
+          });
+        }
+
+        yield put({
+          type: 'updateAllTraineesScores',
+          payload: {all_trainees_scores: all_trainees_scores}
+        });
+      }
+      else {
+        message.warning(data.message);
       }
     },
 
@@ -428,6 +498,20 @@ export default {
       return {
         ...state,
         registration_list: action.payload.registration_list,
+      }
+    },
+    // 更新机构所有没有登记成绩的学生列表
+    updateNoScoresTrainees(state, action) {
+      return {
+        ...state,
+        no_scores_trainees: action.payload.no_scores_trainees,
+      }
+    },
+    // 更新该机构所有学生的登记成绩
+    updateAllTraineesScores(state, action) {
+      return {
+        ...state,
+        all_trainees_scores: action.payload.all_trainees_scores,
       }
     },
 

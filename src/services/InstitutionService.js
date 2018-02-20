@@ -217,3 +217,63 @@ export async function getAllRegistrationInfo(param) {
   })
 
 }
+
+/**
+ * 获取该机构所有没有登记成绩的学生
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllNoScoreTrainees(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+
+  return request('/institution/getAllNoScoreTrainees', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 登记成绩
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function setScores(param) {
+
+  const formData = new FormData();
+  formData.append('course_order_id', param.course_order_id);
+  formData.append('traineeID', param.traineeID);
+  formData.append('courseID', param.courseID);
+  formData.append('institutionID', param.institutionID);
+  formData.append('trainee_name', param.trainee_name);
+  formData.append('course_name', param.course_name);
+  formData.append('scores', param.scores);
+
+  return request('/institution/setScores', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取该机构所有学生的登记成绩
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllTraineesScores(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+
+  return request('/institution/getAllTraineesScores', {
+    method: 'POST',
+    body: formData
+  })
+
+}
