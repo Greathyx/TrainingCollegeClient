@@ -27,9 +27,14 @@ class SupervisorMainPage extends React.Component {
         defaultSelectedKeys: ['4'],
       })
     }
-    else if (window.location.hash === "#/Supervisor/CheckModify"){
+    else if (window.location.hash === "#/Supervisor/CheckModify") {
       this.setState({
         defaultSelectedKeys: ['5'],
+      })
+    }
+    else if (window.location.hash === "#/Supervisor/SettlePayment") {
+      this.setState({
+        defaultSelectedKeys: ['2'],
       })
     }
   }
@@ -55,8 +60,10 @@ class SupervisorMainPage extends React.Component {
               <Menu.Item key="5"><Link to="/Supervisor/CheckModify">审核修改信息</Link></Menu.Item>
             </SubMenu>
             <Menu.Item key="2">
-              <Icon type="pay-circle"/>
-              <span>结算金额</span>
+              <Link to="/Supervisor/SettlePayment">
+                <Icon type="pay-circle"/>
+                <span>金额结算</span>
+              </Link>
             </Menu.Item>
             <Menu.Item key="3">
               <Icon type="area-chart"/>

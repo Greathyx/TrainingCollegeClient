@@ -6,7 +6,9 @@ import {
   getAllModifyApply,
   approveApply,
   rejectApply,
-  sendReplyMail
+  sendReplyMail,
+  getToSettleList,
+  settlePayment,
 } from "../services/SupervisorService";
 
 
@@ -17,7 +19,8 @@ export default {
   state: {
     supervisor_id: null,
     hasLoggedIn: false,
-    registerApplyData: null,
+    registerApplyData: [],
+    toSettleList: [],
   },
 
   subscriptions: {
@@ -97,6 +100,9 @@ export default {
         }
         else if (pathToRegexp('/Supervisor/CheckModify').exec(location.pathname)) {
           document.title = '管理员-机构修改信息审核';
+        }
+        else if (pathToRegexp('/Supervisor/SettlePayment').exec(location.pathname)) {
+          document.title = '管理员-金额结算';
         }
         else {
           document.title = '页面不存在';
@@ -261,36 +267,79 @@ export default {
       }
     },
 
+    // 获取待支付金额的机构列表
+    * getToSettleList({payload}, {call, put, select}) {
+      const data = yield call(getToSettleList);
+      if (data.successTag) {
+        let toSettleList = [];
+        for (let i = 0; i < data.t.length; i++) {
+          toSettleList.push({
+            key: i,
+            institutionID: data.t[i].institutionID,
+            institutionName: data.t[i].institutionName,
+            institution_earning: data.t[i].institution_earning,
+            course_earning: data.t[i].course_earning,
+            actual_earning: data.t[i].actual_earning,
+          });
+        }
+
+        yield put({
+          type: 'updateToSettleList',
+          payload: {toSettleList: toSettleList}
+        });
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
+    // 结算各机构应得钱款
+    * settlePayment({payload}, {call, put, select}) {
+      const data = yield call(settlePayment, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.error(data.message);
+      }
+    },
 
   },
 
   reducers: {
-
+    // 更新管理者ID
     updateSupervisorId(state, action) {
       return {
         ...state,
         supervisor_id: action.payload.supervisor_id,
       }
     },
-
+    // 更新是否已经登陆的标志
     updateHasLoggedIn(state, action) {
       return {
         ...state,
         hasLoggedIn: action.payload.hasLoggedIn,
       }
     },
-
+    // 更新申请注册的机构列表
     updateRegisterApplyData(state, action) {
       return {
         ...state,
         registerApplyData: action.payload.registerApplyData,
       }
     },
-
+    // 更新申请修改信息的机构列表
     updateModifyApplyData(state, action) {
       return {
         ...state,
         modifyApplyData: action.payload.modifyApplyData,
+      }
+    },
+    // 更新待支付金额的机构列表
+    updateToSettleList(state, action) {
+      return {
+        ...state,
+        toSettleList: action.payload.toSettleList,
       }
     },
 

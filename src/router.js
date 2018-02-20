@@ -30,6 +30,7 @@ import SupervisorLoginPage from './routes/supervisor/SupervisorLoginPage';
 import SupervisorMainPage from './routes/supervisor/SupervisorMainPage';
 import SupervisorCheckRegisterPage from './routes/supervisor/SupervisorCheckRegisterPage';
 import SupervisorCheckModifyPage from './routes/supervisor/SupervisorCheckModifyPage';
+import SupervisorSettlePaymentPage from './routes/supervisor/SupervisorSettlePaymentPage';
 
 import Page404 from './routes/404Page';
 import TestPage from './routes/TestPage';
@@ -80,6 +81,7 @@ function RouterConfig({history, app}) {
             <Switch>
               <Route path="/Supervisor/CheckRegister" exact restrict component={SupervisorCheckRegisterPage}/>
               <Route path="/Supervisor/CheckModify" exact restrict component={SupervisorCheckModifyPage}/>
+              <Route path="/Supervisor/SettlePayment" exact restrict component={SupervisorSettlePaymentPage}/>
             </Switch>
           </SupervisorMainPage>
         </Route>

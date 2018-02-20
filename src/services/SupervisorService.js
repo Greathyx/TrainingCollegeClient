@@ -113,3 +113,35 @@ export async function sendReplyMail(param) {
   })
 
 }
+
+/**
+ * 获取所有要结算钱款的机构列表
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getToSettleList() {
+
+  return request('/supervisor/getToSettleList', {
+    method: 'GET',
+  })
+
+}
+
+/**
+ * 结算各机构应得钱款
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function settlePayment(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+  formData.append('course_earning', param.course_earning);
+
+  return request('/supervisor/settlePayment', {
+    method: 'POST',
+    body: formData
+  })
+
+}
