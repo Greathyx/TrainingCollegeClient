@@ -70,6 +70,7 @@ class InstitutionScoresRegistrationPage extends React.Component {
       courseID: null,
       traineeName: null,
       courseName: null,
+      institutionName: null
     },
     filterDropdownVisible_record: false,
     data_record: [],
@@ -146,6 +147,7 @@ class InstitutionScoresRegistrationPage extends React.Component {
         courseID: this.state.registration_info.courseID,
         trainee_name: this.state.registration_info.traineeName,
         course_name: this.state.registration_info.courseName,
+        institution_name: this.state.registration_info.institutionName,
         institutionID: this.props.institution.institution_id,
       };
       this.props.dispatch({
@@ -283,6 +285,7 @@ class InstitutionScoresRegistrationPage extends React.Component {
             courseID: record.courseID,
             traineeName: record.trainee_name,
             courseName: record.course_name,
+            institutionName: record.institution_name,
             course_order_id: record.course_order_id
           };
           this.showRegistrationModal(param)

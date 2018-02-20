@@ -271,3 +271,39 @@ export async function creditsExchange(param) {
   })
 
 }
+
+/**
+ * 获取学员所有课程成绩
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllScores(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.trainee_id);
+
+  return request('/trainee/getAllScores', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取学员所有听课登记记录
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getAllCoursesRegistration(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.trainee_id);
+
+  return request('/trainee/getAllCoursesRegistration', {
+    method: 'POST',
+    body: formData
+  })
+
+}

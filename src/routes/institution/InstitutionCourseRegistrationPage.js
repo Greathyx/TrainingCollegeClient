@@ -80,6 +80,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
       courseID: null,
       traineeName: null,
       courseName: null,
+      institutionName: null,
     },
     filterDropdownVisible_record: false,
     data_record: [],
@@ -156,6 +157,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
         courseID: this.state.registration_info.courseID,
         traineeName: this.state.registration_info.traineeName,
         courseName: this.state.registration_info.courseName,
+        institutionName: this.state.registration_info.institutionName,
         institutionID: this.props.institution.institution_id,
         registration_date: values['registration_date'].format('YYYY-MM-DD') + " " + values['registration_time'].format('HH:mm:ss'),
       };
@@ -290,6 +292,7 @@ class InstitutionCourseRegistrationPage extends React.Component {
             courseID: record.courseID,
             traineeName: record.trainee_name,
             courseName: record.course_name,
+            institutionName: record.institution_name
           };
           this.showRegistrationModal(param)
         }}

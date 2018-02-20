@@ -191,6 +191,7 @@ export async function courseRegistration(param) {
   formData.append('institutionID', param.institutionID);
   formData.append('traineeName', param.traineeName);
   formData.append('courseName', param.courseName);
+  formData.append('institutionName', param.institutionName);
   formData.append('registration_date', param.registration_date);
 
   return request('/institution/courseRegistration', {
@@ -251,6 +252,7 @@ export async function setScores(param) {
   formData.append('institutionID', param.institutionID);
   formData.append('trainee_name', param.trainee_name);
   formData.append('course_name', param.course_name);
+  formData.append('institution_name', param.institution_name);
   formData.append('scores', param.scores);
 
   return request('/institution/setScores', {

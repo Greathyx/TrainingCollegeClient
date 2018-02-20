@@ -77,6 +77,12 @@ export default {
         else if (pathToRegexp('/Trainee/UnsubscribeOrders').exec(location.pathname)) {
           document.title = '学员-已退课订单';
         }
+        else if (pathToRegexp('/Trainee/CourseRegistration').exec(location.pathname)) {
+          document.title = '学员-听课记录';
+        }
+        else if (pathToRegexp('/Trainee/Scores').exec(location.pathname)) {
+          document.title = '学员-个人成绩';
+        }
         else if (pathToRegexp('/Trainee/VipCenter').exec(location.pathname)) {
           document.title = '学员-会员中心';
         }

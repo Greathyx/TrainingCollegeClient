@@ -14,6 +14,8 @@ import {
   cancelPay,
   unsubscribe,
   creditsExchange,
+  getAllScores,
+  getAllCoursesRegistration,
 } from "../services/TraineeService";
 
 
@@ -35,6 +37,8 @@ export default {
     notPaidOrders: [],
     paidOrders: [],
     unsubscribeOrders: [],
+    scores_list: [],
+    courses_registration: [],
   },
 
   subscriptions: {
@@ -480,6 +484,44 @@ export default {
       }
     },
 
+    // 获取学员所有成绩
+    * getAllScores({payload}, {call, put, select}) {
+      const data = yield call(getAllScores, payload);
+      let scores_list = [];
+      for (let i = 0; i < data.t.length; i++) {
+        scores_list.push({
+          key: i,
+          course_name: data.t[i].course_name,
+          institution_name: data.t[i].institution_name,
+          scores: data.t[i].scores,
+        });
+      }
+
+      yield put({
+        type: 'updateScoresList',
+        payload: {scores_list: scores_list}
+      });
+    },
+
+    // 获取学员所有听课登记记录
+    * getAllCoursesRegistration({payload}, {call, put, select}) {
+      const data = yield call(getAllCoursesRegistration, payload);
+      let courses_registration = [];
+      for (let i = 0; i < data.t.length; i++) {
+        courses_registration.push({
+          key: i,
+          course_name: data.t[i].course_name,
+          institution_name: data.t[i].institution_name,
+          registration_date: new Date(parseInt(data.t[i].registration_date, 10)).toLocaleString(),
+        });
+      }
+
+      yield put({
+        type: 'updateCoursesRegistration',
+        payload: {courses_registration: courses_registration}
+      });
+    },
+
   },
 
   reducers: {
@@ -574,6 +616,21 @@ export default {
         unsubscribeOrders: action.payload.unsubscribeOrders,
       }
     },
+    // 更新用户课程成绩列表
+    updateScoresList(state, action) {
+      return {
+        ...state,
+        scores_list: action.payload.scores_list,
+      }
+    },
+    // 更新用户听课登记列表
+    updateCoursesRegistration(state, action) {
+      return {
+        ...state,
+        courses_registration: action.payload.courses_registration,
+      }
+    },
+
   }
 
 }
