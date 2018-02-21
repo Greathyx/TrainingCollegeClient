@@ -9,6 +9,8 @@ import {
   sendReplyMail,
   getToSettleList,
   settlePayment,
+  getStatisticsForBarChart,
+  getStatisticsForPieChart,
 } from "../services/SupervisorService";
 
 
@@ -21,6 +23,8 @@ export default {
     hasLoggedIn: false,
     registerApplyData: [],
     toSettleList: [],
+    bar_chart_statistics: [],
+    pie_chart_statistics: [],
   },
 
   subscriptions: {
@@ -109,6 +113,9 @@ export default {
         }
         else if (pathToRegexp('/Supervisor/SettlePayment').exec(location.pathname)) {
           document.title = '管理员-金额结算';
+        }
+        else if (pathToRegexp('/Supervisor/EarningStatistics').exec(location.pathname)) {
+          document.title = '管理员-若水财务';
         }
         else {
           document.title = '页面不存在';
@@ -310,6 +317,40 @@ export default {
       }
     },
 
+    // 获取若水教育每月收入数据
+    * getStatisticsForBarChart({payload}, {call, put, select}) {
+      const data = yield call(getStatisticsForBarChart);
+      let bar_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        bar_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][1],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForBarChart',
+        payload: {bar_chart_statistics: bar_chart_statistics}
+      });
+    },
+
+    // 获取本年收入来源占比饼图数据
+    * getStatisticsForPieChart({payload}, {call, put, select}) {
+      const data = yield call(getStatisticsForPieChart);
+      let pie_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        pie_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][1],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForPieChart',
+        payload: {pie_chart_statistics: pie_chart_statistics}
+      });
+      return data.t;
+    },
+
+
   },
 
   reducers: {
@@ -346,6 +387,20 @@ export default {
       return {
         ...state,
         toSettleList: action.payload.toSettleList,
+      }
+    },
+    // 更新若水教育每月收入数据
+    updateStatisticsForBarChart(state, action) {
+      return {
+        ...state,
+        bar_chart_statistics: action.payload.bar_chart_statistics,
+      }
+    },
+    // 更新本年收入来源占比饼图数据
+    updateStatisticsForPieChart(state, action) {
+      return {
+        ...state,
+        pie_chart_statistics: action.payload.pie_chart_statistics,
       }
     },
 

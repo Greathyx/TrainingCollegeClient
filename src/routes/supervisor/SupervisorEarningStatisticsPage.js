@@ -3,35 +3,21 @@ import ReactEcharts from 'echarts-for-react';
 import {connect} from 'dva';
 
 
-class TraineeConsumptionStaticsPage extends React.Component {
+class SupervisorEarningStatisticsPage extends React.Component {
 
   // React组件初始化时自动调用的方法
   componentWillMount() {
     this.props.dispatch({
-      type: 'trainee/getStatisticsForBarChart',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-      },
+      type: 'supervisor/getStatisticsForBarChart',
+      payload: {},
     });
     this.props.dispatch({
-      type: 'trainee/getStatisticsForPieChart',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-      },
-    }).then(value => {
-      let pie_chart_legend = [];
-      for (let i = 0; i < value.length; i++) {
-        pie_chart_legend.push(value[i][0]);
-      }
-      this.setState({
-        pie_chart_legend: pie_chart_legend
-      })
+      type: 'supervisor/getStatisticsForPieChart',
+      payload: {},
     });
   }
 
-  state = {
-    pie_chart_legend: []
-  };
+  state = {};
 
   render() {
     const option_bar = {
@@ -101,13 +87,13 @@ class TraineeConsumptionStaticsPage extends React.Component {
       ],
       series: [
         {
-          name: '课程支出',
+          name: '收入',
           type: 'bar',
           itemStyle: {
             color: "rgba(0,191,183,1)",
           },
           barWidth: '50%',
-          data: this.props.trainee.bar_chart_statistics
+          data: this.props.supervisor.bar_chart_statistics
         }
       ]
     };
@@ -120,15 +106,15 @@ class TraineeConsumptionStaticsPage extends React.Component {
       legend: {
         orient: 'vertical',
         left: '10%',
-        data: this.state.pie_chart_legend
+        data: ['订课分成', '退课差额']
       },
       series: [
         {
-          name: '课程支出',
+          name: '收入来源',
           type: 'pie',
           radius: '55%',
           center: ['42%', '40%'],
-          data: this.props.trainee.pie_chart_statistics,
+          data: this.props.supervisor.pie_chart_statistics,
           itemStyle: {
             emphasis: {
               shadowBlur: 10,
@@ -143,17 +129,17 @@ class TraineeConsumptionStaticsPage extends React.Component {
     return (
       <div style={{padding: '0 50px 0 50px', textAlign: 'center'}}>
         <p style={{fontSize: 'x-large'}}>
-          本年每月课程总支出统计
+          本年每月收入统计
         </p>
         <ReactEcharts
           option={option_bar}
           notMerge={true}
           lazyUpdate={true}
           theme={"theme_name"}
-          style={{width: '100%', height: 500, marginBottom: 50, marginTop: -40}}
+          style={{width: '100%', height: 500, marginBottom: 50}}
         />
         <p style={{fontSize: 'x-large'}}>
-          本年各类型课程支出占比
+          本年收入来源占比
         </p>
         <ReactEcharts
           option={option_pie}
@@ -165,12 +151,13 @@ class TraineeConsumptionStaticsPage extends React.Component {
       </div>
     )
   }
+
 }
 
-function mapStateToProps({trainee}) {
+function mapStateToProps({supervisor}) {
   return {
-    trainee,
+    supervisor,
   };
 }
 
-export default connect(mapStateToProps)(TraineeConsumptionStaticsPage);
+export default connect(mapStateToProps)(SupervisorEarningStatisticsPage);

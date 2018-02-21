@@ -37,6 +37,11 @@ class SupervisorMainPage extends React.Component {
         defaultSelectedKeys: ['2'],
       })
     }
+    else if (window.location.hash === "#/Supervisor/EarningStatistics") {
+      this.setState({
+        defaultSelectedKeys: ['6'],
+      })
+    }
   }
 
   render() {
@@ -52,7 +57,7 @@ class SupervisorMainPage extends React.Component {
           <Menu
             theme="dark"
             mode="inline"
-            defaultOpenKeys={['1']}
+            defaultOpenKeys={['1', '3']}
             defaultSelectedKeys={this.state.defaultSelectedKeys}
           >
             <SubMenu key="1" title={<span><Icon type="file-text"/><span>机构审核</span></span>}>
@@ -65,10 +70,9 @@ class SupervisorMainPage extends React.Component {
                 <span>金额结算</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="3">
-              <Icon type="area-chart"/>
-              <span>统计信息</span>
-            </Menu.Item>
+            <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
+              <Menu.Item key="6"><Link to="/Supervisor/EarningStatistics">若水财务</Link></Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout style={{backgroundColor: 'white'}}>

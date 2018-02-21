@@ -145,3 +145,29 @@ export async function settlePayment(param) {
   })
 
 }
+
+/**
+ * 获取若水教育每月收入数据
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getStatisticsForBarChart() {
+
+  return request('/supervisor/getStatisticsForBarChart', {
+    method: 'GET',
+  })
+
+}
+
+/**
+ * 获取本年收入来源占比饼图数据
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getStatisticsForPieChart() {
+
+  return request('/supervisor/getStatisticsForPieChart', {
+    method: 'GET',
+  })
+
+}

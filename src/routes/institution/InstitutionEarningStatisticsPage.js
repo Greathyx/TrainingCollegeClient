@@ -39,7 +39,8 @@ class InstitutionEarningStatisticsPage extends React.Component {
         trigger: 'axis',
         axisPointer: {          // 坐标轴指示器，坐标轴触发有效
           type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-        }
+        },
+        formatter: "{b}<br/>{a0}: {c0}人<br>{a1}: ¥{c1}"
       },
       toolbox: {
         feature: {
@@ -80,26 +81,28 @@ class InstitutionEarningStatisticsPage extends React.Component {
         name: '课程收入',
         position: 'left'
       }],
-      dataZoom: [{
-        show: true,
-        height: 30,
-        xAxisIndex: [0],
-        bottom: 30,
-        start: 0,
-        end: 100,
-        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
-        handleSize: '110%',
-        handleStyle: {
-          color: "#d3dee5",
+      dataZoom: [
+        {
+          show: true,
+          height: 30,
+          xAxisIndex: [
+            0
+          ],
+          bottom: 40,
+          start: 0,
+          end: 100
         },
-        borderColor: "#90979c"
-      }, {
-        type: "inside",
-        show: true,
-        height: 15,
-        start: 1,
-        end: 35
-      }],
+        {
+          type: "inside",
+          show: true,
+          height: 15,
+          xAxisIndex: [
+            0
+          ],
+          start: 1,
+          end: 35
+        }
+      ],
       series: [{
         name: '订课人数',
         type: 'line',
@@ -143,7 +146,18 @@ class InstitutionEarningStatisticsPage extends React.Component {
     const option_pie = {
       tooltip: {
         trigger: 'item',
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
+        formatter: "{a}<br/>{b}: ¥{c} ({d}%)"
+      },
+      toolbox: {
+        feature: {
+          dataView: {
+            show: true,
+            readOnly: false
+          },
+          saveAsImage: {
+            show: true
+          }
+        }
       },
       legend: {
         orient: 'vertical',
