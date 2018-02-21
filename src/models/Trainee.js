@@ -16,6 +16,9 @@ import {
   creditsExchange,
   getAllScores,
   getAllCoursesRegistration,
+  getStatisticsForBarChart,
+  getStatisticsForPieChart,
+
 } from "../services/TraineeService";
 
 
@@ -39,6 +42,8 @@ export default {
     unsubscribeOrders: [],
     scores_list: [],
     courses_registration: [],
+    bar_chart_statistics: [],
+    pie_chart_statistics: [],
   },
 
   subscriptions: {
@@ -496,7 +501,6 @@ export default {
           scores: data.t[i].scores,
         });
       }
-
       yield put({
         type: 'updateScoresList',
         payload: {scores_list: scores_list}
@@ -525,6 +529,39 @@ export default {
       else {
         message.warning(data.message);
       }
+    },
+
+    // 更新学员本年每月消费统计柱状图数据
+    * getStatisticsForBarChart({payload}, {call, put, select}) {
+      const data = yield call(getStatisticsForBarChart, payload);
+      let bar_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        bar_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][1],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForBarChart',
+        payload: {bar_chart_statistics: bar_chart_statistics}
+      });
+    },
+
+    // 更新学员本年各类型课程支出占比饼图饼图数据
+    * getStatisticsForPieChart({payload}, {call, put, select}) {
+      const data = yield call(getStatisticsForPieChart, payload);
+      let pie_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        pie_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][1],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForPieChart',
+        payload: {pie_chart_statistics: pie_chart_statistics}
+      });
+      return data.t;
     },
 
   },
@@ -633,6 +670,20 @@ export default {
       return {
         ...state,
         courses_registration: action.payload.courses_registration,
+      }
+    },
+    // 更新学员本年每月消费统计柱状图数据
+    updateStatisticsForBarChart(state, action) {
+      return {
+        ...state,
+        bar_chart_statistics: action.payload.bar_chart_statistics,
+      }
+    },
+    // 更新学员本年各类型课程支出占比饼图饼图数据
+    updateStatisticsForPieChart(state, action) {
+      return {
+        ...state,
+        pie_chart_statistics: action.payload.pie_chart_statistics,
       }
     },
 

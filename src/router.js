@@ -11,6 +11,7 @@ import TraineePaidPage from './routes/trainee/TraineePaidOrdersPage';
 import TraineeUnsubscribeOrdersPage from './routes/trainee/TraineeUnsubscribeOrdersPage';
 import TraineeCourseRegistrationPage from './routes/trainee/TraineeCourseRegistrationPage';
 import TraineeScoresPage from './routes/trainee/TraineeScoresPage';
+import TraineeConsumptionStaticsPage from './routes/trainee/TraineeConsumptionStaticsPage';
 import TraineeVipCenterPage from './routes/trainee/TraineeVipCenterPage';
 import TraineeEditInfoPage from './routes/trainee/TraineeEditInfoPage';
 
@@ -57,6 +58,7 @@ function RouterConfig({history, app}) {
               <Route path="/Trainee/UnsubscribeOrders" exact restrict component={TraineeUnsubscribeOrdersPage}/>
               <Route path="/Trainee/CourseRegistration" exact restrict component={TraineeCourseRegistrationPage}/>
               <Route path="/Trainee/Scores" exact restrict component={TraineeScoresPage}/>
+              <Route path="/Trainee/ConsumptionStatics" exact restrict component={TraineeConsumptionStaticsPage}/>
               <Route path="/Trainee/VipCenter" exact restrict component={TraineeVipCenterPage}/>
               <Route path="/Trainee/EditInfo" exact restrict component={TraineeEditInfoPage}/>
             </Switch>

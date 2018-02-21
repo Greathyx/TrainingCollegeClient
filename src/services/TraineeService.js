@@ -307,3 +307,39 @@ export async function getAllCoursesRegistration(param) {
   })
 
 }
+
+/**
+ * 获取学员本年每月消费统计柱状图数据
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getStatisticsForBarChart(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.traineeID);
+
+  return request('/trainee/getStatisticsForBarChart', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取学员本年各类型课程支出占比饼图饼图数据
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getStatisticsForPieChart(param) {
+
+  const formData = new FormData();
+  formData.append('traineeID', param.traineeID);
+
+  return request('/trainee/getStatisticsForPieChart', {
+    method: 'POST',
+    body: formData
+  })
+
+}

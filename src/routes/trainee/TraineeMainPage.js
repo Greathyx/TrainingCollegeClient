@@ -59,6 +59,11 @@ class TraineeMainPage extends React.Component {
         defaultSelectedKeys: ['8'],
       })
     }
+    else if (window.location.hash === "#/Trainee/ConsumptionStatics") {
+      this.setState({
+        defaultSelectedKeys: ['2'],
+      })
+    }
     else if (window.location.hash === "#/Trainee/VipCenter") {
       this.setState({
         defaultSelectedKeys: ['9'],
@@ -100,13 +105,10 @@ class TraineeMainPage extends React.Component {
               <Menu.Item key="12"><Link to="/Trainee/PaidOrders">已支付订单</Link></Menu.Item>
               <Menu.Item key="13"><Link to="/Trainee/UnsubscribeOrders">已退课订单</Link></Menu.Item>
             </SubMenu>
-            {/*<Menu.Item key="2">*/}
-              {/*<Icon type="export"/>*/}
-              {/*<span>退定课程</span>*/}
-            {/*</Menu.Item>*/}
             <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
               <Menu.Item key="7"><Link to="/Trainee/CourseRegistration">听课记录</Link></Menu.Item>
               <Menu.Item key="8"><Link to="/Trainee/Scores">个人成绩</Link></Menu.Item>
+              <Menu.Item key="2"><Link to="/Trainee/ConsumptionStatics">消费统计</Link></Menu.Item>
               <Menu.Item key="9"><Link to="/Trainee/VipCenter">会员中心</Link></Menu.Item>
             </SubMenu>
             <Menu.Item key="4">

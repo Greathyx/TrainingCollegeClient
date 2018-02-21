@@ -86,6 +86,9 @@ export default {
         else if (pathToRegexp('/Trainee/Scores').exec(location.pathname)) {
           document.title = '学员-个人成绩';
         }
+        else if (pathToRegexp('/Trainee/ConsumptionStatics').exec(location.pathname)) {
+          document.title = '学员-消费统计';
+        }
         else if (pathToRegexp('/Trainee/VipCenter').exec(location.pathname)) {
           document.title = '学员-会员中心';
         }
