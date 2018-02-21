@@ -13,6 +13,7 @@ import {
   getStatisticsForBarChart,
   getStatisticsForPieChart,
   getInstitutionStatistics,
+  getTraineeStatistics,
 } from "../services/SupervisorService";
 
 
@@ -29,6 +30,7 @@ export default {
     bar_chart_statistics: [],
     pie_chart_statistics: [],
     institution_statistics: [],
+    trainee_statistics: [],
   },
 
   subscriptions: {
@@ -414,6 +416,36 @@ export default {
       }
     },
 
+    // 获取所有会员统计数据
+    * getTraineeStatistics({payload}, {call, put, select}) {
+      const data = yield call(getTraineeStatistics);
+      if (data.successTag) {
+        let trainee_statistics = [];
+        for (let i = 0; i < data.t.length; i++) {
+          trainee_statistics.push({
+            key: i,
+            traineeName: data.t[i].traineeName,
+            email: data.t[i].email,
+            total_expense: data.t[i].total_expense,
+            this_year_expense: data.t[i].this_year_expense,
+            total_course_amount: data.t[i].total_course_amount,
+            this_year_paid_amount: data.t[i].this_year_paid_amount,
+            this_year_unsubscribe_amount: data.t[i].this_year_unsubscribe_amount,
+            level: data.t[i].level,
+            credit: data.t[i].credit,
+            is_active: data.t[i].is_active ? "未注销" : "已注销",
+          });
+        }
+        yield put({
+          type: 'updateTraineeStatistics',
+          payload: {trainee_statistics: trainee_statistics}
+        });
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
   },
 
   reducers: {
@@ -480,7 +512,13 @@ export default {
         institution_statistics: action.payload.institution_statistics,
       }
     },
-
+    // 更新所有会员统计数据
+    updateTraineeStatistics(state, action) {
+      return {
+        ...state,
+        trainee_statistics: action.payload.trainee_statistics,
+      }
+    },
   }
 
 }

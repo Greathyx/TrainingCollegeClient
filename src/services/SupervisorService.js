@@ -197,3 +197,16 @@ export async function getInstitutionStatistics() {
   })
 
 }
+
+/**
+ * 获取所有会员统计数据
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getTraineeStatistics() {
+
+  return request('/supervisor/getTraineeStatistics', {
+    method: 'GET',
+  })
+
+}
