@@ -279,3 +279,39 @@ export async function getAllTraineesScores(param) {
   })
 
 }
+
+/**
+ * 获取机构本年每月课程收入及订课人数数据
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getStatisticsForBarChart(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+
+  return request('/institution/getStatisticsForBarChart', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 获取机构本年各类型课程收入占比饼图数据
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getStatisticsForPieChart(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+
+  return request('/institution/getStatisticsForPieChart', {
+    method: 'POST',
+    body: formData
+  })
+
+}

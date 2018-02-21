@@ -13,6 +13,8 @@ import {
   getAllNoScoreTrainees,
   setScores,
   getAllTraineesScores,
+  getStatisticsForBarChart,
+  getStatisticsForPieChart,
 } from "../services/InstitutionService";
 
 
@@ -36,6 +38,9 @@ export default {
     registration_list: [],
     no_scores_trainees: [],
     all_trainees_scores: [],
+    bar_chart_statistics: [],
+    pie_chart_statistics: [],
+    line_chart_statistics: [],
   },
 
   subscriptions: {
@@ -408,6 +413,51 @@ export default {
       }
     },
 
+    // 获取机构本年每月课程收入及订课人数数据
+    * getStatisticsForBarAndLineChart({payload}, {call, put, select}) {
+      const data = yield call(getStatisticsForBarChart, payload);
+      let bar_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        bar_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][1],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForBarChart',
+        payload: {bar_chart_statistics: bar_chart_statistics}
+      });
+
+      let line_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        line_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][2],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForLineChart',
+        payload: {line_chart_statistics: line_chart_statistics}
+      });
+    },
+
+    // 获取机构本年各类型课程收入占比饼图数据
+    * getStatisticsForPieChart({payload}, {call, put, select}) {
+      const data = yield call(getStatisticsForPieChart, payload);
+      let pie_chart_statistics = [];
+      for (let i = 0; i < data.t.length; i++) {
+        pie_chart_statistics.push({
+          name: data.t[i][0],
+          value: data.t[i][1],
+        });
+      }
+      yield put({
+        type: 'updateStatisticsForPieChart',
+        payload: {pie_chart_statistics: pie_chart_statistics}
+      });
+      return data.t;
+    },
+
   },
 
   reducers: {
@@ -509,11 +559,32 @@ export default {
         no_scores_trainees: action.payload.no_scores_trainees,
       }
     },
-    // 更新该机构所有学生的登记成绩
+    // 更新机构所有学生的登记成绩
     updateAllTraineesScores(state, action) {
       return {
         ...state,
         all_trainees_scores: action.payload.all_trainees_scores,
+      }
+    },
+    // 更新机构本年每月课程收入数据
+    updateStatisticsForBarChart(state, action) {
+      return {
+        ...state,
+        bar_chart_statistics: action.payload.bar_chart_statistics,
+      }
+    },
+    // 更新机构本年每月订课人数数据
+    updateStatisticsForLineChart(state, action) {
+      return {
+        ...state,
+        line_chart_statistics: action.payload.line_chart_statistics,
+      }
+    },
+    // 更新机构本年各类型课程收入占比饼图数据
+    updateStatisticsForPieChart(state, action) {
+      return {
+        ...state,
+        pie_chart_statistics: action.payload.pie_chart_statistics,
       }
     },
 

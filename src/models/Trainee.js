@@ -547,7 +547,7 @@ export default {
       });
     },
 
-    // 更新学员本年各类型课程支出占比饼图饼图数据
+    // 获取学员本年各类型课程支出占比饼图数据
     * getStatisticsForPieChart({payload}, {call, put, select}) {
       const data = yield call(getStatisticsForPieChart, payload);
       let pie_chart_statistics = [];
@@ -679,7 +679,7 @@ export default {
         bar_chart_statistics: action.payload.bar_chart_statistics,
       }
     },
-    // 更新学员本年各类型课程支出占比饼图饼图数据
+    // 更新学员本年各类型课程支出占比饼图数据
     updateStatisticsForPieChart(state, action) {
       return {
         ...state,

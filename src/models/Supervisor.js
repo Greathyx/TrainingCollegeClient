@@ -56,6 +56,9 @@ export default {
         else if (pathToRegexp('/Institution/UnsubscribeCourses').exec(location.pathname)) {
           document.title = '机构-退课信息';
         }
+        else if (pathToRegexp('/Institution/EarningStatistics').exec(location.pathname)) {
+          document.title = '机构-财务信息';
+        }
         else if (pathToRegexp('/Institution/EditInfo').exec(location.pathname)) {
           document.title = '机构-修改信息';
         }
@@ -86,7 +89,7 @@ export default {
         else if (pathToRegexp('/Trainee/Scores').exec(location.pathname)) {
           document.title = '学员-个人成绩';
         }
-        else if (pathToRegexp('/Trainee/ConsumptionStatics').exec(location.pathname)) {
+        else if (pathToRegexp('/Trainee/ConsumptionStatistics').exec(location.pathname)) {
           document.title = '学员-消费统计';
         }
         else if (pathToRegexp('/Trainee/VipCenter').exec(location.pathname)) {

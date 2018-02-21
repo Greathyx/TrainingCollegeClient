@@ -42,10 +42,24 @@ class TraineeConsumptionStaticsPage extends React.Component {
           type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
         }
       },
+      toolbox: {
+        feature: {
+          dataView: {
+            show: true,
+            readOnly: false
+          },
+          restore: {
+            show: true
+          },
+          saveAsImage: {
+            show: true
+          }
+        }
+      },
       grid: {
         left: '5%',
         right: '4%',
-        bottom: '3%',
+        bottom: 95,
         containLabel: true
       },
       xAxis: [
@@ -62,10 +76,33 @@ class TraineeConsumptionStaticsPage extends React.Component {
           type: 'value'
         }
       ],
+      dataZoom: [{
+        show: true,
+        height: 30,
+        xAxisIndex: [0],
+        bottom: 30,
+        start: 0,
+        end: 100,
+        handleIcon: 'path://M306.1,413c0,2.2-1.8,4-4,4h-59.8c-2.2,0-4-1.8-4-4V200.8c0-2.2,1.8-4,4-4h59.8c2.2,0,4,1.8,4,4V413z',
+        handleSize: '110%',
+        handleStyle: {
+          color: "#d3dee5",
+        },
+        borderColor: "#90979c"
+      }, {
+        type: "inside",
+        show: true,
+        height: 15,
+        start: 1,
+        end: 35
+      }],
       series: [
         {
           name: '课程支出',
           type: 'bar',
+          itemStyle: {
+            color: "rgba(0,191,183,1)",
+          },
           barWidth: '50%',
           data: this.props.trainee.bar_chart_statistics
         }
@@ -73,18 +110,12 @@ class TraineeConsumptionStaticsPage extends React.Component {
     };
 
     const option_pie = {
-      // title : {
-      //   text: '某站点用户访问来源',
-      //   subtext: '纯属虚构',
-      //   x:'center'
-      // },
       tooltip: {
         trigger: 'item',
         formatter: "{a} <br/>{b} : {c} ({d}%)"
       },
       legend: {
         orient: 'vertical',
-        // left: 'left',
         left: '10%',
         data: this.state.pie_chart_legend
       },
@@ -116,10 +147,10 @@ class TraineeConsumptionStaticsPage extends React.Component {
           notMerge={true}
           lazyUpdate={true}
           theme={"theme_name"}
-          style={{width: '100%', marginBottom: 50, marginTop: -40}}
+          style={{width: '100%', height: 500, marginBottom: 50, marginTop: -40}}
         />
         <p style={{fontSize: 'x-large'}}>
-          本年各类型课程总支出占比
+          本年各类型课程支出占比
         </p>
         <ReactEcharts
           option={option_pie}

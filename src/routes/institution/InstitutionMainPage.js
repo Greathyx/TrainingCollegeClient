@@ -56,7 +56,12 @@ class InstitutionMainPage extends React.Component {
       this.setState({
         defaultSelectedKeys: ['9'],
       })
+    }else if (window.location.hash === "#/Institution/EarningStatistics") {
+      this.setState({
+        defaultSelectedKeys: ['10'],
+      })
     }
+
     else if (window.location.hash === "#/Institution/EditInfo") {
       this.setState({
         defaultSelectedKeys: ['3'],
@@ -90,7 +95,7 @@ class InstitutionMainPage extends React.Component {
               <Menu.Item key="7"><Link to="/Institution/CourseInfo">课程信息</Link></Menu.Item>
               <Menu.Item key="8"><Link to="/Institution/BookedCourses">订课信息</Link></Menu.Item>
               <Menu.Item key="9"><Link to="/Institution/UnsubscribeCourses">退课信息</Link></Menu.Item>
-              <Menu.Item key="10">财务信息</Menu.Item>
+              <Menu.Item key="10"><Link to="/Institution/EarningStatistics">财务信息</Link></Menu.Item>
             </SubMenu>
             <Menu.Item key="3">
               <Link to="/Institution/EditInfo">

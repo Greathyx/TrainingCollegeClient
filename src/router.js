@@ -11,7 +11,7 @@ import TraineePaidPage from './routes/trainee/TraineePaidOrdersPage';
 import TraineeUnsubscribeOrdersPage from './routes/trainee/TraineeUnsubscribeOrdersPage';
 import TraineeCourseRegistrationPage from './routes/trainee/TraineeCourseRegistrationPage';
 import TraineeScoresPage from './routes/trainee/TraineeScoresPage';
-import TraineeConsumptionStaticsPage from './routes/trainee/TraineeConsumptionStaticsPage';
+import TraineeConsumptionStatisticsPage from './routes/trainee/TraineeConsumptionStatisticsPage';
 import TraineeVipCenterPage from './routes/trainee/TraineeVipCenterPage';
 import TraineeEditInfoPage from './routes/trainee/TraineeEditInfoPage';
 
@@ -25,6 +25,7 @@ import InstitutionConfirmPaymentPage from './routes/institution/InstitutionConfi
 import InstitutionCourseInfoPage from './routes/institution/InstitutionCourseInfoPage';
 import InstitutionBookedCoursesPage from './routes/institution/InstitutionBookedCoursesPage';
 import InstitutionUnsubscribeCoursesPage from './routes/institution/InstitutionUnsubscribeCoursesPage';
+import InstitutionEarningStatisticsPage from './routes/institution/InstitutionEarningStatisticsPage';
 import InstitutionEditInfoPage from './routes/institution/InstitutionEditInfoPage';
 
 import SupervisorLoginPage from './routes/supervisor/SupervisorLoginPage';
@@ -58,7 +59,7 @@ function RouterConfig({history, app}) {
               <Route path="/Trainee/UnsubscribeOrders" exact restrict component={TraineeUnsubscribeOrdersPage}/>
               <Route path="/Trainee/CourseRegistration" exact restrict component={TraineeCourseRegistrationPage}/>
               <Route path="/Trainee/Scores" exact restrict component={TraineeScoresPage}/>
-              <Route path="/Trainee/ConsumptionStatics" exact restrict component={TraineeConsumptionStaticsPage}/>
+              <Route path="/Trainee/ConsumptionStatistics" exact restrict component={TraineeConsumptionStatisticsPage}/>
               <Route path="/Trainee/VipCenter" exact restrict component={TraineeVipCenterPage}/>
               <Route path="/Trainee/EditInfo" exact restrict component={TraineeEditInfoPage}/>
             </Switch>
@@ -74,6 +75,7 @@ function RouterConfig({history, app}) {
               <Route path="/Institution/CourseInfo" exact restrict component={InstitutionCourseInfoPage}/>
               <Route path="/Institution/BookedCourses" exact restrict component={InstitutionBookedCoursesPage}/>
               <Route path="/Institution/UnsubscribeCourses" exact restrict component={InstitutionUnsubscribeCoursesPage}/>
+              <Route path="/Institution/EarningStatistics" exact restrict component={InstitutionEarningStatisticsPage}/>
               <Route path="/Institution/EditInfo" exact restrict component={InstitutionEditInfoPage}/>
             </Switch>
           </InstitutionMainPage>
