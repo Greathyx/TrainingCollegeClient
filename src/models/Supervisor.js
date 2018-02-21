@@ -12,6 +12,7 @@ import {
   settlePayment,
   getStatisticsForBarChart,
   getStatisticsForPieChart,
+  getInstitutionStatistics,
 } from "../services/SupervisorService";
 
 
@@ -27,6 +28,7 @@ export default {
     toSettleList: [],
     bar_chart_statistics: [],
     pie_chart_statistics: [],
+    institution_statistics: [],
   },
 
   subscriptions: {
@@ -121,6 +123,12 @@ export default {
         }
         else if (pathToRegexp('/Supervisor/EarningStatistics').exec(location.pathname)) {
           document.title = '管理员-若水财务';
+        }
+        else if (pathToRegexp('/Supervisor/InstitutionStatistics').exec(location.pathname)) {
+          document.title = '管理员-机构数据';
+        }
+        else if (pathToRegexp('/Supervisor/TraineeStatistics').exec(location.pathname)) {
+          document.title = '管理员-学员数据';
         }
         else {
           document.title = '页面不存在';
@@ -378,9 +386,33 @@ export default {
         type: 'updateStatisticsForPieChart',
         payload: {pie_chart_statistics: pie_chart_statistics}
       });
-      return data.t;
     },
 
+    // 获取所有机构统计数据
+    * getInstitutionStatistics({payload}, {call, put, select}) {
+      const data = yield call(getInstitutionStatistics);
+      if (data.successTag) {
+        let institution_statistics = [];
+        for (let i = 0; i < data.t.length; i++) {
+          institution_statistics.push({
+            key: i,
+            institutionName: data.t[i].institutionName,
+            total_earning: data.t[i].total_earning,
+            this_year_earning: data.t[i].this_year_earning,
+            total_course_amount: data.t[i].total_course_amount,
+            this_year_paid_amount: data.t[i].this_year_paid_amount,
+            this_year_unsubscribe_amount: data.t[i].this_year_unsubscribe_amount,
+          });
+        }
+        yield put({
+          type: 'updateInstitutionStatistics',
+          payload: {institution_statistics: institution_statistics}
+        });
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
 
   },
 
@@ -439,6 +471,13 @@ export default {
       return {
         ...state,
         pie_chart_statistics: action.payload.pie_chart_statistics,
+      }
+    },
+    // 更新所有机构统计数据
+    updateInstitutionStatistics(state, action) {
+      return {
+        ...state,
+        institution_statistics: action.payload.institution_statistics,
       }
     },
 

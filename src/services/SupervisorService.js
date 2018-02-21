@@ -184,3 +184,16 @@ export async function getStatisticsForPieChart() {
   })
 
 }
+
+/**
+ * 获取所有机构统计数据
+ *
+ * @returns {Promise.<Object>}
+ */
+export async function getInstitutionStatistics() {
+
+  return request('/supervisor/getInstitutionStatistics', {
+    method: 'GET',
+  })
+
+}

@@ -11,7 +11,7 @@ class SupervisorCheckRegisterPage extends React.Component {
     this.columns = [{
       title: '机构名称',
       dataIndex: 'name',
-      width: 100,
+      width: 150,
       fixed: 'left'
     }, {
       title: '联系邮箱',

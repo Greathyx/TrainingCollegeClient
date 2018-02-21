@@ -47,6 +47,16 @@ class SupervisorMainPage extends React.Component {
         defaultSelectedKeys: ['6'],
       })
     }
+    else if (window.location.hash === "#/Supervisor/InstitutionStatistics") {
+      this.setState({
+        defaultSelectedKeys: ['7'],
+      })
+    }
+    else if (window.location.hash === "#/Supervisor/TraineeStatistics") {
+      this.setState({
+        defaultSelectedKeys: ['8'],
+      })
+    }
   }
 
   render() {
@@ -78,8 +88,8 @@ class SupervisorMainPage extends React.Component {
             </Menu.Item>
             <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
               <Menu.Item key="6"><Link to="/Supervisor/EarningStatistics">若水财务</Link></Menu.Item>
-              <Menu.Item key="7"><Link to="">机构统计</Link></Menu.Item>
-              <Menu.Item key="8"><Link to="">学员统计</Link></Menu.Item>
+              <Menu.Item key="7"><Link to="/Supervisor/InstitutionStatistics">机构数据</Link></Menu.Item>
+              <Menu.Item key="8"><Link to="/Supervisor/TraineeStatistics">学员数据</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>

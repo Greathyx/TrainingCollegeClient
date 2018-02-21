@@ -35,6 +35,8 @@ import SupervisorCheckModifyPage from './routes/supervisor/SupervisorCheckModify
 import SupervisorInstitutionsInfoPage from './routes/supervisor/SupervisorInstitutionsInfoPage';
 import SupervisorSettlePaymentPage from './routes/supervisor/SupervisorSettlePaymentPage';
 import SupervisorEarningStatisticsPage from './routes/supervisor/SupervisorEarningStatisticsPage';
+import SupervisorInstitutionStatisticsPage from './routes/supervisor/SupervisorInstitutionStatisticsPage';
+import SupervisorTraineeStatisticsPage from './routes/supervisor/SupervisorTraineeStatisticsPage';
 
 import Page404 from './routes/404Page';
 import TestPage from './routes/TestPage';
@@ -55,7 +57,8 @@ function RouterConfig({history, app}) {
           <TraineeMainPage>
             <Switch>
               <Route path="/Trainee/ChooseCourseWithClass" exact restrict component={TraineeChooseCourseWithClassPage}/>
-              <Route path="/Trainee/ChooseCourseWithoutClass" exact restrict component={TraineeChooseCourseWithoutClassPage}/>
+              <Route path="/Trainee/ChooseCourseWithoutClass" exact restrict
+                     component={TraineeChooseCourseWithoutClassPage}/>
               <Route path="/Trainee/NotPaidOrders" exact restrict component={TraineeNotPaidOrdersPage}/>
               <Route path="/Trainee/PaidOrders" exact restrict component={TraineePaidPage}/>
               <Route path="/Trainee/UnsubscribeOrders" exact restrict component={TraineeUnsubscribeOrdersPage}/>
@@ -71,12 +74,15 @@ function RouterConfig({history, app}) {
           <InstitutionMainPage>
             <Switch>
               <Route path="/Institution/ReleaseCourse" exact restrict component={InstitutionReleaseCoursePage}/>
-              <Route path="/Institution/CourseRegistration" exact restrict component={InstitutionCourseRegistrationPage}/>
-              <Route path="/Institution/ScoresRegistration" exact restrict component={InstitutionScoresRegistrationPage}/>
+              <Route path="/Institution/CourseRegistration" exact restrict
+                     component={InstitutionCourseRegistrationPage}/>
+              <Route path="/Institution/ScoresRegistration" exact restrict
+                     component={InstitutionScoresRegistrationPage}/>
               <Route path="/Institution/ConfirmPayment" exact restrict component={InstitutionConfirmPaymentPage}/>
               <Route path="/Institution/CourseInfo" exact restrict component={InstitutionCourseInfoPage}/>
               <Route path="/Institution/BookedCourses" exact restrict component={InstitutionBookedCoursesPage}/>
-              <Route path="/Institution/UnsubscribeCourses" exact restrict component={InstitutionUnsubscribeCoursesPage}/>
+              <Route path="/Institution/UnsubscribeCourses" exact restrict
+                     component={InstitutionUnsubscribeCoursesPage}/>
               <Route path="/Institution/EarningStatistics" exact restrict component={InstitutionEarningStatisticsPage}/>
               <Route path="/Institution/EditInfo" exact restrict component={InstitutionEditInfoPage}/>
             </Switch>
@@ -90,6 +96,10 @@ function RouterConfig({history, app}) {
               <Route path="/Supervisor/InstitutionsInfo" exact restrict component={SupervisorInstitutionsInfoPage}/>
               <Route path="/Supervisor/SettlePayment" exact restrict component={SupervisorSettlePaymentPage}/>
               <Route path="/Supervisor/EarningStatistics" exact restrict component={SupervisorEarningStatisticsPage}/>
+              <Route path="/Supervisor/InstitutionStatistics" exact restrict
+                     component={SupervisorInstitutionStatisticsPage}/>
+              <Route path="/Supervisor/TraineeStatistics" exact restrict
+                     component={SupervisorTraineeStatisticsPage}/>
             </Switch>
           </SupervisorMainPage>
         </Route>
