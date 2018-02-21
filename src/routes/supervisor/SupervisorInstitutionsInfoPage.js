@@ -1,0 +1,61 @@
+import React from 'react';
+import {connect} from 'dva';
+import {Table} from 'antd';
+
+
+class SupervisorInstitutionsInfoPage extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.columns = [{
+      title: '机构名称',
+      dataIndex: 'name',
+      width: 100,
+      fixed: 'left'
+    }, {
+      title: '联系邮箱',
+      dataIndex: 'email',
+      width: 180,
+    }, {
+      title: '地址',
+      width: 200,
+      dataIndex: 'address',
+    }, {
+      title: '师资介绍',
+      dataIndex: 'faculty',
+    }, {
+      title: '机构简介',
+      dataIndex: 'introduction',
+    }];
+  }
+
+  // React组件初始化时自动调用的方法
+  componentWillMount() {
+    this.props.dispatch({
+      type: 'supervisor/getInstitutionsInfo',
+      payload: {},
+    });
+  }
+
+  render() {
+    const columns = this.columns;
+    return (
+      <div style={{padding: '0 50px 20px 50px', backgroundColor: 'white'}}>
+        <Table
+          pagination={{defaultPageSize: 5}}
+          columns={columns}
+          dataSource={this.props.supervisor.institutions_info}
+          scroll={{x: 1500}}/>
+      </div>
+    )
+  }
+}
+
+function mapStateToProps({supervisor}) {
+  return {
+    supervisor,
+  };
+}
+
+export default connect(mapStateToProps)(SupervisorInstitutionsInfoPage);

@@ -32,6 +32,11 @@ class SupervisorMainPage extends React.Component {
         defaultSelectedKeys: ['5'],
       })
     }
+    else if (window.location.hash === "#/Supervisor/InstitutionsInfo") {
+      this.setState({
+        defaultSelectedKeys: ['9'],
+      })
+    }
     else if (window.location.hash === "#/Supervisor/SettlePayment") {
       this.setState({
         defaultSelectedKeys: ['2'],
@@ -61,8 +66,9 @@ class SupervisorMainPage extends React.Component {
             defaultSelectedKeys={this.state.defaultSelectedKeys}
           >
             <SubMenu key="1" title={<span><Icon type="file-text"/><span>机构审核</span></span>}>
-              <Menu.Item key="4"><Link to="/Supervisor/CheckRegister">审核注册信息</Link></Menu.Item>
-              <Menu.Item key="5"><Link to="/Supervisor/CheckModify">审核修改信息</Link></Menu.Item>
+              <Menu.Item key="4"><Link to="/Supervisor/CheckRegister">注册信息审核</Link></Menu.Item>
+              <Menu.Item key="5"><Link to="/Supervisor/CheckModify">修改信息审核</Link></Menu.Item>
+              <Menu.Item key="9"><Link to="/Supervisor/InstitutionsInfo">已注册机构</Link></Menu.Item>
             </SubMenu>
             <Menu.Item key="2">
               <Link to="/Supervisor/SettlePayment">
@@ -72,6 +78,8 @@ class SupervisorMainPage extends React.Component {
             </Menu.Item>
             <SubMenu key="3" title={<span><Icon type="area-chart"/><span>统计信息</span></span>}>
               <Menu.Item key="6"><Link to="/Supervisor/EarningStatistics">若水财务</Link></Menu.Item>
+              <Menu.Item key="7"><Link to="">机构统计</Link></Menu.Item>
+              <Menu.Item key="8"><Link to="">学员统计</Link></Menu.Item>
             </SubMenu>
           </Menu>
         </Sider>

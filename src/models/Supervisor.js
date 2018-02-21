@@ -7,6 +7,7 @@ import {
   approveApply,
   rejectApply,
   sendReplyMail,
+  getAllInstitutionsInfo,
   getToSettleList,
   settlePayment,
   getStatisticsForBarChart,
@@ -22,6 +23,7 @@ export default {
     supervisor_id: null,
     hasLoggedIn: false,
     registerApplyData: [],
+    institutions_info: [],
     toSettleList: [],
     bar_chart_statistics: [],
     pie_chart_statistics: [],
@@ -109,7 +111,10 @@ export default {
           document.title = '管理员-机构注册审核';
         }
         else if (pathToRegexp('/Supervisor/CheckModify').exec(location.pathname)) {
-          document.title = '管理员-机构修改信息审核';
+          document.title = '管理员-修改信息审核';
+        }
+        else if (pathToRegexp('/Supervisor/InstitutionsInfo').exec(location.pathname)) {
+          document.title = '管理员-已注册机构';
         }
         else if (pathToRegexp('/Supervisor/SettlePayment').exec(location.pathname)) {
           document.title = '管理员-金额结算';
@@ -280,6 +285,32 @@ export default {
       }
     },
 
+    // 获取所有已注册机构信息
+    * getInstitutionsInfo({payload}, {call, put, select}) {
+      const data = yield call(getAllInstitutionsInfo);
+      if (data.successTag) {
+        let institutions_info = [];
+        for (let i = 0; i < data.t.length; i++) {
+          institutions_info.push({
+            key: i,
+            name: data.t[i].name,
+            email: data.t[i].email,
+            address: data.t[i].location,
+            faculty: data.t[i].faculty,
+            introduction: data.t[i].introduction,
+          });
+        }
+
+        yield put({
+          type: 'updateInstitutionsInfo',
+          payload: {institutions_info: institutions_info}
+        });
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
     // 获取待支付金额的机构列表
     * getToSettleList({payload}, {call, put, select}) {
       const data = yield call(getToSettleList);
@@ -380,6 +411,13 @@ export default {
       return {
         ...state,
         modifyApplyData: action.payload.modifyApplyData,
+      }
+    },
+    // 更新已注册机构列表
+    updateInstitutionsInfo(state, action) {
+      return {
+        ...state,
+        institutions_info: action.payload.institutions_info,
       }
     },
     // 更新待支付金额的机构列表

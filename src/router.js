@@ -32,6 +32,7 @@ import SupervisorLoginPage from './routes/supervisor/SupervisorLoginPage';
 import SupervisorMainPage from './routes/supervisor/SupervisorMainPage';
 import SupervisorCheckRegisterPage from './routes/supervisor/SupervisorCheckRegisterPage';
 import SupervisorCheckModifyPage from './routes/supervisor/SupervisorCheckModifyPage';
+import SupervisorInstitutionsInfoPage from './routes/supervisor/SupervisorInstitutionsInfoPage';
 import SupervisorSettlePaymentPage from './routes/supervisor/SupervisorSettlePaymentPage';
 import SupervisorEarningStatisticsPage from './routes/supervisor/SupervisorEarningStatisticsPage';
 
@@ -86,6 +87,7 @@ function RouterConfig({history, app}) {
             <Switch>
               <Route path="/Supervisor/CheckRegister" exact restrict component={SupervisorCheckRegisterPage}/>
               <Route path="/Supervisor/CheckModify" exact restrict component={SupervisorCheckModifyPage}/>
+              <Route path="/Supervisor/InstitutionsInfo" exact restrict component={SupervisorInstitutionsInfoPage}/>
               <Route path="/Supervisor/SettlePayment" exact restrict component={SupervisorSettlePaymentPage}/>
               <Route path="/Supervisor/EarningStatistics" exact restrict component={SupervisorEarningStatisticsPage}/>
             </Switch>
