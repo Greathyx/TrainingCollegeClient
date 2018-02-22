@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'dva';
 import {Link} from 'dva/router';
 import {Layout, Menu, Icon} from 'antd';
 import styles from '../css/SupervisorMainPage.css';
@@ -69,6 +70,16 @@ class InstitutionMainPage extends React.Component {
     }
   }
 
+  handleClickMenu = (e) => {
+    // 退出登录
+    if (e.key === "12") {
+      this.props.dispatch({
+        type: 'institution/logout',
+        payload: {},
+      });
+    }
+  };
+
   render() {
     return (
       <Layout>
@@ -84,6 +95,7 @@ class InstitutionMainPage extends React.Component {
             mode="inline"
             defaultOpenKeys={['1', '2']}
             defaultSelectedKeys={this.state.defaultSelectedKeys}
+            onClick={this.handleClickMenu}
           >
             <SubMenu key="1" title={<span><Icon type="file-text"/><span>办公</span></span>}>
               <Menu.Item key="4"><Link to="/Institution/ReleaseCourse">课程发布</Link></Menu.Item>
@@ -103,6 +115,12 @@ class InstitutionMainPage extends React.Component {
                 <span>修改信息</span>
               </Link>
             </Menu.Item>
+            <Menu.Item key="12">
+              <Link to="/homepage">
+                <Icon type="export"/>
+                <span>退出登录</span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout style={{backgroundColor: 'white'}}>
@@ -118,7 +136,12 @@ class InstitutionMainPage extends React.Component {
       </Layout>
     );
   }
-
 }
 
-export default InstitutionMainPage;
+function mapStateToProps({institution}) {
+  return {
+    institution,
+  };
+}
+
+export default connect(mapStateToProps)(InstitutionMainPage);

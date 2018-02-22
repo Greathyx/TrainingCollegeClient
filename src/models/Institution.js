@@ -23,6 +23,7 @@ export default {
   namespace: 'institution',
 
   state: {
+    hasLoggedIn: false,
     institution_id: null,
     institution_code: null,
     institution_email: null,
@@ -45,6 +46,7 @@ export default {
 
   subscriptions: {
     setup({dispatch, history}) {
+      const hasInstitutionLoggedIn = sessionStorage.getItem("hasInstitutionLoggedIn");
       const institution_id = sessionStorage.getItem('institution_id');
       const institution_code = sessionStorage.getItem('institution_code');
       const institution_email = sessionStorage.getItem('institution_email');
@@ -52,6 +54,13 @@ export default {
       const institution_location = sessionStorage.getItem('institution_location');
       const institution_faculty = sessionStorage.getItem('institution_faculty');
       const institution_introduction = sessionStorage.getItem('institution_introduction');
+
+      if (hasInstitutionLoggedIn && hasInstitutionLoggedIn !== undefined) {
+        dispatch({
+          type: 'updateHasLoggedIn',
+          payload: {hasLoggedIn: hasInstitutionLoggedIn},
+        });
+      }
       if (institution_id && institution_id !== undefined) {
         dispatch({
           type: 'updateInstitutionId',
@@ -114,6 +123,7 @@ export default {
     * login({payload}, {call, put, select}) {
       const data = yield call(login, payload);
       if (data.successTag) {
+        sessionStorage.setItem('hasInstitutionLoggedIn', true);
         sessionStorage.setItem('institution_id', data.t.institution_id);
         sessionStorage.setItem('institution_code', data.t.code);
         sessionStorage.setItem('institution_email', data.t.email);
@@ -121,6 +131,11 @@ export default {
         sessionStorage.setItem('institution_location', data.t.location);
         sessionStorage.setItem('institution_faculty', data.t.faculty);
         sessionStorage.setItem('institution_introduction', data.t.introduction);
+
+        yield put({
+          type: 'updateHasLoggedIn',
+          payload: {hasLoggedIn: true}
+        });
         yield put({
           type: 'updateInstitutionId',
           payload: {institution_id: data.t.institution_id}
@@ -156,6 +171,16 @@ export default {
         message.error(data.message);
         return false;
       }
+    },
+
+    // 退出登录
+    * logout({payload}, {call, put, select}) {
+      sessionStorage.setItem('hasInstitutionLoggedIn', false);
+      yield put({
+        type: 'updateHasLoggedIn',
+        payload: {hasLoggedIn: false}
+      });
+      message.success("已退出登录！");
     },
 
     // 机构申请修改信息
@@ -461,6 +486,13 @@ export default {
   },
 
   reducers: {
+    // 更新是否已经登陆的标志
+    updateHasLoggedIn(state, action) {
+      return {
+        ...state,
+        hasLoggedIn: action.payload.hasLoggedIn,
+      }
+    },
     // 更新机构ID
     updateInstitutionId(state, action) {
       return {

@@ -104,6 +104,10 @@ class SupervisorCheckModifyPage extends React.Component {
 
   // React组件初始化时自动调用的方法
   componentWillMount() {
+    // 如果未登录，则跳转到登陆界面
+    if (!this.props.supervisor.hasLoggedIn) {
+      this.props.history.push("/SupervisorLogin");
+    }
     this.props.dispatch({
       type: 'supervisor/getAllModifyApply',
       payload: {},

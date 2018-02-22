@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link } from 'dva/router';
+import {connect} from 'dva';
+import {Link} from 'dva/router';
 import {Layout, Button, Dropdown, Menu, Icon} from 'antd';
 import styles from './css/HomePage.css';
 
@@ -50,6 +51,33 @@ class HomePage extends React.Component {
     });
   };
 
+  handleClickSideMenu = (e) => {
+    if (e.key === "1") {
+      if (this.props.trainee.hasLoggedIn) {
+        this.props.history.push("/Trainee/ChooseCourseWithClass");
+      }
+      else {
+        this.props.history.push("/TraineeLogin");
+      }
+    }
+    else if (e.key === "2") {
+      if (this.props.institution.hasLoggedIn) {
+        this.props.history.push("/Institution/CourseInfo");
+      }
+      else {
+        this.props.history.push("/InstitutionLogin");
+      }
+    }
+    else if (e.key === "3") {
+      if (this.props.supervisor.hasLoggedIn) {
+        this.props.history.push("/Supervisor/CheckRegister");
+      }
+      else {
+        this.props.history.push("/SupervisorLogin");
+      }
+    }
+  };
+
   render() {
     return (
       <Layout>
@@ -60,18 +88,15 @@ class HomePage extends React.Component {
           style={{overflow: 'auto', height: '100vh', left: 0}}
         >
           <div className={styles.logo}/>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+          <Menu theme="dark" mode="inline" onClick={this.handleClickSideMenu}>
             <Menu.Item key="1">
-              <Icon type="user"/>
-              <span>nav 1</span>
+              <Icon type="user"/><span>会员</span>
             </Menu.Item>
             <Menu.Item key="2">
-              <Icon type="video-camera"/>
-              <span>nav 2</span>
+              <Icon type="shop"/><span>机构</span>
             </Menu.Item>
             <Menu.Item key="3">
-              <Icon type="upload"/>
-              <span>nav 3</span>
+              <Icon type="safety"/><span>管理员</span>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -88,7 +113,7 @@ class HomePage extends React.Component {
             <div className={styles.buttons}>
               <Dropdown overlay={menu_trainee}>
                 <Button type="primary" className={styles.singleButton}>
-                  学员 <Icon type="down"/>
+                  会员 <Icon type="down"/>
                 </Button>
               </Dropdown>
               <Dropdown overlay={menu_institution}>
@@ -109,4 +134,10 @@ class HomePage extends React.Component {
   }
 }
 
-export default HomePage;
+function mapStateToProps({trainee, institution, supervisor}) {
+  return {
+    trainee, institution, supervisor,
+  };
+}
+
+export default connect(mapStateToProps)(HomePage);

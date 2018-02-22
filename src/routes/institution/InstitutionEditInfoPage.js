@@ -9,6 +9,14 @@ const {TextArea} = Input;
 
 class InstitutionEditInfoForm extends React.Component {
 
+  // React组件初始化时自动调用的方法
+  componentWillMount() {
+    // 如果未登录，则跳转到登陆界面
+    if (!this.props.institution.hasLoggedIn) {
+      this.props.history.push("/InstitutionLogin");
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {

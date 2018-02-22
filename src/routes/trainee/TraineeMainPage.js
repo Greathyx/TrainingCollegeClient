@@ -1,7 +1,6 @@
 import React from 'react';
-// import {connect} from 'dva';
+import {connect} from 'dva';
 import {Link} from 'dva/router';
-// import {Layout, Menu, Icon, Badge} from 'antd';
 import {Layout, Menu, Icon} from 'antd';
 import styles from '../css/SupervisorMainPage.css';
 
@@ -76,6 +75,16 @@ class TraineeMainPage extends React.Component {
     }
   }
 
+  handleClickMenu = (e) => {
+    // 退出登录
+    if (e.key === "14") {
+      this.props.dispatch({
+        type: 'trainee/logout',
+        payload: {},
+      });
+    }
+  };
+
   render() {
     return (
       <Layout>
@@ -91,6 +100,7 @@ class TraineeMainPage extends React.Component {
             mode="inline"
             defaultOpenKeys={['1', '3', '10']}
             defaultSelectedKeys={this.state.defaultSelectedKeys}
+            onClick={this.handleClickMenu}
           >
             <SubMenu key="1" title={<span><Icon type="book"/><span>预定课程</span></span>}>
               <Menu.Item key="5"><Link to="/Trainee/ChooseCourseWithClass">选班级</Link></Menu.Item>
@@ -117,6 +127,12 @@ class TraineeMainPage extends React.Component {
                 <span>修改信息</span>
               </Link>
             </Menu.Item>
+            <Menu.Item key="14">
+              <Link to="/homepage">
+                <Icon type="export"/>
+                <span>退出登录</span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout style={{backgroundColor: 'white'}}>
@@ -135,11 +151,10 @@ class TraineeMainPage extends React.Component {
 
 }
 
-// function mapStateToProps({trainee}) {
-//   return {
-//     trainee,
-//   };
-// }
+function mapStateToProps({trainee}) {
+  return {
+    trainee,
+  };
+}
 
-// export default connect(mapStateToProps)(TraineeMainPage);
-export default TraineeMainPage;
+export default connect(mapStateToProps)(TraineeMainPage);

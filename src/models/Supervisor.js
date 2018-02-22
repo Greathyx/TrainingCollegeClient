@@ -137,9 +137,16 @@ export default {
         }
       });
 
+      const hasSupervisorLoggedIn = sessionStorage.getItem("hasSupervisorLoggedIn");
       const supervisor_id = sessionStorage.getItem('supervisor_id');
       const hasLoggedIn = sessionStorage.getItem('hasLoggedIn');
 
+      if (hasSupervisorLoggedIn && hasSupervisorLoggedIn !== undefined) {
+        dispatch({
+          type: 'updateHasLoggedIn',
+          payload: {hasLoggedIn: hasSupervisorLoggedIn},
+        });
+      }
       if (supervisor_id && supervisor_id !== undefined) {
         dispatch({
           type: 'updateSupervisorId',
@@ -163,6 +170,7 @@ export default {
     * login({payload}, {call, put, select}) {
       const data = yield call(login, payload);
       if (data.successTag) {
+        sessionStorage.setItem('hasSupervisorLoggedIn', true);
         sessionStorage.setItem('supervisor_id', data.t.supervisor_id);
         sessionStorage.setItem('hasLoggedIn', true);
 
@@ -182,6 +190,16 @@ export default {
         message.error(data.message);
         return false;
       }
+    },
+
+    // 退出登录
+    * logout({payload}, {call, put, select}) {
+      sessionStorage.setItem('hasSupervisorLoggedIn', false);
+      yield put({
+        type: 'updateHasLoggedIn',
+        payload: {hasLoggedIn: false}
+      });
+      message.success("已退出登录！");
     },
 
     // 获取所有机构注册申请

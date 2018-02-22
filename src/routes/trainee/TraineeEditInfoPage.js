@@ -9,6 +9,14 @@ const Option = Select.Option;
 
 class TraineeEditInfoForm extends React.Component {
 
+  // React组件初始化时自动调用的方法
+  componentWillMount() {
+    // 如果未登录，则跳转到登陆界面
+    if (!this.props.trainee.hasLoggedIn) {
+      this.props.history.push("/TraineeLogin");
+    }
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
@@ -55,7 +63,7 @@ class TraineeEditInfoForm extends React.Component {
         },
       }).then(value => {
         // 如果修改信息成功则先确认会员是否被注销
-        if (value){
+        if (value) {
           this.props.dispatch({
             type: 'trainee/isActive',
             payload: {
@@ -181,40 +189,6 @@ class TraineeEditInfoForm extends React.Component {
               </Select>
             )}
           </FormItem>
-          {/*<FormItem*/}
-            {/*{...formItemLayout}*/}
-            {/*label="累计消费(¥)"*/}
-          {/*>*/}
-            {/*<Tooltip*/}
-              {/*trigger={['hover']}*/}
-              {/*title="累计消费金额无法修改"*/}
-              {/*placement="topLeft"*/}
-              {/*overlayClassName="numeric-input"*/}
-            {/*>*/}
-              {/*<Input*/}
-                {/*prefix={<Icon type="pay-circle-o" style={{color: 'rgba(0,0,0,.25)'}}/>}*/}
-                {/*disabled={true}*/}
-                {/*defaultValue={this.props.trainee.expenditure}*/}
-              {/*/>*/}
-            {/*</Tooltip>*/}
-          {/*</FormItem>*/}
-          {/*<FormItem*/}
-            {/*{...formItemLayout}*/}
-            {/*label="积分"*/}
-          {/*>*/}
-            {/*<Tooltip*/}
-              {/*trigger={['hover']}*/}
-              {/*title="个人积分无法修改"*/}
-              {/*placement="topLeft"*/}
-              {/*overlayClassName="numeric-input"*/}
-            {/*>*/}
-              {/*<Input*/}
-                {/*prefix={<Icon type="credit-card" style={{color: 'rgba(0,0,0,.25)'}}/>}*/}
-                {/*disabled={true}*/}
-                {/*defaultValue={this.props.trainee.credit}*/}
-              {/*/>*/}
-            {/*</Tooltip>*/}
-          {/*</FormItem>*/}
           <FormItem
             {...buttonLayout}
           >

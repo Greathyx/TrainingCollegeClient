@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'dva';
 import {Link} from 'dva/router';
 import {Layout, Menu, Icon} from 'antd';
 import styles from '../css/SupervisorMainPage.css';
@@ -59,6 +60,16 @@ class SupervisorMainPage extends React.Component {
     }
   }
 
+  handleClickMenu = (e) => {
+    // 退出登录
+    if (e.key === "10") {
+      this.props.dispatch({
+        type: 'supervisor/logout',
+        payload: {},
+      });
+    }
+  };
+
   render() {
     return (
       <Layout>
@@ -74,6 +85,7 @@ class SupervisorMainPage extends React.Component {
             mode="inline"
             defaultOpenKeys={['1', '3']}
             defaultSelectedKeys={this.state.defaultSelectedKeys}
+            onClick={this.handleClickMenu}
           >
             <SubMenu key="1" title={<span><Icon type="file-text"/><span>机构审核</span></span>}>
               <Menu.Item key="4"><Link to="/Supervisor/CheckRegister">注册信息审核</Link></Menu.Item>
@@ -91,6 +103,12 @@ class SupervisorMainPage extends React.Component {
               <Menu.Item key="7"><Link to="/Supervisor/InstitutionStatistics">机构数据</Link></Menu.Item>
               <Menu.Item key="8"><Link to="/Supervisor/TraineeStatistics">学员数据</Link></Menu.Item>
             </SubMenu>
+            <Menu.Item key="10">
+              <Link to="/homepage">
+                <Icon type="export"/>
+                <span>退出登录</span>
+              </Link>
+            </Menu.Item>
           </Menu>
         </Sider>
         <Layout style={{backgroundColor: 'white'}}>
@@ -106,7 +124,12 @@ class SupervisorMainPage extends React.Component {
       </Layout>
     );
   }
-
 }
 
-export default SupervisorMainPage;
+function mapStateToProps({supervisor}) {
+  return {
+    supervisor,
+  };
+}
+
+export default connect(mapStateToProps)(SupervisorMainPage);

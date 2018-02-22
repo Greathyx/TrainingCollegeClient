@@ -27,6 +27,7 @@ export default {
   namespace: 'trainee',
 
   state: {
+    hasLoggedIn: false,
     trainee_id: null,
     trainee_email: null,
     trainee_name: null,
@@ -48,6 +49,7 @@ export default {
 
   subscriptions: {
     setup({dispatch, history}) {
+      const hasTraineeLoggedIn = sessionStorage.getItem("hasLoggedIn");
       const trainee_id = sessionStorage.getItem('trainee_id');
       const trainee_email = sessionStorage.getItem('trainee_email');
       const trainee_name = sessionStorage.getItem('trainee_name');
@@ -57,6 +59,12 @@ export default {
       const level = sessionStorage.getItem('level');
       const discount = sessionStorage.getItem('discount');
 
+      if (hasTraineeLoggedIn && hasTraineeLoggedIn !== undefined) {
+        dispatch({
+          type: 'updateHasLoggedIn',
+          payload: {hasLoggedIn: hasTraineeLoggedIn},
+        });
+      }
       if (trainee_id && trainee_id !== undefined) {
         dispatch({
           type: 'updateTraineeId',
@@ -153,6 +161,7 @@ export default {
     * login({payload}, {call, put, select}) {
       const data = yield call(login, payload);
       if (data.successTag) {
+        sessionStorage.setItem('hasTraineeLoggedIn', true);
         sessionStorage.setItem('trainee_id', data.t.trainee_id);
         sessionStorage.setItem('trainee_email', data.t.email);
         let name = data.t.name;
@@ -163,6 +172,11 @@ export default {
         sessionStorage.setItem('expenditure', data.t.expenditure);
         sessionStorage.setItem('credit', data.t.credit);
         sessionStorage.setItem('is_active', data.t.is_active);
+
+        yield put({
+          type: 'updateHasLoggedIn',
+          payload: {hasLoggedIn: true}
+        });
         yield put({
           type: 'updateTraineeId',
           payload: {trainee_id: data.t.trainee_id}
@@ -194,6 +208,16 @@ export default {
         message.error(data.message);
         return false;
       }
+    },
+
+    // 退出登录
+    * logout({payload}, {call, put, select}) {
+      sessionStorage.setItem('hasTraineeLoggedIn', false);
+      yield put({
+        type: 'updateHasLoggedIn',
+        payload: {hasLoggedIn: false}
+      });
+      message.success("已退出登录！");
     },
 
     // 学员修改信息
@@ -567,6 +591,13 @@ export default {
   },
 
   reducers: {
+    // 更新是否已经登陆的标志
+    updateHasLoggedIn(state, action) {
+      return {
+        ...state,
+        hasLoggedIn: action.payload.hasLoggedIn,
+      }
+    },
     // 更新学员ID
     updateTraineeId(state, action) {
       return {
