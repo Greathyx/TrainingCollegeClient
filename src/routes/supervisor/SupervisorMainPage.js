@@ -68,6 +68,14 @@ class SupervisorMainPage extends React.Component {
         payload: {},
       });
     }
+    // 用reducers更新state，使页面重新渲染，以达到跳转目的；
+    // 否则只有路由改变而页面未重新渲染，需要手动刷新才可获取新的界面
+    this.props.dispatch({
+      type: 'supervisor/changeSelectedKey',
+      payload: {
+        selectedKey: e.key
+      },
+    });
   };
 
   render() {

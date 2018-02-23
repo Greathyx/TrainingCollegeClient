@@ -31,6 +31,7 @@ export default {
     pie_chart_statistics: [],
     institution_statistics: [],
     trainee_statistics: [],
+    selectedKey: 4
   },
 
   subscriptions: {
@@ -464,6 +465,14 @@ export default {
       }
     },
 
+    // 更改管理者主面板选中的menuItem的key值
+    * changeSelectedKey({payload}, {call, put, select}) {
+      yield put({
+        type: 'updateSelectedKey',
+        payload: {selectedKey: payload.selectedKey}
+      });
+    },
+
   },
 
   reducers: {
@@ -535,6 +544,13 @@ export default {
       return {
         ...state,
         trainee_statistics: action.payload.trainee_statistics,
+      }
+    },
+    // 更新机构主面板选中的menuItem的key值
+    updateSelectedKey(state, action) {
+      return {
+        ...state,
+        selectedKey: action.payload.selectedKey,
       }
     },
   }

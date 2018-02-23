@@ -42,6 +42,7 @@ export default {
     bar_chart_statistics: [],
     pie_chart_statistics: [],
     line_chart_statistics: [],
+    selectedKey: 7
   },
 
   subscriptions: {
@@ -483,6 +484,14 @@ export default {
       return data.t;
     },
 
+    // 更改机构主面板选中的menuItem的key值
+    * changeSelectedKey({payload}, {call, put, select}) {
+      yield put({
+        type: 'updateSelectedKey',
+        payload: {selectedKey: payload.selectedKey}
+      });
+    },
+
   },
 
   reducers: {
@@ -617,6 +626,13 @@ export default {
       return {
         ...state,
         pie_chart_statistics: action.payload.pie_chart_statistics,
+      }
+    },
+    // 更新机构主面板选中的menuItem的key值
+    updateSelectedKey(state, action) {
+      return {
+        ...state,
+        selectedKey: action.payload.selectedKey,
       }
     },
 
