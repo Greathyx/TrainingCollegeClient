@@ -15,6 +15,8 @@ import {
   getAllTraineesScores,
   getStatisticsForBarChart,
   getStatisticsForPieChart,
+  getToDivideClassList,
+  divideClasses,
 } from "../services/InstitutionService";
 
 
@@ -42,7 +44,8 @@ export default {
     bar_chart_statistics: [],
     pie_chart_statistics: [],
     line_chart_statistics: [],
-    selectedKey: 7
+    selectedKey: 7,
+    toDivideClasses: [],
   },
 
   subscriptions: {
@@ -229,7 +232,7 @@ export default {
           introduction: data.t[i].introduction,
           price: data.t[i].price,
           class_amount: class_amount,
-          book_due_date: data.t[i].book_due_date
+          book_due_date: data.t[i].due
         });
       }
 
@@ -253,7 +256,7 @@ export default {
           institution_name: data.t[i].institution_name,
           amount: data.t[i].amount,
           payment: data.t[i].payment,
-          book_time: data.t[i].book_time,
+          book_time: data.t[i].bookTime,
           description: data.t[i].description,
         });
       }
@@ -276,7 +279,7 @@ export default {
           amount: data.t[i].amount,
           payment: data.t[i].payment,
           payback: data.t[i].payback,
-          book_time: data.t[i].book_time,
+          book_time: data.t[i].bookTime,
           unsubscribe_time: data.t[i].unsubscribe_time,
           description: data.t[i].description,
         });
@@ -492,6 +495,46 @@ export default {
       });
     },
 
+    // 获取机构待分班课程列表
+    * getToDivideClassList({payload}, {call, put, select}) {
+      const data = yield call(getToDivideClassList, payload);
+      if (data.successTag) {
+        let toDivideClasses = [];
+        for (let i = 0; i < data.t.length; i++) {
+          toDivideClasses.push({
+            key: i,
+            courseID: data.t[i].courseID,
+            courseName: data.t[i].courseName,
+            trainee_amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+            max_amount: data.t[i].trainee_amount,
+            book_due_date: data.t[i].book_due_date,
+            start_date: data.t[i].start_date,
+            class_amount: data.t[i].class_amount,
+            canDivide: data.t[i].canDivide,
+          });
+        }
+
+        yield put({
+          type: 'updateToDivideClasses',
+          payload: {toDivideClasses: toDivideClasses}
+        });
+      }
+      else {
+        message.warning(data.message);
+      }
+    },
+
+    // 分配班级
+    * divideClasses({payload}, {call, put, select}) {
+      const data = yield call(divideClasses, payload);
+      if (data.successTag) {
+        message.success(data.message);
+      }
+      else {
+        message.error(data.message);
+      }
+    },
+
   },
 
   reducers: {
@@ -635,7 +678,13 @@ export default {
         selectedKey: action.payload.selectedKey,
       }
     },
-
+    // 更新机构待分班课程列表
+    updateToDivideClasses(state, action) {
+      return {
+        ...state,
+        toDivideClasses: action.payload.toDivideClasses,
+      }
+    },
   }
 
 }

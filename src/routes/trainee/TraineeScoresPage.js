@@ -19,16 +19,18 @@ class TraineeScoresPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllScores',
-      payload: {
-        trainee_id: this.props.trainee.trainee_id
-      },
-    }).then(() => {
-      this.setState({
-        data: this.props.trainee.scores_list
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllScores',
+        payload: {
+          trainee_id: this.props.trainee.trainee_id
+        },
+      }).then(() => {
+        this.setState({
+          data: this.props.trainee.scores_list
+        });
       });
-    });
+    }
   }
 
   onInputChange = (e) => {

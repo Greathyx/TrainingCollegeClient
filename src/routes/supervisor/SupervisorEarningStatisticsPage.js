@@ -11,14 +11,16 @@ class SupervisorEarningStatisticsPage extends React.Component {
     if (!this.props.supervisor.hasLoggedIn) {
       this.props.history.push("/SupervisorLogin");
     }
-    this.props.dispatch({
-      type: 'supervisor/getStatisticsForBarChart',
-      payload: {},
-    });
-    this.props.dispatch({
-      type: 'supervisor/getStatisticsForPieChart',
-      payload: {},
-    });
+    else {
+      this.props.dispatch({
+        type: 'supervisor/getStatisticsForBarChart',
+        payload: {},
+      });
+      this.props.dispatch({
+        type: 'supervisor/getStatisticsForPieChart',
+        payload: {},
+      });
+    }
   }
 
   state = {};

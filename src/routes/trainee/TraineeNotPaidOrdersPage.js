@@ -23,7 +23,7 @@ const ConfirmPayForm = Form.create()(
     return (
       <Modal
         visible={visible}
-        title="确认支付"
+        title="支付确认"
         okText="支付"
         cancelText="取消"
         onCancel={onCancel}
@@ -144,13 +144,15 @@ class TraineeNotPaidOrdersPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllNotPaidOrders',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-        status: "not_paid"
-      },
-    });
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllNotPaidOrders',
+        payload: {
+          traineeID: this.props.trainee.trainee_id,
+          status: "not_paid"
+        },
+      });
+    }
   }
 
   // 打开确认取消订单对话框

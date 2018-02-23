@@ -1,8 +1,11 @@
 import React from 'react';
 import {connect} from 'dva';
-import {Table, Input, Button, Icon, Tooltip} from 'antd';
+import {Form, Modal, Input, InputNumber, Table, Button, Icon, Tooltip} from 'antd';
 import styles from '../css/TraineeChooseCourseWithClassPage.css';
 
+
+const FormItem = Form.Item;
+const {TextArea} = Input;
 
 const types = [
   {text: '外语', value: '外语',},
@@ -18,6 +21,103 @@ const types = [
   {text: '烹饪', value: '烹饪',},
 ];
 
+/**
+ *
+ * 检查学员人数是否符合要求
+ *
+ * @param value
+ * @returns {*}
+ */
+function validateTraineeAmount(value) {
+  if (value >= 1 && value <= 9) {
+    return {
+      validateStatus: 'success',
+      errorMsg: null,
+    };
+  }
+  return {
+    validateStatus: 'error',
+    errorMsg: '订课人数须至少1人且限额9人！',
+  };
+}
+
+const PaymentCreateForm = Form.create()(
+  (props) => {
+    const {visible, onCancel, onCreate, form, book_info, onAmountChange, trainee_amount} = props;
+    const {getFieldDecorator} = form;
+    const formItemLayout = {
+      labelCol: {
+        xs: {span: 24},
+        sm: {span: 8},
+      },
+      wrapperCol: {
+        xs: {span: 24},
+        sm: {span: 16},
+      },
+    };
+
+    return (
+      <Modal
+        visible={visible}
+        title="请您确认订单信息"
+        okText="确认"
+        cancelText="取消"
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout="vertical" style={{width: '100%', marginTop: 20, marginLeft: 30}}>
+          <FormItem
+            {...formItemLayout} label="课程价格"
+          >
+            <span>{book_info.price * book_info.book_amount + "元"}</span>
+          </FormItem>
+          <FormItem
+            {...formItemLayout} label="会员折扣"
+          >
+            <span>{book_info.discount === "1" ? "暂无可使用优惠折扣" : book_info.discount + "折"}</span>
+          </FormItem>
+          <FormItem
+            {...formItemLayout} label="最终支付"
+          >
+            <span>{book_info.price * book_info.book_amount * book_info.discount + "元"}</span>
+          </FormItem>
+          <FormItem
+            {...formItemLayout} label="可获积分"
+          >
+            <span>{Math.floor((book_info.price * book_info.book_amount * book_info.discount) / 100) * 5 + "分"}</span>
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="订课人数"
+            validateStatus={trainee_amount.validateStatus}
+            help={trainee_amount.errorMsg || "订课人数须至少1人且限额9人！"}
+          >
+            {getFieldDecorator('amount', {
+              initialValue: 1,
+              rules: [{required: true, message: '请输入订课人数！'}],
+            })(
+              <InputNumber
+                min={1}
+                max={9}
+                onChange={onAmountChange}
+              />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label="联系方式">
+            <Tooltip title="请留下您的联系方式，若您为他人订购课程，请再留下他们的姓名及联系方式">
+              {getFieldDecorator('description', {
+                rules: [{required: true, message: '请输入联系方式！'}],
+              })(
+                <TextArea rows={3}/>
+              )}
+            </Tooltip>
+          </FormItem>
+        </Form>
+      </Modal>
+    );
+  }
+);
+
 class TraineeChooseCourseWithoutClassPage extends React.Component {
 
   state = {
@@ -25,6 +125,17 @@ class TraineeChooseCourseWithoutClassPage extends React.Component {
     data: [],
     searchText: '',
     filtered: false,
+    visible: false,
+    trainee_amount: {
+      value: 1 // 初始值
+    },
+    book_info: {
+      price: -1,
+      course_id: -1,
+      institution_id: -1,
+      discount: -1,
+      book_amount: 1,
+    },
   };
 
   // React组件初始化时自动调用的方法
@@ -33,15 +144,80 @@ class TraineeChooseCourseWithoutClassPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllCoursesWithClasses',
-      payload: {},
-    }).then(() => {
-      this.setState({
-        data: this.props.trainee.coursesWithoutClasses
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllCoursesWithClasses',
+        payload: {},
+      }).then(() => {
+        this.setState({
+          data: this.props.trainee.coursesWithoutClasses
+        });
       });
-    });
+    }
   }
+
+  // 处理订课人数变换，改变订单总价
+  onAmountChange = (value) => {
+    this.setState({
+      book_info: {
+        ...this.state.book_info,
+        book_amount: value
+      },
+      trainee_amount: {
+        ...validateTraineeAmount(value),
+        value,
+      },
+    })
+  };
+
+  // 打开确认订单对话框
+  showModal = (book_info) => {
+    // 更新会员折扣优惠
+    this.props.dispatch({
+      type: 'trainee/getTraineeVipInfo',
+      payload: {
+        trainee_id: this.props.trainee.trainee_id
+      },
+    });
+    this.setState({
+      visible: true,
+      book_info: book_info
+    });
+  };
+
+  // 取消订购方法
+  handleCancel = () => {
+    this.setState({visible: false});
+  };
+
+  // 确认订单
+  handleCreate = () => {
+    const form = this.form;
+    form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
+      const param = {
+        ...values,
+        payment: this.state.book_info.price * this.state.book_info.book_amount * this.state.book_info.discount,
+        traineeID: this.props.trainee.trainee_id,
+        courseID: this.state.book_info.course_id,
+        institutionID: this.state.book_info.institution_id,
+      };
+      this.props.dispatch({
+        type: 'trainee/generateOrder',
+        payload: {
+          ...param,
+        },
+      });
+      form.resetFields();
+      this.setState({visible: false});
+    });
+  };
+
+  saveFormRef = (form) => {
+    this.form = form;
+  };
 
   onInputChange = (e) => {
     this.setState({searchText: e.target.value});
@@ -172,15 +348,22 @@ class TraineeChooseCourseWithoutClassPage extends React.Component {
             type="primary"
             disabled={record.trainee_amount <= record.booked_amount}
             onClick={() => {
-              // this.timer = setInterval(() => {
-              //   window.location.reload(true);
-              // }, 1000);
+              const param = {
+                price: record.price,
+                course_id: record.course_id,
+                institution_id: record.institution_id,
+                discount: this.props.trainee.discount,
+                book_amount: 1,
+              };
+              this.showModal(param)
             }}
           >
             预定
           </Button>
         </span>)
     }];
+
+    const trainee_amount = this.state.trainee_amount;
 
     return (
       <div style={{padding: '0 50px 20px 50px', backgroundColor: 'white'}}>
@@ -189,6 +372,15 @@ class TraineeChooseCourseWithoutClassPage extends React.Component {
           columns={columns}
           dataSource={this.state.data}
           scroll={{x: 2400}}
+        />
+        <PaymentCreateForm
+          ref={this.saveFormRef}
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          onCreate={this.handleCreate}
+          book_info={this.state.book_info}
+          onAmountChange={this.onAmountChange}
+          trainee_amount={trainee_amount}
         />
       </div>
     )

@@ -84,16 +84,18 @@ class InstitutionScoresRegistrationPage extends React.Component {
     if (!this.props.institution.hasLoggedIn) {
       this.props.history.push("/InstitutionLogin");
     }
-    this.props.dispatch({
-      type: 'institution/getAllNoScoresTrainees',
-      payload: {
-        institutionID: this.props.institution.institution_id
-      },
-    }).then(() => {
-      this.setState({
-        data: this.props.institution.no_scores_trainees
+    else {
+      this.props.dispatch({
+        type: 'institution/getAllNoScoresTrainees',
+        payload: {
+          institutionID: this.props.institution.institution_id
+        },
+      }).then(() => {
+        this.setState({
+          data: this.props.institution.no_scores_trainees
+        });
       });
-    });
+    }
   }
 
   // 点击tab标签的监听

@@ -11,26 +11,28 @@ class InstitutionEarningStatisticsPage extends React.Component {
     if (!this.props.institution.hasLoggedIn) {
       this.props.history.push("/InstitutionLogin");
     }
-    this.props.dispatch({
-      type: 'institution/getStatisticsForBarAndLineChart',
-      payload: {
-        institutionID: this.props.institution.institution_id,
-      },
-    });
-    this.props.dispatch({
-      type: 'institution/getStatisticsForPieChart',
-      payload: {
-        institutionID: this.props.institution.institution_id,
-      },
-    }).then(value => {
-      let pie_chart_legend = [];
-      for (let i = 0; i < value.length; i++) {
-        pie_chart_legend.push(value[i][0]);
-      }
-      this.setState({
-        pie_chart_legend: pie_chart_legend
-      })
-    });
+    else {
+      this.props.dispatch({
+        type: 'institution/getStatisticsForBarAndLineChart',
+        payload: {
+          institutionID: this.props.institution.institution_id,
+        },
+      });
+      this.props.dispatch({
+        type: 'institution/getStatisticsForPieChart',
+        payload: {
+          institutionID: this.props.institution.institution_id,
+        },
+      }).then(value => {
+        let pie_chart_legend = [];
+        for (let i = 0; i < value.length; i++) {
+          pie_chart_legend.push(value[i][0]);
+        }
+        this.setState({
+          pie_chart_legend: pie_chart_legend
+        })
+      });
+    }
   }
 
   state = {

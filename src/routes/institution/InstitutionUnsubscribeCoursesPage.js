@@ -12,17 +12,19 @@ class InstitutionUnsubscribeCoursesPage extends React.Component {
     if (!this.props.institution.hasLoggedIn) {
       this.props.history.push("/InstitutionLogin");
     }
-    this.props.dispatch({
-      type: 'institution/getAllUnsubscribeOrders',
-      payload: {
-        institutionID: this.props.institution.institution_id,
-        status: "unsubscribe"
-      },
-    }).then(() => {
-      this.setState({
-        data: this.props.institution.unsubscribe_courses
+    else {
+      this.props.dispatch({
+        type: 'institution/getAllUnsubscribeOrders',
+        payload: {
+          institutionID: this.props.institution.institution_id,
+          status: "unsubscribe"
+        },
+      }).then(() => {
+        this.setState({
+          data: this.props.institution.unsubscribe_courses
+        });
       });
-    });
+    }
   }
 
   state = {

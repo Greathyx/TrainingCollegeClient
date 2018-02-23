@@ -11,26 +11,28 @@ class TraineeConsumptionStaticsPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getStatisticsForBarChart',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-      },
-    });
-    this.props.dispatch({
-      type: 'trainee/getStatisticsForPieChart',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-      },
-    }).then(value => {
-      let pie_chart_legend = [];
-      for (let i = 0; i < value.length; i++) {
-        pie_chart_legend.push(value[i][0]);
-      }
-      this.setState({
-        pie_chart_legend: pie_chart_legend
-      })
-    });
+    else {
+      this.props.dispatch({
+        type: 'trainee/getStatisticsForBarChart',
+        payload: {
+          traineeID: this.props.trainee.trainee_id,
+        },
+      });
+      this.props.dispatch({
+        type: 'trainee/getStatisticsForPieChart',
+        payload: {
+          traineeID: this.props.trainee.trainee_id,
+        },
+      }).then(value => {
+        let pie_chart_legend = [];
+        for (let i = 0; i < value.length; i++) {
+          pie_chart_legend.push(value[i][0]);
+        }
+        this.setState({
+          pie_chart_legend: pie_chart_legend
+        })
+      });
+    }
   }
 
   state = {

@@ -19,16 +19,18 @@ class TraineeCourseRegistrationPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllCoursesRegistration',
-      payload: {
-        trainee_id: this.props.trainee.trainee_id
-      },
-    }).then(() => {
-      this.setState({
-        data: this.props.trainee.courses_registration
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllCoursesRegistration',
+        payload: {
+          trainee_id: this.props.trainee.trainee_id
+        },
+      }).then(() => {
+        this.setState({
+          data: this.props.trainee.courses_registration
+        });
       });
-    });
+    }
   }
 
   onInputChange = (e) => {

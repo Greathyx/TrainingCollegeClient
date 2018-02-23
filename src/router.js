@@ -19,6 +19,7 @@ import InstitutionRegisterPage from './routes/institution/InstitutionRegisterPag
 import InstitutionLoginPage from './routes/institution/InstitutionLoginPage';
 import InstitutionMainPage from './routes/institution/InstitutionMainPage';
 import InstitutionReleaseCoursePage from './routes/institution/InstitutionReleaseCoursePage';
+import InstitutionDivideClassPage from './routes/institution/InstitutionDivideClassPage';
 import InstitutionCourseRegistrationPage from './routes/institution/InstitutionCourseRegistrationPage';
 import InstitutionScoresRegistrationPage from './routes/institution/InstitutionScoresRegistrationPage';
 import InstitutionConfirmPaymentPage from './routes/institution/InstitutionConfirmPaymentPage';
@@ -39,7 +40,7 @@ import SupervisorInstitutionStatisticsPage from './routes/supervisor/SupervisorI
 import SupervisorTraineeStatisticsPage from './routes/supervisor/SupervisorTraineeStatisticsPage';
 
 import Page404 from './routes/404Page';
-import TestPage from './routes/TestPage';
+
 
 function RouterConfig({history, app}) {
   return (
@@ -47,7 +48,6 @@ function RouterConfig({history, app}) {
       <Switch>
         <Route path="/" exact component={HomePage}/>
         <Route path="/homepage" exact component={HomePage}/>
-        <Route path="/test" exact component={TestPage}/>
         <Route path="/SupervisorLogin" exact component={SupervisorLoginPage}/>
         <Route path="/TraineeRegister" exact component={TraineeRegisterPage}/>
         <Route path="/TraineeLogin" exact component={TraineeLoginPage}/>
@@ -74,6 +74,7 @@ function RouterConfig({history, app}) {
           <InstitutionMainPage>
             <Switch>
               <Route path="/Institution/ReleaseCourse" exact restrict component={InstitutionReleaseCoursePage}/>
+              <Route path="/Institution/DivideClass" exact restrict component={InstitutionDivideClassPage}/>
               <Route path="/Institution/CourseRegistration" exact restrict
                      component={InstitutionCourseRegistrationPage}/>
               <Route path="/Institution/ScoresRegistration" exact restrict

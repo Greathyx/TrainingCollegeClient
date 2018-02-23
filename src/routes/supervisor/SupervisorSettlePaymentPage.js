@@ -82,10 +82,12 @@ class SupervisorSettlePaymentPage extends React.Component {
     if (!this.props.supervisor.hasLoggedIn) {
       this.props.history.push("/SupervisorLogin");
     }
-    this.props.dispatch({
-      type: 'supervisor/getToSettleList',
-      payload: {},
-    });
+    else {
+      this.props.dispatch({
+        type: 'supervisor/getToSettleList',
+        payload: {},
+      });
+    }
   }
 
   // 打开确认结算对话框

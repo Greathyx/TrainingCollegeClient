@@ -12,14 +12,16 @@ class SupervisorInstitutionStatisticsPage extends React.Component {
     if (!this.props.supervisor.hasLoggedIn) {
       this.props.history.push("/SupervisorLogin");
     }
-    this.props.dispatch({
-      type: 'supervisor/getInstitutionStatistics',
-      payload: {},
-    }).then(() => {
-      this.setState({
-        data: this.props.supervisor.institution_statistics
+    else {
+      this.props.dispatch({
+        type: 'supervisor/getInstitutionStatistics',
+        payload: {},
+      }).then(() => {
+        this.setState({
+          data: this.props.supervisor.institution_statistics
+        });
       });
-    });
+    }
   }
 
   state = {

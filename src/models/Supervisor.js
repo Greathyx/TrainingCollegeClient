@@ -49,6 +49,9 @@ export default {
         else if (pathToRegexp('/Institution/ReleaseCourse').exec(location.pathname)) {
           document.title = '机构-课程发布';
         }
+        else if (pathToRegexp('/Institution/DivideClass').exec(location.pathname)) {
+          document.title = '机构-分配班级';
+        }
         else if (pathToRegexp('/Institution/CourseRegistration').exec(location.pathname)) {
           document.title = '机构-听课登记';
         }

@@ -16,46 +16,50 @@ class TraineePaidPage extends React.Component {
       title: '课程名称',
       dataIndex: 'course_name',
       width: 150,
-      // fixed: 'left'
+      fixed: 'left'
     }, {
       title: '机构名称',
-      width: 150,
+      // width: 150,
       dataIndex: 'institution_name',
     }, {
       title: '订购学员',
-      width: 100,
+      // width: 100,
       dataIndex: 'trainee_name',
     }, {
       title: '订购人数',
-      width: 100,
+      // width: 100,
       dataIndex: 'amount',
     }, {
+      title: '班级编号',
+      // width: 100,
+      dataIndex: 'classID',
+    }, {
       title: '订单状态',
-      width: 100,
+      // width: 100,
       dataIndex: 'status',
     }, {
       title: '订课日期',
-      width: 120,
+      // width: 120,
       dataIndex: 'book_time',
     }, {
       title: '联系方式',
-      width: 200,
+      // width: 200,
       dataIndex: 'description',
     }, {
       title: '总金额(¥)',
       dataIndex: 'payment',
       width: 100,
-      // fixed: 'right',
+      fixed: 'right',
     }, {
       title: '已获积分',
       dataIndex: 'add_credits',
       width: 100,
-      // fixed: 'right',
+      fixed: 'right',
     }, {
       title: '退课',
       dataIndex: 'unsubscribe',
       width: 100,
-      // fixed: 'right',
+      fixed: 'right',
       render: (text, record) => (
         <span>
       <Button
@@ -77,13 +81,15 @@ class TraineePaidPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllPaidOrders',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-        status: "paid"
-      },
-    });
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllPaidOrders',
+        payload: {
+          traineeID: this.props.trainee.trainee_id,
+          status: "paid"
+        },
+      });
+    }
   }
 
   // 打开确认取退课对话框
@@ -135,7 +141,7 @@ class TraineePaidPage extends React.Component {
           pagination={{defaultPageSize: 5}}
           columns={columns}
           dataSource={this.props.trainee.paidOrders}
-          // scroll={{x: 1500}}
+          scroll={{x: 1500}}
         />
       </div>
     )

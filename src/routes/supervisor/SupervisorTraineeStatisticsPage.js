@@ -12,14 +12,16 @@ class SupervisorTraineeStatisticsPage extends React.Component {
     if (!this.props.supervisor.hasLoggedIn) {
       this.props.history.push("/SupervisorLogin");
     }
-    this.props.dispatch({
-      type: 'supervisor/getTraineeStatistics',
-      payload: {},
-    }).then(() => {
-      this.setState({
-        data: this.props.supervisor.trainee_statistics
+    else {
+      this.props.dispatch({
+        type: 'supervisor/getTraineeStatistics',
+        payload: {},
+      }).then(() => {
+        this.setState({
+          data: this.props.supervisor.trainee_statistics
+        });
       });
-    });
+    }
   }
 
   state = {

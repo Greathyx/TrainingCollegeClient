@@ -315,3 +315,40 @@ export async function getStatisticsForPieChart(param) {
   })
 
 }
+
+/**
+ * 获取机构待分班课程列表
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function getToDivideClassList(param) {
+
+  const formData = new FormData();
+  formData.append('institutionID', param.institutionID);
+
+  return request('/institution/getToDivideClassList', {
+    method: 'POST',
+    body: formData
+  })
+
+}
+
+/**
+ * 分配班级方法
+ *
+ * @param param
+ * @returns {Promise.<Object>}
+ */
+export async function divideClasses(param) {
+
+  const formData = new FormData();
+  formData.append('courseID', param.courseID);
+  formData.append('class_amount', param.class_amount);
+
+  return request('/institution/divideClasses', {
+    method: 'POST',
+    body: formData
+  })
+
+}

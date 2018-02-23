@@ -108,10 +108,12 @@ class SupervisorCheckModifyPage extends React.Component {
     if (!this.props.supervisor.hasLoggedIn) {
       this.props.history.push("/SupervisorLogin");
     }
-    this.props.dispatch({
-      type: 'supervisor/getAllModifyApply',
-      payload: {},
-    });
+    else {
+      this.props.dispatch({
+        type: 'supervisor/getAllModifyApply',
+        payload: {},
+      });
+    }
   }
 
   render() {

@@ -37,11 +37,11 @@ function validateTraineeAmount(value) {
   }
   return {
     validateStatus: 'error',
-    errorMsg: '课程人数须至少1人且限额3人！',
+    errorMsg: '订课人数须至少1人且限额3人！',
   };
 }
 
-const CollectionCreateForm = Form.create()(
+const PaymentCreateForm = Form.create()(
   (props) => {
     const {visible, onCancel, onCreate, form, book_info, onAmountChange, trainee_amount} = props;
     const {getFieldDecorator} = form;
@@ -90,7 +90,7 @@ const CollectionCreateForm = Form.create()(
             {...formItemLayout}
             label="订课人数"
             validateStatus={trainee_amount.validateStatus}
-            help={trainee_amount.errorMsg || "课程人数须至少1人且限额3人！"}
+            help={trainee_amount.errorMsg || "订课人数须至少1人且限额3人！"}
           >
             {getFieldDecorator('amount', {
               initialValue: 1,
@@ -118,7 +118,6 @@ const CollectionCreateForm = Form.create()(
   }
 );
 
-
 class TraineeChooseCourseWithClassPage extends React.Component {
 
   state = {
@@ -145,14 +144,16 @@ class TraineeChooseCourseWithClassPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllCourses',
-      payload: {},
-    }).then(() => {
-      this.setState({
-        data: this.props.trainee.courses
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllCourses',
+        payload: {},
+      }).then(() => {
+        this.setState({
+          data: this.props.trainee.courses
+        });
       });
-    });
+    }
   }
 
   // 处理订课人数变换，改变订单总价
@@ -171,15 +172,13 @@ class TraineeChooseCourseWithClassPage extends React.Component {
 
   // 打开确认订单对话框
   showModal = (book_info) => {
-    // 已获取会员折扣后就不会再去后端申请获取数据
-    if (this.props.trainee.discount === null) {
-      this.props.dispatch({
-        type: 'trainee/getTraineeVipInfo',
-        payload: {
-          trainee_id: this.props.trainee.trainee_id
-        },
-      });
-    }
+    // 更新会员折扣优惠
+    this.props.dispatch({
+      type: 'trainee/getTraineeVipInfo',
+      payload: {
+        trainee_id: this.props.trainee.trainee_id
+      },
+    });
     this.setState({
       visible: true,
       book_info: book_info
@@ -376,7 +375,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
           dataSource={this.state.data}
           scroll={{x: 2400}}
         />
-        <CollectionCreateForm
+        <PaymentCreateForm
           ref={this.saveFormRef}
           visible={this.state.visible}
           onCancel={this.handleCancel}

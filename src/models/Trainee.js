@@ -40,7 +40,7 @@ export default {
     coursesWithoutClasses: [],
     notPaidOrders: [],
     paidOrders: [],
-    unsubscribeOrders: [],
+    unsubscribeAndFailedOrders: [],
     scores_list: [],
     courses_registration: [],
     bar_chart_statistics: [],
@@ -317,7 +317,7 @@ export default {
           teacher: data.t[i].teacher,
           course_introduction: data.t[i].introduction,
           class_amount: data.t[i].class_amount,
-          book_due_date: data.t[i].book_due_date,
+          book_due_date: data.t[i].due,
         });
       }
 
@@ -350,7 +350,7 @@ export default {
           teacher: data.t[i].teacher,
           course_introduction: data.t[i].introduction,
           class_amount: "开课前2周系统自动分配班级",
-          book_due_date: data.t[i].book_due_date,
+          book_due_date: data.t[i].due,
         });
       }
 
@@ -429,7 +429,7 @@ export default {
           course_order_id: data.t[i].course_order_id,
           traineeID: data.t[i].traineeID,
           courseID: data.t[i].courseID,
-          classID: data.t[i].classID,
+          classID: data.t[i].classID === 0 ? "该课程暂无班级" : data.t[i].classID,
           payment: data.t[i].payment,
           status: status,
           amount: data.t[i].amount,
@@ -438,7 +438,7 @@ export default {
           institution_name: data.t[i].institution_name,
           course_name: data.t[i].course_name,
           add_credits: data.t[i].add_credits,
-          book_time: data.t[i].book_time
+          book_time: data.t[i].bookTime
         });
       }
 
@@ -449,22 +449,23 @@ export default {
     },
 
     // 获取学员所有已退课订单
-    * getAllUnsubscribeOrders({payload}, {call, put, select}) {
-      const data = yield call(getAllOrdersByStatus, payload);
-      let unsubscribeOrders = [];
+    * getAllUnsubscribeAndFailedOrders({payload}, {call, put, select}) {
+      const data = yield call(getAllOrdersByStatus, payload.unsubscribe);
+      const data2 = yield call(getAllOrdersByStatus, payload.failure);
+      let unsubscribeAndFailedOrders = [];
       for (let i = 0; i < data.t.length; i++) {
         let status = "";
         if (data.t[i].status === "unsubscribe") {
           status = "已退课";
         }
-        unsubscribeOrders.push({
+        unsubscribeAndFailedOrders.push({
           key: i,
           course_order_id: data.t[i].course_order_id,
           traineeID: data.t[i].traineeID,
           courseID: data.t[i].courseID,
           payment: data.t[i].payment,
           status: status,
-          book_time: data.t[i].book_time,
+          book_time: data.t[i].bookTime,
           unsubscribe_time: data.t[i].unsubscribe_time,
           trainee_name: data.t[i].trainee_name,
           institution_name: data.t[i].institution_name,
@@ -475,9 +476,32 @@ export default {
         });
       }
 
+      for (let i = 0; i < data2.t.length; i++) {
+        let status = "";
+        if (data2.t[i].status === "failure") {
+          status = "配班失败，已全额退款";
+        }
+        unsubscribeAndFailedOrders.push({
+          key: i,
+          course_order_id: data2.t[i].course_order_id,
+          traineeID: data2.t[i].traineeID,
+          courseID: data2.t[i].courseID,
+          payment: data2.t[i].payment,
+          status: status,
+          book_time: data2.t[i].bookTime,
+          unsubscribe_time: data2.t[i].unsubscribe_time,
+          trainee_name: data2.t[i].trainee_name,
+          institution_name: data2.t[i].institution_name,
+          course_name: data2.t[i].course_name,
+          add_credits: data2.t[i].add_credits,
+          payback: data2.t[i].payback,
+          minus_credits: data2.t[i].minus_credits,
+        });
+      }
+
       yield put({
-        type: 'updateUnsubscribeOrders',
-        payload: {unsubscribeOrders: unsubscribeOrders}
+        type: 'updateUnsubscribeAndFailedOrders',
+        payload: {unsubscribeAndFailedOrders: unsubscribeAndFailedOrders}
       });
     },
 
@@ -691,11 +715,11 @@ export default {
         paidOrders: action.payload.paidOrders,
       }
     },
-    // 更新用户已退课订单列表
-    updateUnsubscribeOrders(state, action) {
+    // 更新用户已退课和配班失败订单列表
+    updateUnsubscribeAndFailedOrders(state, action) {
       return {
         ...state,
-        unsubscribeOrders: action.payload.unsubscribeOrders,
+        unsubscribeAndFailedOrders: action.payload.unsubscribeAndFailedOrders,
       }
     },
     // 更新用户课程成绩列表

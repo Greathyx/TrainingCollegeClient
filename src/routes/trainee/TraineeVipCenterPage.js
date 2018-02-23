@@ -127,12 +127,14 @@ class TraineeVipCenterPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getTraineeVipInfo',
-      payload: {
-        trainee_id: this.props.trainee.trainee_id
-      },
-    });
+    else {
+      this.props.dispatch({
+        type: 'trainee/getTraineeVipInfo',
+        payload: {
+          trainee_id: this.props.trainee.trainee_id
+        },
+      });
+    }
   }
 
   state = {

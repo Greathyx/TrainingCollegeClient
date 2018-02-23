@@ -61,12 +61,14 @@ class InstitutionCourseInfoPage extends React.Component {
     if (!this.props.institution.hasLoggedIn) {
       this.props.history.push("/InstitutionLogin");
     }
-    this.props.dispatch({
-      type: 'institution/getCourseInfo',
-      payload: {
-        publisher: this.props.institution.institution_id
-      },
-    });
+    else {
+      this.props.dispatch({
+        type: 'institution/getCourseInfo',
+        payload: {
+          publisher: this.props.institution.institution_id
+        },
+      });
+    }
   }
 
   render() {

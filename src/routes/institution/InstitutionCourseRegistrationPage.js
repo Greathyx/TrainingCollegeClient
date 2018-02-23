@@ -94,17 +94,19 @@ class InstitutionCourseRegistrationPage extends React.Component {
     if (!this.props.institution.hasLoggedIn) {
       this.props.history.push("/InstitutionLogin");
     }
-    this.props.dispatch({
-      type: 'institution/getAllBookedOrders',
-      payload: {
-        institutionID: this.props.institution.institution_id,
-        status: "paid"
-      },
-    }).then(() => {
-      this.setState({
-        data: this.props.institution.booked_courses
+    else {
+      this.props.dispatch({
+        type: 'institution/getAllBookedOrders',
+        payload: {
+          institutionID: this.props.institution.institution_id,
+          status: "paid"
+        },
+      }).then(() => {
+        this.setState({
+          data: this.props.institution.booked_courses
+        });
       });
-    });
+    }
   }
 
   // 点击tab标签的监听

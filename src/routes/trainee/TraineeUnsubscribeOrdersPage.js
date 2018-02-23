@@ -62,13 +62,21 @@ class TraineeUnsubscribeOrdersPage extends React.Component {
     if (!this.props.trainee.hasLoggedIn) {
       this.props.history.push("/TraineeLogin");
     }
-    this.props.dispatch({
-      type: 'trainee/getAllUnsubscribeOrders',
-      payload: {
-        traineeID: this.props.trainee.trainee_id,
-        status: "unsubscribe"
-      },
-    });
+    else {
+      this.props.dispatch({
+        type: 'trainee/getAllUnsubscribeAndFailedOrders',
+        payload: {
+          unsubscribe: {
+            traineeID: this.props.trainee.trainee_id,
+            status: "unsubscribe"
+          },
+          failure: {
+            traineeID: this.props.trainee.trainee_id,
+            status: "failure"
+          }
+        },
+      });
+    }
   }
 
   render() {
@@ -78,7 +86,7 @@ class TraineeUnsubscribeOrdersPage extends React.Component {
         <Table
           pagination={{defaultPageSize: 10}}
           columns={columns}
-          dataSource={this.props.trainee.unsubscribeOrders}
+          dataSource={this.props.trainee.unsubscribeAndFailedOrders}
           // scroll={{x: 1500}}
         />
       </div>
