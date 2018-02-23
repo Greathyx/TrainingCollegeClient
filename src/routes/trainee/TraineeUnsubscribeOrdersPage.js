@@ -12,47 +12,51 @@ class TraineeUnsubscribeOrdersPage extends React.Component {
       title: '课程名称',
       dataIndex: 'course_name',
       width: 150,
-      // fixed: 'left'
+      fixed: 'left'
     }, {
       title: '机构名称',
-      width: 150,
+      // width: 150,
       dataIndex: 'institution_name',
     }, {
-      title: '订购学员',
-      width: 100,
+      title: '订课学员',
+      // width: 100,
       dataIndex: 'trainee_name',
     }, {
+      title: '订课人数',
+      // width: 100,
+      dataIndex: 'amount',
+    }, {
       title: '订单状态',
-      width: 100,
+      // width: 100,
       dataIndex: 'status',
     }, {
       title: '订课日期',
-      width: 120,
+      // width: 120,
       dataIndex: 'book_time',
     }, {
       title: '退课日期',
-      width: 120,
+      // width: 120,
       dataIndex: 'unsubscribe_time',
     }, {
       title: '付款金额(¥)',
       dataIndex: 'payment',
-      width: 100,
+      // width: 120,
       // fixed: 'right',
     }, {
       title: '获得积分',
       dataIndex: 'add_credits',
-      width: 100,
+      // width: 100,
       // fixed: 'right',
     }, {
       title: '退款金额(¥)',
       dataIndex: 'payback',
-      width: 100,
-      // fixed: 'right',
+      width: 120,
+      fixed: 'right',
     }, {
       title: '扣除积分',
       dataIndex: 'minus_credits',
       width: 100,
-      // fixed: 'right',
+      fixed: 'right',
     }];
   }
 
@@ -87,7 +91,7 @@ class TraineeUnsubscribeOrdersPage extends React.Component {
           pagination={{defaultPageSize: 10}}
           columns={columns}
           dataSource={this.props.trainee.unsubscribeAndFailedOrders}
-          // scroll={{x: 1500}}
+          scroll={{x: 1500}}
         />
       </div>
     )

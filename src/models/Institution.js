@@ -35,7 +35,7 @@ export default {
     institution_introduction: null,
     courseData: [],
     booked_courses: [],
-    unsubscribe_courses: [],
+    unsubscribeAndFailedOrders: [],
     trainee_discount_info: [],
     trainee_all_discount_info: [],
     registration_list: [],
@@ -267,12 +267,17 @@ export default {
       });
     },
 
-    // 获取机构退课信息
-    * getAllUnsubscribeOrders({payload}, {call, put, select}) {
-      const data = yield call(getAllOrdersByStatus, payload);
-      let unsubscribe_courses = [];
+    // 获取机构退课和配班失败订单列表
+    * getAllUnsubscribeAndFailedOrders({payload}, {call, put, select}) {
+      const data = yield call(getAllOrdersByStatus, payload.unsubscribe);
+      const data2 = yield call(getAllOrdersByStatus, payload.failure);
+      let unsubscribeAndFailedOrders = [];
       for (let i = 0; i < data.t.length; i++) {
-        unsubscribe_courses.push({
+        let status = "";
+        if (data.t[i].status === "unsubscribe") {
+          status = "已退课";
+        }
+        unsubscribeAndFailedOrders.push({
           key: i,
           course_name: data.t[i].course_name,
           trainee_name: data.t[i].trainee_name,
@@ -282,12 +287,32 @@ export default {
           book_time: data.t[i].bookTime,
           unsubscribe_time: data.t[i].unsubscribe_time,
           description: data.t[i].description,
+          status: status,
+        });
+      }
+
+      for (let i = 0; i < data2.t.length; i++) {
+        let status = "";
+        if (data2.t[i].status === "failure") {
+          status = "配班失败，已全额退款";
+        }
+        unsubscribeAndFailedOrders.push({
+          key: i,
+          course_name: data2.t[i].course_name,
+          trainee_name: data2.t[i].trainee_name,
+          amount: data2.t[i].amount,
+          payment: data2.t[i].payment,
+          payback: data2.t[i].payback,
+          book_time: data2.t[i].bookTime,
+          unsubscribe_time: data2.t[i].unsubscribe_time,
+          description: data2.t[i].description,
+          status: status,
         });
       }
 
       yield put({
-        type: 'updateUnsubscribeCourses',
-        payload: {unsubscribe_courses: unsubscribe_courses}
+        type: 'updateUnsubscribeAndFailedOrders',
+        payload: {unsubscribeAndFailedOrders: unsubscribeAndFailedOrders}
       });
     },
 
@@ -608,11 +633,11 @@ export default {
         booked_courses: action.payload.booked_courses,
       }
     },
-    // 更新机构退课信息
-    updateUnsubscribeCourses(state, action) {
+    // 更新机构退课和配班失败订单列表
+    updateUnsubscribeAndFailedOrders(state, action) {
       return {
         ...state,
-        unsubscribe_courses: action.payload.unsubscribe_courses,
+        unsubscribeAndFailedOrders: action.payload.unsubscribeAndFailedOrders,
       }
     },
     // 更新学员优惠信息

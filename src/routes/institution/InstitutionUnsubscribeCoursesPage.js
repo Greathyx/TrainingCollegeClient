@@ -14,14 +14,20 @@ class InstitutionUnsubscribeCoursesPage extends React.Component {
     }
     else {
       this.props.dispatch({
-        type: 'institution/getAllUnsubscribeOrders',
+        type: 'institution/getAllUnsubscribeAndFailedOrders',
         payload: {
-          institutionID: this.props.institution.institution_id,
-          status: "unsubscribe"
+          unsubscribe: {
+            institutionID: this.props.institution.institution_id,
+            status: "unsubscribe"
+          },
+          failure: {
+            institutionID: this.props.institution.institution_id,
+            status: "failure"
+          }
         },
       }).then(() => {
         this.setState({
-          data: this.props.institution.unsubscribe_courses
+          data: this.props.institution.unsubscribeAndFailedOrders
         });
       });
     }
@@ -69,6 +75,7 @@ class InstitutionUnsubscribeCoursesPage extends React.Component {
       title: '课程名称',
       dataIndex: 'course_name',
       key: 'course_name',
+      width: 150,
       filterDropdown: (
         <div className={styles.custom_filter_dropdown}>
           <Tooltip title="清空搜索内容再按搜索键，可显示全部课程">
@@ -93,26 +100,37 @@ class InstitutionUnsubscribeCoursesPage extends React.Component {
       },
     }, {
       title: '订课学员',
+      width: 100,
       dataIndex: 'trainee_name',
       key: 'trainee_name',
     }, {
       title: '订课人数',
+      width: 100,
       dataIndex: 'amount',
       key: 'amount',
     }, {
       title: '实付费用(¥)',
+      width: 120,
       dataIndex: 'payment',
       key: 'payment',
     }, {
       title: '实退费用(¥)',
+      width: 120,
       dataIndex: 'payback',
       key: 'payback',
     }, {
+      title: '订单状态',
+      width: 100,
+      dataIndex: 'status',
+      key: 'status',
+    }, {
       title: '订课日期',
+      width: 120,
       dataIndex: 'book_time',
       key: 'book_time',
     }, {
       title: '退课日期',
+      width: 120,
       dataIndex: 'unsubscribe_time',
       key: 'unsubscribe_time',
     }, {

@@ -448,7 +448,7 @@ export default {
       });
     },
 
-    // 获取学员所有已退课订单
+    // 获取学员所有已退课及配班失败订单列表
     * getAllUnsubscribeAndFailedOrders({payload}, {call, put, select}) {
       const data = yield call(getAllOrdersByStatus, payload.unsubscribe);
       const data2 = yield call(getAllOrdersByStatus, payload.failure);
@@ -464,6 +464,7 @@ export default {
           traineeID: data.t[i].traineeID,
           courseID: data.t[i].courseID,
           payment: data.t[i].payment,
+          amount: data.t[i].amount,
           status: status,
           book_time: data.t[i].bookTime,
           unsubscribe_time: data.t[i].unsubscribe_time,
@@ -487,6 +488,7 @@ export default {
           traineeID: data2.t[i].traineeID,
           courseID: data2.t[i].courseID,
           payment: data2.t[i].payment,
+          amount: data2.t[i].amount,
           status: status,
           book_time: data2.t[i].bookTime,
           unsubscribe_time: data2.t[i].unsubscribe_time,
