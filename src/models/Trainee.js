@@ -50,7 +50,7 @@ export default {
 
   subscriptions: {
     setup({dispatch, history}) {
-      const hasTraineeLoggedIn = sessionStorage.getItem("hasLoggedIn");
+      const hasTraineeLoggedIn = sessionStorage.getItem("hasTraineeLoggedIn");
       const trainee_id = sessionStorage.getItem('trainee_id');
       const trainee_email = sessionStorage.getItem('trainee_email');
       const trainee_name = sessionStorage.getItem('trainee_name');
@@ -299,26 +299,28 @@ export default {
       const data = yield call(getAllCourses);
 
       let courses = [];
-      for (let i = 0; i < data.t.length; i++) {
-        courses.push({
-          key: i,
-          course_id: data.t[i].course_id,
-          institution_id: data.t[i].publisher,
-          institution_name: data.t[i].publisher_name,
-          course_name: data.t[i].name,
-          price: data.t[i].price,
-          type: data.t[i].type,
-          amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
-          trainee_amount: data.t[i].trainee_amount,
-          booked_amount: data.t[i].booked_amount,
-          start_date: data.t[i].start_date,
-          periods_per_week: data.t[i].periods_per_week,
-          total_weeks: data.t[i].total_weeks,
-          teacher: data.t[i].teacher,
-          course_introduction: data.t[i].introduction,
-          class_amount: data.t[i].class_amount,
-          book_due_date: data.t[i].due,
-        });
+      if(data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          courses.push({
+            key: i,
+            course_id: data.t[i].course_id,
+            institution_id: data.t[i].publisher,
+            institution_name: data.t[i].publisher_name,
+            course_name: data.t[i].name,
+            price: data.t[i].price,
+            type: data.t[i].type,
+            amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+            trainee_amount: data.t[i].trainee_amount,
+            booked_amount: data.t[i].booked_amount,
+            start_date: data.t[i].start_date,
+            periods_per_week: data.t[i].periods_per_week,
+            total_weeks: data.t[i].total_weeks,
+            teacher: data.t[i].teacher,
+            course_introduction: data.t[i].introduction,
+            class_amount: data.t[i].class_amount,
+            book_due_date: data.t[i].due,
+          });
+        }
       }
 
       yield put({
@@ -332,26 +334,29 @@ export default {
       const data = yield call(getAllCoursesWithClasses);
 
       let coursesWithoutClasses = [];
-      for (let i = 0; i < data.t.length; i++) {
-        coursesWithoutClasses.push({
-          key: i,
-          course_id: data.t[i].course_id,
-          institution_id: data.t[i].publisher,
-          institution_name: data.t[i].publisher_name,
-          course_name: data.t[i].name,
-          price: data.t[i].price,
-          type: data.t[i].type,
-          amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
-          trainee_amount: data.t[i].trainee_amount,
-          booked_amount: data.t[i].booked_amount,
-          start_date: data.t[i].start_date,
-          periods_per_week: data.t[i].periods_per_week,
-          total_weeks: data.t[i].total_weeks,
-          teacher: data.t[i].teacher,
-          course_introduction: data.t[i].introduction,
-          class_amount: "开课前2周系统自动分配班级",
-          book_due_date: data.t[i].due,
-        });
+      if(data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          coursesWithoutClasses.push({
+            key: i,
+            course_id: data.t[i].course_id,
+            institution_id: data.t[i].publisher,
+            institution_name: data.t[i].publisher_name,
+            course_name: data.t[i].name,
+            price: data.t[i].price,
+            type: data.t[i].type,
+            amount: data.t[i].booked_amount + " / " + data.t[i].trainee_amount,
+            trainee_amount: data.t[i].trainee_amount,
+            booked_amount: data.t[i].booked_amount,
+            start_date: data.t[i].start_date,
+            periods_per_week: data.t[i].periods_per_week,
+            total_weeks: data.t[i].total_weeks,
+            teacher: data.t[i].teacher,
+            course_introduction: data.t[i].introduction,
+            class_amount: "开课前2周系统自动分配班级",
+            book_due_date: data.t[i].due,
+          });
+        }
+
       }
 
       yield put({
@@ -375,27 +380,29 @@ export default {
     * getAllNotPaidOrders({payload}, {call, put, select}) {
       const data = yield call(getAllOrdersByStatus, payload);
       let notPaidOrders = [];
-      for (let i = 0; i < data.t.length; i++) {
-        let status = "";
-        if (data.t[i].status === "not_paid") {
-          status = "未支付";
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          let status = "";
+          if (data.t[i].status === "not_paid") {
+            status = "未支付";
+          }
+          notPaidOrders.push({
+            key: i,
+            course_order_id: data.t[i].course_order_id,
+            traineeID: data.t[i].traineeID,
+            courseID: data.t[i].courseID,
+            classID: data.t[i].classID,
+            payment: data.t[i].payment,
+            status: status,
+            amount: data.t[i].amount,
+            description: data.t[i].description,
+            trainee_name: data.t[i].trainee_name,
+            institution_name: data.t[i].institution_name,
+            course_name: data.t[i].course_name,
+            add_credits: data.t[i].add_credits,
+            book_time: data.t[i].bookTime,
+          });
         }
-        notPaidOrders.push({
-          key: i,
-          course_order_id: data.t[i].course_order_id,
-          traineeID: data.t[i].traineeID,
-          courseID: data.t[i].courseID,
-          classID: data.t[i].classID,
-          payment: data.t[i].payment,
-          status: status,
-          amount: data.t[i].amount,
-          description: data.t[i].description,
-          trainee_name: data.t[i].trainee_name,
-          institution_name: data.t[i].institution_name,
-          course_name: data.t[i].course_name,
-          add_credits: data.t[i].add_credits,
-          book_time: data.t[i].book_time,
-        });
       }
 
       yield put({
@@ -419,27 +426,29 @@ export default {
     * getAllPaidOrders({payload}, {call, put, select}) {
       const data = yield call(getAllOrdersByStatus, payload);
       let paidOrders = [];
-      for (let i = 0; i < data.t.length; i++) {
-        let status = "";
-        if (data.t[i].status === "paid") {
-          status = "已支付";
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          let status = "";
+          if (data.t[i].status === "paid") {
+            status = "已支付";
+          }
+          paidOrders.push({
+            key: i,
+            course_order_id: data.t[i].course_order_id,
+            traineeID: data.t[i].traineeID,
+            courseID: data.t[i].courseID,
+            classID: data.t[i].classID === 0 ? "该课程暂无班级" : data.t[i].classID,
+            payment: data.t[i].payment,
+            status: status,
+            amount: data.t[i].amount,
+            description: data.t[i].description,
+            trainee_name: data.t[i].trainee_name,
+            institution_name: data.t[i].institution_name,
+            course_name: data.t[i].course_name,
+            add_credits: data.t[i].add_credits,
+            book_time: data.t[i].bookTime
+          });
         }
-        paidOrders.push({
-          key: i,
-          course_order_id: data.t[i].course_order_id,
-          traineeID: data.t[i].traineeID,
-          courseID: data.t[i].courseID,
-          classID: data.t[i].classID === 0 ? "该课程暂无班级" : data.t[i].classID,
-          payment: data.t[i].payment,
-          status: status,
-          amount: data.t[i].amount,
-          description: data.t[i].description,
-          trainee_name: data.t[i].trainee_name,
-          institution_name: data.t[i].institution_name,
-          course_name: data.t[i].course_name,
-          add_credits: data.t[i].add_credits,
-          book_time: data.t[i].bookTime
-        });
       }
 
       yield put({
@@ -453,52 +462,56 @@ export default {
       const data = yield call(getAllOrdersByStatus, payload.unsubscribe);
       const data2 = yield call(getAllOrdersByStatus, payload.failure);
       let unsubscribeAndFailedOrders = [];
-      for (let i = 0; i < data.t.length; i++) {
-        let status = "";
-        if (data.t[i].status === "unsubscribe") {
-          status = "已退课";
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          let status = "";
+          if (data.t[i].status === "unsubscribe") {
+            status = "已退课";
+          }
+          unsubscribeAndFailedOrders.push({
+            key: i,
+            course_order_id: data.t[i].course_order_id,
+            traineeID: data.t[i].traineeID,
+            courseID: data.t[i].courseID,
+            payment: data.t[i].payment,
+            amount: data.t[i].amount,
+            status: status,
+            book_time: data.t[i].bookTime,
+            unsubscribe_time: data.t[i].unsubscribe_time,
+            trainee_name: data.t[i].trainee_name,
+            institution_name: data.t[i].institution_name,
+            course_name: data.t[i].course_name,
+            add_credits: data.t[i].add_credits,
+            payback: data.t[i].payback,
+            minus_credits: data.t[i].minus_credits,
+          });
         }
-        unsubscribeAndFailedOrders.push({
-          key: i,
-          course_order_id: data.t[i].course_order_id,
-          traineeID: data.t[i].traineeID,
-          courseID: data.t[i].courseID,
-          payment: data.t[i].payment,
-          amount: data.t[i].amount,
-          status: status,
-          book_time: data.t[i].bookTime,
-          unsubscribe_time: data.t[i].unsubscribe_time,
-          trainee_name: data.t[i].trainee_name,
-          institution_name: data.t[i].institution_name,
-          course_name: data.t[i].course_name,
-          add_credits: data.t[i].add_credits,
-          payback: data.t[i].payback,
-          minus_credits: data.t[i].minus_credits,
-        });
       }
 
-      for (let i = 0; i < data2.t.length; i++) {
-        let status = "";
-        if (data2.t[i].status === "failure") {
-          status = "配班失败，已全额退款";
+      if (data2.t !== null) {
+        for (let i = 0; i < data2.t.length; i++) {
+          let status = "";
+          if (data2.t[i].status === "failure") {
+            status = "配班失败，已全额退款";
+          }
+          unsubscribeAndFailedOrders.push({
+            key: i,
+            course_order_id: data2.t[i].course_order_id,
+            traineeID: data2.t[i].traineeID,
+            courseID: data2.t[i].courseID,
+            payment: data2.t[i].payment,
+            amount: data2.t[i].amount,
+            status: status,
+            book_time: data2.t[i].bookTime,
+            unsubscribe_time: data2.t[i].unsubscribe_time,
+            trainee_name: data2.t[i].trainee_name,
+            institution_name: data2.t[i].institution_name,
+            course_name: data2.t[i].course_name,
+            add_credits: data2.t[i].add_credits,
+            payback: data2.t[i].payback,
+            minus_credits: data2.t[i].minus_credits,
+          });
         }
-        unsubscribeAndFailedOrders.push({
-          key: i,
-          course_order_id: data2.t[i].course_order_id,
-          traineeID: data2.t[i].traineeID,
-          courseID: data2.t[i].courseID,
-          payment: data2.t[i].payment,
-          amount: data2.t[i].amount,
-          status: status,
-          book_time: data2.t[i].bookTime,
-          unsubscribe_time: data2.t[i].unsubscribe_time,
-          trainee_name: data2.t[i].trainee_name,
-          institution_name: data2.t[i].institution_name,
-          course_name: data2.t[i].course_name,
-          add_credits: data2.t[i].add_credits,
-          payback: data2.t[i].payback,
-          minus_credits: data2.t[i].minus_credits,
-        });
       }
 
       yield put({
@@ -544,13 +557,15 @@ export default {
     * getAllScores({payload}, {call, put, select}) {
       const data = yield call(getAllScores, payload);
       let scores_list = [];
-      for (let i = 0; i < data.t.length; i++) {
-        scores_list.push({
-          key: i,
-          course_name: data.t[i].course_name,
-          institution_name: data.t[i].institution_name,
-          scores: data.t[i].scores,
-        });
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          scores_list.push({
+            key: i,
+            course_name: data.t[i].course_name,
+            institution_name: data.t[i].institution_name,
+            scores: data.t[i].scores,
+          });
+        }
       }
       yield put({
         type: 'updateScoresList',
@@ -563,13 +578,15 @@ export default {
       const data = yield call(getAllCoursesRegistration, payload);
       if (data.successTag) {
         let courses_registration = [];
-        for (let i = 0; i < data.t.length; i++) {
-          courses_registration.push({
-            key: i,
-            course_name: data.t[i].course_name,
-            institution_name: data.t[i].institution_name,
-            registration_date: new Date(parseInt(data.t[i].registration_date, 10)).toLocaleString(),
-          });
+        if (data.t !== null) {
+          for (let i = 0; i < data.t.length; i++) {
+            courses_registration.push({
+              key: i,
+              course_name: data.t[i].course_name,
+              institution_name: data.t[i].institution_name,
+              registration_date: new Date(parseInt(data.t[i].registration_date, 10)).toLocaleString(),
+            });
+          }
         }
 
         yield put({
@@ -586,12 +603,15 @@ export default {
     * getStatisticsForBarChart({payload}, {call, put, select}) {
       const data = yield call(getStatisticsForBarChart, payload);
       let bar_chart_statistics = [];
-      for (let i = 0; i < data.t.length; i++) {
-        bar_chart_statistics.push({
-          name: data.t[i][0],
-          value: data.t[i][1],
-        });
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          bar_chart_statistics.push({
+            name: data.t[i][0],
+            value: data.t[i][1],
+          });
+        }
       }
+
       yield put({
         type: 'updateStatisticsForBarChart',
         payload: {bar_chart_statistics: bar_chart_statistics}
@@ -602,12 +622,15 @@ export default {
     * getStatisticsForPieChart({payload}, {call, put, select}) {
       const data = yield call(getStatisticsForPieChart, payload);
       let pie_chart_statistics = [];
-      for (let i = 0; i < data.t.length; i++) {
-        pie_chart_statistics.push({
-          name: data.t[i][0],
-          value: data.t[i][1],
-        });
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          pie_chart_statistics.push({
+            name: data.t[i][0],
+            value: data.t[i][1],
+          });
+        }
       }
+
       yield put({
         type: 'updateStatisticsForPieChart',
         payload: {pie_chart_statistics: pie_chart_statistics}

@@ -211,16 +211,18 @@ export default {
       const data = yield call(getAllRegisterApply);
 
       let applies = [];
-      for (let i = 0; i < data.t.length; i++) {
-        applies.push({
-          key: i,
-          institution_apply_id: data.t[i].institution_apply_id,
-          name: data.t[i].name,
-          email: data.t[i].email,
-          address: data.t[i].location,
-          faculty: data.t[i].faculty,
-          introduction: data.t[i].introduction,
-        });
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          applies.push({
+            key: i,
+            institution_apply_id: data.t[i].institution_apply_id,
+            name: data.t[i].name,
+            email: data.t[i].email,
+            address: data.t[i].location,
+            faculty: data.t[i].faculty,
+            introduction: data.t[i].introduction,
+          });
+        }
       }
 
       yield put({
@@ -234,16 +236,18 @@ export default {
       const data = yield call(getAllModifyApply);
 
       let applies = [];
-      for (let i = 0; i < data.t.length; i++) {
-        applies.push({
-          key: i,
-          institution_apply_id: data.t[i].institution_apply_id,
-          name: data.t[i].name,
-          email: data.t[i].email,
-          address: data.t[i].location,
-          faculty: data.t[i].faculty,
-          introduction: data.t[i].introduction,
-        });
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          applies.push({
+            key: i,
+            institution_apply_id: data.t[i].institution_apply_id,
+            name: data.t[i].name,
+            email: data.t[i].email,
+            address: data.t[i].location,
+            faculty: data.t[i].faculty,
+            introduction: data.t[i].introduction,
+          });
+        }
       }
 
       yield put({
@@ -322,15 +326,17 @@ export default {
       const data = yield call(getAllInstitutionsInfo);
       if (data.successTag) {
         let institutions_info = [];
-        for (let i = 0; i < data.t.length; i++) {
-          institutions_info.push({
-            key: i,
-            name: data.t[i].name,
-            email: data.t[i].email,
-            address: data.t[i].location,
-            faculty: data.t[i].faculty,
-            introduction: data.t[i].introduction,
-          });
+        if (data.t !== null) {
+          for (let i = 0; i < data.t.length; i++) {
+            institutions_info.push({
+              key: i,
+              name: data.t[i].name,
+              email: data.t[i].email,
+              address: data.t[i].location,
+              faculty: data.t[i].faculty,
+              introduction: data.t[i].introduction,
+            });
+          }
         }
 
         yield put({
@@ -348,15 +354,17 @@ export default {
       const data = yield call(getToSettleList);
       if (data.successTag) {
         let toSettleList = [];
-        for (let i = 0; i < data.t.length; i++) {
-          toSettleList.push({
-            key: i,
-            institutionID: data.t[i].institutionID,
-            institutionName: data.t[i].institutionName,
-            institution_earning: data.t[i].institution_earning,
-            course_earning: data.t[i].course_earning,
-            actual_earning: data.t[i].actual_earning,
-          });
+        if (data.t !== null) {
+          for (let i = 0; i < data.t.length; i++) {
+            toSettleList.push({
+              key: i,
+              institutionID: data.t[i].institutionID,
+              institutionName: data.t[i].institutionName,
+              institution_earning: data.t[i].institution_earning,
+              course_earning: data.t[i].course_earning,
+              actual_earning: data.t[i].actual_earning,
+            });
+          }
         }
 
         yield put({
@@ -384,12 +392,16 @@ export default {
     * getStatisticsForBarChart({payload}, {call, put, select}) {
       const data = yield call(getStatisticsForBarChart);
       let bar_chart_statistics = [];
-      for (let i = 0; i < data.t.length; i++) {
-        bar_chart_statistics.push({
-          name: data.t[i][0],
-          value: data.t[i][1],
-        });
+
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          bar_chart_statistics.push({
+            name: data.t[i][0],
+            value: data.t[i][1],
+          });
+        }
       }
+
       yield put({
         type: 'updateStatisticsForBarChart',
         payload: {bar_chart_statistics: bar_chart_statistics}
@@ -400,12 +412,16 @@ export default {
     * getStatisticsForPieChart({payload}, {call, put, select}) {
       const data = yield call(getStatisticsForPieChart);
       let pie_chart_statistics = [];
-      for (let i = 0; i < data.t.length; i++) {
-        pie_chart_statistics.push({
-          name: data.t[i][0],
-          value: data.t[i][1],
-        });
+
+      if (data.t !== null) {
+        for (let i = 0; i < data.t.length; i++) {
+          pie_chart_statistics.push({
+            name: data.t[i][0],
+            value: data.t[i][1],
+          });
+        }
       }
+
       yield put({
         type: 'updateStatisticsForPieChart',
         payload: {pie_chart_statistics: pie_chart_statistics}
@@ -417,17 +433,21 @@ export default {
       const data = yield call(getInstitutionStatistics);
       if (data.successTag) {
         let institution_statistics = [];
-        for (let i = 0; i < data.t.length; i++) {
-          institution_statistics.push({
-            key: i,
-            institutionName: data.t[i].institutionName,
-            total_earning: data.t[i].total_earning,
-            this_year_earning: data.t[i].this_year_earning,
-            total_course_amount: data.t[i].total_course_amount,
-            this_year_paid_amount: data.t[i].this_year_paid_amount,
-            this_year_unsubscribe_amount: data.t[i].this_year_unsubscribe_amount,
-          });
+
+        if (data.t !== null) {
+          for (let i = 0; i < data.t.length; i++) {
+            institution_statistics.push({
+              key: i,
+              institutionName: data.t[i].institutionName,
+              total_earning: data.t[i].total_earning,
+              this_year_earning: data.t[i].this_year_earning,
+              total_course_amount: data.t[i].total_course_amount,
+              this_year_paid_amount: data.t[i].this_year_paid_amount,
+              this_year_unsubscribe_amount: data.t[i].this_year_unsubscribe_amount,
+            });
+          }
         }
+
         yield put({
           type: 'updateInstitutionStatistics',
           payload: {institution_statistics: institution_statistics}
@@ -443,21 +463,24 @@ export default {
       const data = yield call(getTraineeStatistics);
       if (data.successTag) {
         let trainee_statistics = [];
-        for (let i = 0; i < data.t.length; i++) {
-          trainee_statistics.push({
-            key: i,
-            traineeName: data.t[i].traineeName,
-            email: data.t[i].email,
-            total_expense: data.t[i].total_expense,
-            this_year_expense: data.t[i].this_year_expense,
-            total_course_amount: data.t[i].total_course_amount,
-            this_year_paid_amount: data.t[i].this_year_paid_amount,
-            this_year_unsubscribe_amount: data.t[i].this_year_unsubscribe_amount,
-            level: data.t[i].level,
-            credit: data.t[i].credit,
-            is_active: data.t[i].is_active ? "未注销" : "已注销",
-          });
+        if (data.t !== null) {
+          for (let i = 0; i < data.t.length; i++) {
+            trainee_statistics.push({
+              key: i,
+              traineeName: data.t[i].traineeName,
+              email: data.t[i].email,
+              total_expense: data.t[i].total_expense,
+              this_year_expense: data.t[i].this_year_expense,
+              total_course_amount: data.t[i].total_course_amount,
+              this_year_paid_amount: data.t[i].this_year_paid_amount,
+              this_year_unsubscribe_amount: data.t[i].this_year_unsubscribe_amount,
+              level: data.t[i].level,
+              credit: data.t[i].credit,
+              is_active: data.t[i].is_active ? "未注销" : "已注销",
+            });
+          }
         }
+
         yield put({
           type: 'updateTraineeStatistics',
           payload: {trainee_statistics: trainee_statistics}
