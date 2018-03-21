@@ -102,6 +102,10 @@ class InstitutionDivideClassPage extends React.Component {
       });
       form.resetFields();
       this.setState({visible: false});
+      // 1s后刷新本页面
+      this.timer = setInterval(() => {
+        window.location.reload(true);
+      }, 1000);
     });
   };
 

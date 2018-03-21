@@ -374,7 +374,7 @@ export default {
         });
       }
       else {
-        message.error(data.message);
+        message.warning(data.message);
       }
     },
 
