@@ -41,9 +41,29 @@ function validateTraineeAmount(value) {
   };
 }
 
+/**
+ *
+ * 检查使用抵用金额是否符合要求
+ *
+ * @param param
+ * @returns {*}
+ */
+function validateCreditAmount(param) {
+  if (param.credit >= 0 && param.credit <= param.max_credit) {
+    return {
+      validateStatus: 'success',
+      errorMsg: null,
+    };
+  }
+  return {
+    validateStatus: 'error',
+    errorMsg: '抵用金额超出可用金额！',
+  };
+}
+
 const PaymentCreateForm = Form.create()(
   (props) => {
-    const {visible, onCancel, onCreate, form, book_info, onAmountChange, trainee_amount} = props;
+    const {visible, onCancel, onCreate, form, book_info, onAmountChange, trainee_amount, use_credit, onCreditChange} = props;
     const {getFieldDecorator} = form;
     const formItemLayout = {
       labelCol: {
@@ -77,9 +97,31 @@ const PaymentCreateForm = Form.create()(
             <span>{book_info.discount === "1" ? "暂无可使用优惠折扣" : book_info.discount + "折"}</span>
           </FormItem>
           <FormItem
+            {...formItemLayout} label="可用积分"
+          >
+            <span>{book_info.max_credit + "元"}</span>
+          </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="抵用积分"
+            validateStatus={use_credit.validateStatus}
+            help={use_credit.errorMsg || "抵用金额超出可用金额！"}
+          >
+            {getFieldDecorator('use_credit', {
+              initialValue: 1,
+              rules: [{required: true, message: '请输入抵用积分！'}],
+            })(
+              <InputNumber
+                min={0}
+                max={book_info.max_credit}
+                onChange={onCreditChange}
+              />
+            )}
+          </FormItem>
+          <FormItem
             {...formItemLayout} label="最终支付"
           >
-            <span>{book_info.price * book_info.book_amount * book_info.discount + "元"}</span>
+            <span>{book_info.price * book_info.book_amount * book_info.discount - use_credit.value + "元"}</span>
           </FormItem>
           <FormItem
             {...formItemLayout} label="可获积分"
@@ -129,12 +171,16 @@ class TraineeChooseCourseWithClassPage extends React.Component {
     trainee_amount: {
       value: 1 // 初始值
     },
+    use_credit: {
+      value: 0 // 初始值
+    },
     book_info: {
       price: -1,
       course_id: -1,
       institution_id: -1,
       discount: -1,
       book_amount: 1,
+      max_credit: -1,
     },
   };
 
@@ -145,6 +191,12 @@ class TraineeChooseCourseWithClassPage extends React.Component {
       this.props.history.push("/TraineeLogin");
     }
     else {
+      this.props.dispatch({
+        type: 'trainee/getTraineeVipInfo',
+        payload: {
+          trainee_id: this.props.trainee.trainee_id
+        },
+      });
       this.props.dispatch({
         type: 'trainee/getAllCourses',
         payload: {},
@@ -165,6 +217,25 @@ class TraineeChooseCourseWithClassPage extends React.Component {
       },
       trainee_amount: {
         ...validateTraineeAmount(value),
+        value,
+      },
+    })
+  };
+
+  // 处理积分使用变换，改变订单总价
+  onCreditChange = (value) => {
+    const param = {
+      credit: value,
+      max_credit: this.state.book_info.max_credit
+    };
+
+    this.setState({
+      book_info: {
+        ...this.state.book_info,
+        use_credit: value
+      },
+      use_credit: {
+        ...validateCreditAmount(param),
         value,
       },
     })
@@ -199,7 +270,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
       }
       const param = {
         ...values,
-        payment: this.state.book_info.price * this.state.book_info.book_amount * this.state.book_info.discount,
+        payment: this.state.book_info.price * this.state.book_info.book_amount * this.state.book_info.discount - this.state.use_credit.value,
         traineeID: this.props.trainee.trainee_id,
         courseID: this.state.book_info.course_id,
         institutionID: this.state.book_info.institution_id,
@@ -356,6 +427,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
                 institution_id: record.institution_id,
                 discount: this.props.trainee.discount,
                 book_amount: 1,
+                max_credit: this.props.trainee.credit
               };
               this.showModal(param)
             }}
@@ -366,6 +438,7 @@ class TraineeChooseCourseWithClassPage extends React.Component {
     }];
 
     const trainee_amount = this.state.trainee_amount;
+    const use_credit = this.state.use_credit;
 
     return (
       <div style={{padding: '0 50px 20px 50px', backgroundColor: 'white'}}>
@@ -383,6 +456,8 @@ class TraineeChooseCourseWithClassPage extends React.Component {
           book_info={this.state.book_info}
           onAmountChange={this.onAmountChange}
           trainee_amount={trainee_amount}
+          use_credit={use_credit}
+          onCreditChange={this.onCreditChange}
         />
       </div>
     )

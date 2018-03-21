@@ -169,6 +169,7 @@ export async function generateOrder(param) {
   formData.append('payment', param.payment);
   formData.append('amount', param.amount);
   formData.append('description', param.description);
+  formData.append('use_credit', param.use_credit);
 
   return request('/trainee/generateOrder', {
     method: 'POST',
